@@ -5,21 +5,14 @@
   <h3>🤖 AI 기반 주가 예측 웹 애플리케이션</h3>
   <p>React · Spring Boot · Python · Machine Learning</p>
   
+  ![Stars](https://img.shields.io/github/stars/hwan0050/stock-prediction-app?style=social)
+  ![Forks](https://img.shields.io/github/forks/hwan0050/stock-prediction-app?style=social)
+  ![Issues](https://img.shields.io/github/issues/hwan0050/stock-prediction-app)
+  ![License](https://img.shields.io/github/license/hwan0050/stock-prediction-app)
+  
 </div>
 
-<!--# 📈 Stock Prediction App -->
-
-<div align="center">
-
-<!--![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white) 
-
-**AI 기반 주가 예측 웹 애플리케이션** -->
-
-[데모 보기](#) · [버그 제보](../../issues) · [기능 제안](../../issues)
-
-</div>
+<br/>
 
 ---
 
