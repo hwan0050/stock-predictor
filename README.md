@@ -1,318 +1,303 @@
-# Git 작업 단위별 관리 정책 📋
+# 📈 Stock Prediction App
 
-## 🌿 브랜치 전략 (Git Flow 간소화 버전)
+<div align="center">
 
-```
-main (production)
-  ↓
-develop (개발)
-  ↓
-feature/기능명 (기능 개발)
-  ↓
-hotfix/버그명 (긴급 수정)
-```
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white)
 
-### 브랜치 종류
+**AI 기반 주가 예측 웹 애플리케이션**
 
-| 브랜치 | 용도 | 네이밍 규칙 | 예시 |
-|--------|------|-------------|------|
-| `main` | 배포용 | - | `main` |
-| `develop` | 개발 통합 | - | `develop` |
-| `feature` | 새 기능 개발 | `feature/기능명` | `feature/login-page` |
-| `fix` | 버그 수정 | `fix/버그명` | `fix/navbar-responsive` |
-| `hotfix` | 긴급 수정 | `hotfix/버그명` | `hotfix/security-patch` |
-| `refactor` | 리팩토링 | `refactor/작업명` | `refactor/api-structure` |
+[데모 보기](#) · [버그 제보](../../issues) · [기능 제안](../../issues)
+
+</div>
 
 ---
 
-## 📝 커밋 메시지 컨벤션
+## 🎯 프로젝트 소개
 
-### 기본 구조
-```
-타입(스코프): 제목
+실시간 주식 데이터를 분석하여 미래 주가를 예측하는 웹 애플리케이션입니다.
 
-본문 (선택)
+### ✨ 주요 기능
 
-푸터 (선택)
-```
-
-### 커밋 타입
-
-| 타입 | 설명 | 예시 |
-|------|------|------|
-| `feat` | 새로운 기능 추가 | `feat(auth): 로그인 페이지 추가` |
-| `fix` | 버그 수정 | `fix(api): 데이터 로딩 오류 수정` |
-| `docs` | 문서 수정 | `docs(readme): 설치 가이드 업데이트` |
-| `style` | 코드 포맷팅 (기능 변경 X) | `style(css): 버튼 간격 조정` |
-| `refactor` | 코드 리팩토링 | `refactor(user): 사용자 모델 구조 개선` |
-| `test` | 테스트 코드 | `test(auth): 로그인 유닛 테스트 추가` |
-| `chore` | 빌드, 패키지 등 | `chore(deps): axios 버전 업데이트` |
-| `design` | UI/UX 디자인 변경 | `design(home): 메인 페이지 레이아웃 수정` |
-
-### 커밋 메시지 작성 규칙
-
-1. **제목은 50자 이내**
-2. **제목 첫 글자는 대문자 (영문) 또는 명확한 동사 (한글)**
-3. **제목 끝에 마침표 금지**
-4. **본문은 72자마다 줄바꿈**
-5. **본문은 "무엇을", "왜" 변경했는지 설명**
-
-### 좋은 예시
-```bash
-feat(auth): 소셜 로그인 기능 구현
-
-- Google OAuth 2.0 연동
-- 사용자 프로필 자동 생성
-- 세션 관리 추가
-
-Closes #123
-```
-
-### 나쁜 예시
-```bash
-# ❌ 너무 모호함
-update code
-
-# ❌ 타입 누락
-로그인 버그 수정
-
-# ❌ 여러 작업을 한 커밋에
-feat: 로그인 추가, 회원가입 추가, CSS 수정
-```
+- 📊 **실시간 주가 데이터** - 주요 종목의 실시간 가격 정보
+- 🤖 **AI 기반 예측** - 머신러닝 모델을 활용한 가격 예측
+- 📈 **인터랙티브 차트** - 직관적인 데이터 시각화
+- 🔔 **가격 알림** - 목표 가격 도달 시 알림 기능
+- 📱 **반응형 디자인** - 모바일/태블릿/데스크톱 지원
 
 ---
 
-## 🔄 작업 프로세스
-
-### 1️⃣ 새 기능 개발 시
-
-```bash
-# 1. develop 브랜치에서 최신 코드 받기
-git checkout develop
-git pull origin develop
-
-# 2. 새 기능 브랜치 생성
-git checkout -b feature/stock-chart
-
-# 3. 작업 후 커밋 (작은 단위로 자주)
-git add .
-git commit -m "feat(chart): 주가 차트 컴포넌트 추가"
-
-# 4. 더 작업...
-git commit -m "feat(chart): 차트 데이터 로딩 구현"
-
-# 5. 원격 저장소에 푸시
-git push origin feature/stock-chart
-
-# 6. GitHub에서 Pull Request 생성
-# develop <- feature/stock-chart
-
-# 7. 코드 리뷰 후 머지
-
-# 8. 로컬에서 브랜치 삭제
-git checkout develop
-git branch -d feature/stock-chart
-```
-
-### 2️⃣ 버그 수정 시
-
-```bash
-# 1. develop에서 브랜치 생성
-git checkout develop
-git checkout -b fix/price-display
-
-# 2. 수정 후 커밋
-git commit -m "fix(ui): 가격 표시 오류 수정"
-
-# 3. 푸시 및 PR
-git push origin fix/price-display
-```
-
-### 3️⃣ 긴급 수정 (Hotfix) 시
-
-```bash
-# 1. main에서 직접 브랜치 생성
-git checkout main
-git checkout -b hotfix/security-patch
-
-# 2. 수정 후 커밋
-git commit -m "hotfix(security): XSS 취약점 패치"
-
-# 3. main과 develop 둘 다 머지
-git checkout main
-git merge hotfix/security-patch
-git push origin main
-
-git checkout develop
-git merge hotfix/security-patch
-git push origin develop
-
-# 4. 브랜치 삭제
-git branch -d hotfix/security-patch
-```
-
----
-
-## 📏 작업 단위 가이드
-
-### ✅ 커밋 단위 (작게 쪼개기)
-- **하나의 논리적 변경사항 = 하나의 커밋**
-- 예시:
-  - ✅ "차트 컴포넌트 UI 구현"
-  - ✅ "API 데이터 연동"
-  - ✅ "에러 처리 추가"
-  - ❌ "주가 차트 전체 구현" (너무 큼)
-
-### ✅ 브랜치 단위 (기능/이슈 기준)
-- **하나의 완결된 기능 = 하나의 브랜치**
-- 예시:
-  - ✅ `feature/stock-search`
-  - ✅ `feature/price-alert`
-  - ❌ `feature/all-features` (너무 큼)
-
-### ✅ Pull Request 단위
-- **리뷰 가능한 크기로 유지 (변경된 파일 10개 이하 권장)**
-- 너무 크면 여러 PR로 분리
-
----
-
-## 🚀 프로젝트별 커밋 스코프
+## 🛠️ 기술 스택
 
 ### Frontend
-- `ui` - UI 컴포넌트
-- `page` - 페이지
-- `chart` - 차트 관련
-- `api` - API 호출
+- **React** (예정) - 사용자 인터페이스
+- **JavaScript/TypeScript** (학습 중) - 프론트엔드 로직
+- **Chart.js** - 데이터 시각화
+- **Tailwind CSS** - 스타일링
 
 ### Backend
-- `controller` - 컨트롤러
-- `service` - 비즈니스 로직
-- `repository` - 데이터베이스
-- `api` - REST API
+- **Java/Spring Boot** - REST API 서버
+- **Python** - 데이터 분석 및 ML 모델
+- **Node.js** - 실시간 데이터 처리 (검토 중)
 
-### ML Model
-- `model` - 모델 구조
-- `train` - 학습 관련
-- `predict` - 예측 로직
-- `data` - 데이터 처리
+### Data & AI
+- **pandas** - 데이터 처리
+- **scikit-learn** - 머신러닝 모델
+- **TensorFlow/PyTorch** - 딥러닝 (예정)
 
-### 공통
-- `config` - 설정
-- `test` - 테스트
-- `docs` - 문서
+### Database
+- **PostgreSQL** - 주가 데이터 저장
+- **Redis** - 캐싱 및 세션 관리
 
 ---
 
-## 🚀 실전 팁
+## 📂 프로젝트 구조
 
-### 1. 커밋 전 체크리스트
+```
+stock-prediction-app/
+├── frontend/               # React 프론트엔드
+│   ├── src/
+│   │   ├── components/    # React 컴포넌트
+│   │   ├── pages/         # 페이지
+│   │   └── utils/         # 유틸리티
+│   └── package.json
+│
+├── backend/               # Spring Boot 백엔드
+│   ├── src/main/java/
+│   │   └── com/stock/
+│   │       ├── controller/
+│   │       ├── service/
+│   │       └── repository/
+│   └── pom.xml
+│
+├── ml-model/              # Python ML 모델
+│   ├── data/              # 학습 데이터
+│   ├── models/            # 저장된 모델
+│   ├── train.py           # 모델 학습
+│   └── predict.py         # 예측 스크립트
+│
+├── docs/                  # 문서
+│   └── GIT_WORKFLOW.md   # Git 작업 정책
+│
+└── README.md
+```
+
+---
+
+## 🚀 시작하기
+
+### 필수 요구사항
+
+- **Node.js** 18+ (프론트엔드)
+- **Java** 11+ (백엔드)
+- **Python** 3.8+ (ML 모델)
+- **PostgreSQL** 13+
+- **Git**
+
+### 설치 방법
+
+#### 1️⃣ 저장소 클론
+
 ```bash
-# 변경사항 확인
-git status
-git diff
-
-# 불필요한 파일 제외
-# .gitignore 활용
-
-# 테스트 실행
-npm test  # 프론트엔드
-./mvnw test  # 백엔드
-pytest  # ML 모델
-
-# 커밋
-git commit -m "타입(스코프): 설명"
+git clone https://github.com/hwan0050/stock-prediction-app.git
+cd stock-prediction-app
 ```
 
-### 2. 자주 사용하는 명령어
+#### 2️⃣ 백엔드 설정 (Spring Boot)
+
 ```bash
-# 커밋 히스토리 보기
-git log --oneline --graph
-
-# 마지막 커밋 수정
-git commit --amend
-
-# 작업 임시 저장
-git stash
-git stash pop
-
-# 브랜치 목록
-git branch -a
-
-# 원격 브랜치 삭제
-git push origin --delete feature/old-feature
+cd backend
+./mvnw clean install
+./mvnw spring-boot:run
 ```
 
-### 3. 좋은 습관
-- ✅ 매일 작업 시작 전 `git pull`
-- ✅ 작은 단위로 자주 커밋
-- ✅ 의미 있는 커밋 메시지 작성
-- ✅ Push 전에 로컬에서 테스트
-- ✅ PR에 작업 내용과 스크린샷 포함
+서버: `http://localhost:8080`
 
-### 4. 나쁜 습관
-- ❌ 며칠 작업을 한 번에 커밋
-- ❌ "수정", "변경" 같은 모호한 메시지
-- ❌ main/develop에 직접 푸시
-- ❌ 머지된 브랜치 방치
+#### 3️⃣ 프론트엔드 설정 (React)
 
----
+```bash
+cd frontend
+npm install
+npm start
+```
 
-## 📂 .gitignore 설정
+앱: `http://localhost:3000`
 
-```gitignore
-# Node.js (Frontend)
-node_modules/
-npm-debug.log
-yarn-error.log
-.env.local
+#### 4️⃣ ML 모델 설정 (Python)
 
-# Java (Backend)
-target/
-.gradle/
-build/
-*.class
-*.jar
-*.war
-
-# Python (ML Model)
-__pycache__/
-*.pyc
-*.pyo
-venv/
-.env
-*.h5
-*.pkl
-data/*.csv
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-.DS_Store
-
-# Database
-*.db
-*.sqlite
-
-# Logs
-*.log
-logs/
-
-# Environment
-.env
-.env.local
-.env.production
+```bash
+cd ml-model
+pip install -r requirements.txt
+python train.py
 ```
 
 ---
 
-## ✨ 요약
+## 💡 사용 방법
 
-1. **브랜치**: 기능 단위로 생성 (`feature/기능명`)
-2. **커밋**: 작은 단위로 자주 (`타입(스코프): 설명`)
-3. **푸시**: 작업 완료 후 원격에 백업
-4. **PR**: 코드 리뷰 후 머지
-5. **정리**: 머지된 브랜치는 삭제
+### 1. 주식 검색
+```
+홈 화면에서 종목 코드 또는 이름 입력
+예: "삼성전자", "005930", "AAPL"
+```
 
-이 정책을 따르면 깔끔하고 관리하기 쉬운 Git 히스토리를 유지할 수 있습니다! 🎉
+### 2. 차트 확인
+```
+선택한 종목의 과거 데이터 및 예측 그래프 표시
+```
+
+### 3. 예측 보기
+```
+AI 모델이 분석한 다음 주 예상 가격 확인
+```
+
+---
+
+## 📊 API 엔드포인트
+
+### 주가 데이터 조회
+```http
+GET /api/stocks/{symbol}
+```
+
+### 예측 데이터 조회
+```http
+GET /api/predictions/{symbol}?days=7
+```
+
+### 알림 설정
+```http
+POST /api/alerts
+Content-Type: application/json
+
+{
+  "symbol": "005930",
+  "targetPrice": 75000,
+  "condition": "above"
+}
+```
+
+자세한 API 문서: [API.md](docs/API.md) (예정)
+
+---
+
+## 🎨 화면 구성
+
+### 메인 화면
+- 인기 종목 목록
+- 실시간 시장 현황
+- 검색 바
+
+### 종목 상세
+- 실시간 가격
+- 과거 데이터 차트
+- AI 예측 그래프
+- 기술적 지표
+
+### 마이페이지
+- 관심 종목
+- 알림 설정
+- 예측 히스토리
+
+---
+
+## 🧪 테스트
+
+```bash
+# 백엔드 테스트
+cd backend
+./mvnw test
+
+# 프론트엔드 테스트
+cd frontend
+npm test
+
+# ML 모델 테스트
+cd ml-model
+pytest
+```
+
+---
+
+## 📋 개발 로드맵
+
+### Phase 1: MVP (진행 중)
+- [x] 프로젝트 초기 설정
+- [ ] 기본 UI 구현
+- [ ] 주가 데이터 API 연동
+- [ ] 간단한 차트 표시
+
+### Phase 2: 핵심 기능
+- [ ] 사용자 인증 시스템
+- [ ] 기본 ML 모델 구현
+- [ ] 실시간 데이터 업데이트
+- [ ] 관심 종목 관리
+
+### Phase 3: 고급 기능
+- [ ] 딥러닝 모델 적용
+- [ ] 포트폴리오 분석
+- [ ] 뉴스 감성 분석
+- [ ] 모바일 앱 개발
+
+---
+
+## 🤝 기여하기
+
+프로젝트에 기여하고 싶으신가요? 환영합니다!
+
+### 기여 프로세스
+
+1. **Fork** 이 저장소
+2. **Feature 브랜치** 생성 (`git checkout -b feature/amazing-feature`)
+3. **변경사항 커밋** (`git commit -m 'feat: Add amazing feature'`)
+4. **브랜치에 Push** (`git push origin feature/amazing-feature`)
+5. **Pull Request** 생성
+
+### Git 작업 정책
+
+이 프로젝트는 체계적인 Git 작업 정책을 따릅니다.
+
+📖 자세한 내용: [Git 작업 정책](docs/GIT_WORKFLOW.md)
+
+---
+
+## 📝 라이선스
+
+이 프로젝트는 MIT 라이선스를 따릅니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
+
+---
+
+## 👤 개발자
+
+**Hwan Lee**
+
+- GitHub: [@hwan0050](https://github.com/hwan0050)
+- Email: akma0050@naver.com
+
+---
+
+## 🙏 감사의 말
+
+- [Yahoo Finance API](https://finance.yahoo.com) - 주가 데이터 제공
+- [Chart.js](https://www.chartjs.org) - 차트 라이브러리
+- [Spring Boot](https://spring.io/projects/spring-boot) - 백엔드 프레임워크
+
+---
+
+## 📌 참고 자료
+
+- [프로젝트 위키](../../wiki)
+- [이슈 트래커](../../issues)
+- [변경 로그](CHANGELOG.md)
+- [기여 가이드](CONTRIBUTING.md)
+
+---
+
+<div align="center">
+
+**⭐ 이 프로젝트가 도움이 되셨다면 Star를 눌러주세요! ⭐**
+
+Made with ❤️ by Hwan
+
+</div>
