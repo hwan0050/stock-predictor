@@ -1,3 +1,12 @@
+<div align="center">
+  
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=header&text=Stock%20Prediction%20App&fontSize=50&fontAlignY=35&animation=twinkling&fontColor=ffffff" />
+  
+  <h3>🤖 AI 기반 주가 예측 웹 애플리케이션</h3>
+  <p>React · Spring Boot · Python · Machine Learning</p>
+  
+</div>
+
 # 📈 Stock Prediction App
 
 <div align="center">
