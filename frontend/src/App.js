@@ -7,42 +7,37 @@ import StockChart from './components/StockChart';
 function App() {
   const [stock, setStock] = useState(null);
   const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSearch = (symbol) => {
-    // 임시 주식 데이터
-    const mockStock = {
-      symbol: symbol,
-      name: symbol === 'AAPL' ? 'Apple Inc.' : 
-            symbol === '005930' ? '삼성전자' : 
-            symbol,
-      price: 150.25,
-      change: 2.50,
-      changePercent: 1.69,
-      volume: 45678900,
-      marketCap: 2500000000000
-    };
+  const handleSearch = async (symbol) => {
+    setLoading(true);
+    setError(null);
     
-    // 임시 차트 데이터 (30일)
-    const mockChartData = [];
-    const today = new Date();
-    let basePrice = 140;
-    
-    for (let i = 29; i >= 0; i--) {
-      const date = new Date(today);
-      date.setDate(date.getDate() - i);
+    try {
+      // 백엔드 API 호출
+      const stockResponse = await fetch(`http://localhost:8080/api/stocks/${symbol}`);
+      const stockData = await stockResponse.json();
       
-      // 랜덤 가격 변동 (±5%)
-      const change = (Math.random() - 0.5) * 10;
-      basePrice = Math.max(basePrice + change, 100);
+      const historyResponse = await fetch(`http://localhost:8080/api/stocks/${symbol}/history`);
+      const historyData = await historyResponse.json();
       
-      mockChartData.push({
-        date: `${date.getMonth() + 1}/${date.getDate()}`,
-        price: basePrice
-      });
+      setStock(stockData);
+      
+      // 차트 데이터 변환
+      const chartDataFormatted = historyData.data.map(item => ({
+        date: item.date.substring(5), // MM-DD 형식
+        price: item.close
+      }));
+      
+      setChartData(chartDataFormatted);
+      
+    } catch (err) {
+      console.error('API 호출 실패:', err);
+      setError('데이터를 불러오는데 실패했습니다.');
+    } finally {
+      setLoading(false);
     }
-    
-    setStock(mockStock);
-    setChartData(mockChartData);
   };
 
   return (
@@ -51,6 +46,9 @@ function App() {
       <p>Stock Prediction Platform</p>
       
       <SearchBar onSearch={handleSearch} />
+      
+      {loading && <p style={{color: 'white'}}>로딩 중...</p>}
+      {error && <p style={{color: '#ff6b6b'}}>{error}</p>}
       
       {stock && <StockCard stock={stock} />}
       
