@@ -17,24 +17,43 @@ function App() {
     try {
       // 백엔드 API 호출
       const stockResponse = await fetch(`http://localhost:8080/api/stocks/${symbol}`);
+
+      if (!stockResponse.ok) {
+        throw new Error(`HTTP error! status: ${stockResponse.status}`);
+      }
+
       const stockData = await stockResponse.json();
-      
-      const historyResponse = await fetch(`http://localhost:8080/api/stocks/${symbol}/history`);
-      const historyData = await historyResponse.json();
-      
       setStock(stockData);
-      
-      // 차트 데이터 변환
-      const chartDataFormatted = historyData.data.map(item => ({
-        date: item.date.substring(5), // MM-DD 형식
-        price: item.close
-      }));
-      
-      setChartData(chartDataFormatted);
-      
+
+      // History API 호출
+      const historyResponse = await fetch(`http://localhost:8080/api/stocks/${symbol}/history?days=30`);
+
+      if (historyResponse.ok) {
+        const historyData = await historyResponse.json();
+
+        // 데이터 존재 여부 확인
+        if (historyData && historyData.data && Array.isArray(historyData.data)) {
+          // 차트 데이터 변환
+          const chartDataFormatted = historyData.data.map(item => ({
+            date: item.date ? item.date.substring(5) : '', // MM-DD 형식
+            price: item.close || 0
+          }));
+
+          setChartData(chartDataFormatted);
+        } else {
+          console.warn('History data not available');
+          setChartData([]);
+        }
+      } else {
+        console.warn('History API failed, skipping chart');
+        setChartData([]);
+      }
+
     } catch (err) {
       console.error('API 호출 실패:', err);
       setError('데이터를 불러오는데 실패했습니다.');
+      setStock(null);
+      setChartData([]);
     } finally {
       setLoading(false);
     }

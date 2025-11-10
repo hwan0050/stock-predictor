@@ -31,6 +31,11 @@ public class StockController {
     public ResponseEntity<StockDataDto> getStock(@PathVariable String symbol) {
         try {
             log.info("Received request for stock: {}", symbol);
+
+            // TEST 심볼이면 Mock 데이터 반환
+            if ("TEST".equalsIgnoreCase(symbol)) {
+                return getTestMockData();
+            }
             StockDataDto stockData = yahooFinanceService.getRealtimeStockData(symbol);
             return ResponseEntity.ok(stockData);
         } catch (Exception e) {
