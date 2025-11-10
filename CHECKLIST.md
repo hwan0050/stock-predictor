@@ -7,7 +7,7 @@
 
 ---
 
-## 📊 전체 진행률: 30% (8/24)
+## 📊 전체 진행률: 40% (12/24)
 
 ---
 
@@ -44,29 +44,29 @@
 
 ---
 
-## Phase 2: Frontend 개발 (진행률: 0%)
+## Phase 2: Frontend 개발 (진행률: 40%)
 
 ### 2.1 프로젝트 초기 설정
-- [ ] React 프로젝트 생성
-- [ ] 폴더 구조 설계
+- [X] React 프로젝트 생성 ✅
+- [X] 폴더 구조 설계 ✅
 - [ ] Tailwind CSS 설치
 - [ ] Axios 설치
 
 ### 2.2 기본 컴포넌트
-- [ ] 헤더/네비게이션
-- [ ] 검색 바
-- [ ] 주가 카드 컴포넌트
-- [ ] 차트 컴포넌트
+- [X] 헤더/네비게이션 ✅
+- [X] 검색 바 ✅
+- [X] 주가 카드 컴포넌트 ✅
+- [X] 차트 컴포넌트 ✅
 
 ### 2.3 API 연동
 - [ ] Axios 인스턴스 설정
-- [ ] API 서비스 함수 작성
-- [ ] 실시간 데이터 조회
-- [ ] 에러 핸들링
+- [X] API 서비스 함수 작성 ✅ (fetch 사용)
+- [X] 실시간 데이터 조회 ✅
+- [X] 에러 핸들링 ✅
 
 ### 2.4 차트 구현
-- [ ] Chart.js 또는 Recharts 설치
-- [ ] 주가 차트 컴포넌트
+- [X] Chart.js 설치 ✅
+- [X] 주가 차트 컴포넌트 ✅
 - [ ] 인터랙티브 기능
 - [ ] 반응형 디자인
 
@@ -121,14 +121,22 @@
 
 ## 🔧 현재 작업 중
 
-**날짜:** 2025-11-08  
-**작업:** Backend API 연동 완료, Frontend 개발 시작 준비
+**날짜:** 2025-11-09  
+**작업:** Frontend-Backend 연동 완료! 다음: axios 설치 및 UI 개선
 
 **완료 사항:**
-- Yahoo Finance API 연동 완료
-- Mock 테스트 엔드포인트 추가 (/api/stocks/test/mock)
-- Git 커밋 완료 (2회)
-- IntelliJ 환경 설정 완료
+- Backend API Mock 데이터 처리 추가
+- Frontend StockCard 버그 수정 (price → currentPrice)
+- Frontend App.js 에러 처리 개선
+- TEST 심볼로 정상 작동 확인
+- Frontend 실행 성공 (localhost:3000)
+- Backend 실행 성공 (localhost:8080)
+
+**다음 작업:**
+- axios 설치 및 적용
+- SearchBar, StockChart 컴포넌트 확인
+- 실제 주가 데이터 테스트 (Yahoo API 복구 대기)
+- UI/UX 개선
 
 **파일 위치:** `/backend/src/main/java/com/stock/predictor/`
 
