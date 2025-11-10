@@ -276,4 +276,4 @@ feat: TEST 심볼 자동 Mock 데이터 반환
 **마지막 업데이트:** 2025-11-09 00:15  
 **작업자:** Hwan Lee  
 **환경:** IntelliJ IDEA + Windows PowerShell
-**상태:** Frontend-Backend 연동 성공! 🎉
+**상태:** Frontend-Backend 연동 성공! 🎉 
