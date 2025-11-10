@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Map;
 
 @Slf4j
@@ -77,6 +79,11 @@ public class StockController {
         try {
             log.info("Received history request for stock: {}, days: {}, from: {}, to: {}",
                     symbol, days, from, to);
+
+            // TEST 심볼이면 Mock 히스토리 데이터 반환
+            if ("TEST".equalsIgnoreCase(symbol)) {
+                return getTestMockHistory(days != null ? days : 30);
+            }
 
             List<StockHistoryDto> historyData;
 
@@ -180,6 +187,44 @@ public class StockController {
                 .build();
 
         return ResponseEntity.ok(mockData);
+    }
+
+    /**
+     * 테스트용 Mock 히스토리 데이터
+     */
+    private ResponseEntity<Map<String, Object>> getTestMockHistory(int days) {
+        List<StockHistoryDto> historyData = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        BigDecimal basePrice = new BigDecimal("145.00");
+
+        // 과거 N일 데이터 생성
+        for (int i = days - 1; i >= 0; i--) {
+            LocalDate date = today.minusDays(i);
+
+            // 랜덤 변동 (-5 ~ +5)
+            double randomChange = (Math.random() - 0.5) * 10;
+            BigDecimal price = basePrice.add(BigDecimal.valueOf(randomChange));
+
+            StockHistoryDto historyDto = StockHistoryDto.builder()
+                    .date(date)
+                    .open(price.multiply(BigDecimal.valueOf(0.99)))
+                    .high(price.multiply(BigDecimal.valueOf(1.02)))
+                    .low(price.multiply(BigDecimal.valueOf(0.98)))
+                    .close(price)
+                    .adjClose(price)
+                    .volume((long)(Math.random() * 10000000) + 5000000L)
+                    .build();
+
+            historyData.add(historyDto);
+            basePrice = price; // 다음 날 기준 가격
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("symbol", "TEST");
+        response.put("data", historyData);
+        response.put("count", historyData.size());
+
+        return ResponseEntity.ok(response);
     }
 }
 
