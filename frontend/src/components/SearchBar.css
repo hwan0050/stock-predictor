@@ -46,3 +46,26 @@
 .search-bar button:active {
   transform: translateY(0);
 }
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .search-bar {
+    margin: 1.5rem 1rem;
+    max-width: 100%;
+  }
+
+  .search-bar form {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .search-bar input {
+    padding: 0.8rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .search-bar button {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}

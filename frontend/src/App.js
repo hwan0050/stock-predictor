@@ -74,8 +74,14 @@ function App() {
 
       <SearchBar onSearch={handleSearch} />
 
-      {loading && <p style={{color: 'white'}}>로딩 중...</p>}
-      {error && <p style={{color: '#ff6b6b'}}>{error}</p>}
+      {loading && (
+        <div className="loading-container">
+          <div className="spinner"></div>
+          <p>데이터를 불러오는 중...</p>
+        </div>
+      )}
+
+      {error && <div className="error-message">{error}</div>}
 
       {stock && <StockCard stock={stock} />}
 
