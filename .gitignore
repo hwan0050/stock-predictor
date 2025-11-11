@@ -1,30 +1,132 @@
-# Node.js (Frontend)
-node_modules/
-npm-debug.log
-yarn-error.log
-.env.local
+# Stock Predictor - Root .gitignore
+
+# ===================================
+# OS Generated Files
+# ===================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ===================================
+# IDE & Editors
+# ===================================
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.idea_modules/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Eclipse
+.project
+.classpath
+.settings/
+.metadata/
+
+# NetBeans
+nbproject/
+nbbuild/
+nbdist/
+
+# ===================================
+# Logs
+# ===================================
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# ===================================
+# Temporary Files
+# ===================================
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.cache/
+
+# ===================================
+# Build & Distribution
+# ===================================
 dist/
 build/
-
-# Java (Backend)
 target/
-.gradle/
-build/
-*.class
 *.jar
+!gradle-wrapper.jar
 *.war
-.mvn/
-mvnw
-mvnw.cmd
+*.ear
 
-# Python (ML Model)
-__pycache__/
-*.pyc
-*.pyo
-venv/
+# ===================================
+# Dependencies
+# ===================================
+node_modules/
+.pnp/
+.pnp.js
+
+# ===================================
+# Environment Variables
+# ===================================
 .env
-*.h5
-*.pkl
-*.model
-data/*.csv
-*.ipynb_checkpo
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ===================================
+# Database
+# ===================================
+*.db
+*.sqlite
+*.sqlite3
+
+# ===================================
+# Coverage & Testing
+# ===================================
+coverage/
+.nyc_output/
+*.lcov
+*.coverage
+
+# ===================================
+# Documentation
+# ===================================
+docs/_build/
+site/
+
+# ===================================
+# Misc
+# ===================================
+*.bak
+*.orig
+*.rej
+.gradle/
+gradle/
+!gradle/wrapper/
+
+# ===================================
+# Project Specific
+# ===================================
+# Screenshots (optional - remove if you want to track them)
+# docs/screenshots/*.png
+
+# Mock data
+mock-data/
+
+# Secrets
+secrets/
+*.pem
+*.key
+*.cert
