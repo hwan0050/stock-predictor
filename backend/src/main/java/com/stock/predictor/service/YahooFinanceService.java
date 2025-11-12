@@ -4,6 +4,7 @@ import com.stock.predictor.dto.StockDataDto;
 import com.stock.predictor.dto.StockHistoryDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.Cacheable;
 import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
 import yahoofinance.histquotes.HistoricalQuote;
@@ -25,10 +26,11 @@ import java.util.stream.Collectors;
 public class YahooFinanceService {
 
     /**
-     * 실시간 주가 데이터 조회
+     * 실시간 주가 데이터 조회 (캐싱 적용)
      * @param symbol 종목 코드 (예: "AAPL", "005930.KS")
      * @return StockDataDto
      */
+    @Cacheable(value = "stocks", key = "#symbol")
     public StockDataDto getRealtimeStockData(String symbol) {
         try {
             log.info("Fetching real-time stock data for symbol: {}", symbol);
@@ -132,12 +134,13 @@ public class YahooFinanceService {
     }
 
     /**
-     * 주가 히스토리 데이터 조회
+     * 주가 히스토리 데이터 조회 (캐싱 적용)
      * @param symbol 종목 코드
      * @param from 시작일
      * @param to 종료일
      * @return List<StockHistoryDto>
      */
+    @Cacheable(value = "stocks", key = "#symbol")
     public List<StockHistoryDto> getStockHistory(String symbol, LocalDate from, LocalDate to) {
         try {
             log.info("Fetching history for symbol: {} from {} to {}", symbol, from, to);
