@@ -1,397 +1,285 @@
-# 🚀 주가 예측 웹 애플리케이션 - 개발 체크리스트
+# 📋 Stock Predictor - 개발 체크리스트
 
-## 프로젝트 정보
-- **GitHub:** https://github.com/hwan0050/stock-predictor
-- **시작일:** 2025-11-08
-- **기술스택:** React, Spring Boot, Python
-
----
-
-## 📊 전체 진행률: 50% (15/30)
+> **최종 업데이트**: 2024-11-12  
+> **현재 진행률**: 60%  
+> **GitHub**: https://github.com/hwan0050/stock-predictor
 
 ---
 
-## Phase 1: Backend 개발 (진행률: 75% 완료) ✅
+## 🎯 프로젝트 개요
 
-### 1.1 프로젝트 초기 설정
-- [X] Spring Boot 프로젝트 생성
-- [X] build.gradle 설정
-- [X] 기본 패키지 구조 생성
-- [X] application.properties 설정
-- [X] CORS 설정
+### 기본 정보
+- **프로젝트명**: Stock Predictor (주가 예측 웹 애플리케이션)
+- **로컬 경로**: `F:\workspace\stock-predictor`
+- **포트**: Frontend(3000), Backend(8080)
+- **현재 버전**: v0.6.0
 
-### 1.2 Yahoo Finance API 연동 ✅ **완료!**
-- [X] Yahoo Finance API 의존성 추가
-- [X] StockDataDto.java 생성
-- [X] StockHistoryDto.java 생성
-- [X] YahooFinanceService.java 구현
-- [X] StockController.java 구현
-- [X] GlobalExceptionHandler.java 생성
-- [X] API 로컬 테스트 완료 (Mock 엔드포인트)
-- [X] Mock 테스트 완료
-- [X] TEST 심볼 자동 Mock 데이터 반환 추가
-- [X] TEST 심볼 history Mock 데이터 추가
+### 기술 스택
+- **Frontend**: React 18, Chart.js 4, Axios, CSS Variables
+- **Backend**: Spring Boot 3, Gradle, Yahoo Finance API
+- **기타**: Git, IntelliJ IDEA, VSCode
 
-### 1.3 데이터베이스 설계
-- [ ] Entity 클래스 설계
+---
+
+## ✅ Phase 1: 기본 구축 (100% 완료)
+
+### Backend 구축
+- [x] Spring Boot 프로젝트 초기화
+- [x] Gradle 설정
+- [x] 기본 패키지 구조 생성
+- [x] Yahoo Finance API 연동
+- [x] RESTful API 구현
+    - [x] `/api/stocks/{symbol}` - 현재 주가 조회
+    - [x] `/api/stocks/{symbol}/history` - 과거 데이터 조회
+- [x] CORS 설정
+- [x] Mock 데이터 (TEST 심볼)
+- [x] Exception 처리 (GlobalExceptionHandler)
+- [x] Spring Cache 설정 (429 에러 대응)
+
+### Frontend 구축
+- [x] React 프로젝트 초기화 (Create React App)
+- [x] 필수 패키지 설치
+    - [x] axios
+    - [x] chart.js, react-chartjs-2
+- [x] Backend 연동 (API 통신)
+- [x] 컴포넌트 구조 설계
+    - [x] SearchBar - 검색 바
+    - [x] StockCard - 주가 정보 카드
+    - [x] StockChart - 차트 컴포넌트
+    - [x] SearchHistory - 검색 히스토리
+
+### 기본 기능
+- [x] 주식 심볼 검색
+- [x] 현재 주가 표시
+- [x] 30일 히스토리 차트
+- [x] 로딩 스피너
+- [x] 에러 처리 및 메시지
+
+---
+
+## ✅ Phase 2: UI/UX 개선 (100% 완료)
+
+### 디자인
+- [x] 반응형 레이아웃 (모바일/태블릿/데스크톱)
+- [x] 깔끔한 UI 디자인
+- [x] 카드 스타일 컴포넌트
+- [x] 부드러운 애니메이션 효과
+- [x] 컬러 스킴 설정
+
+### 사용자 경험
+- [x] Favicon 추가 (📈)
+- [x] 환경 변수 설정 (.env)
+- [x] 검색 히스토리 (LocalStorage)
+- [x] 히스토리 클릭으로 재검색
+- [x] 친절한 에러 메시지
+- [x] Welcome 메시지
+
+### 다크모드 (NEW!)
+- [x] ThemeToggle 컴포넌트 추가
+- [x] 라이트/다크 테마 전환
+- [x] LocalStorage 테마 저장
+- [x] CSS Variables 활용
+- [x] 부드러운 전환 애니메이션
+- [x] 모든 컴포넌트 테마 적용
+
+### 버그 수정 (NEW!)
+- [x] StockCard 렌더링 오류 해결
+- [x] StockChart 데이터 구조 처리 개선
+- [x] 에러 처리 강화
+- [x] 데이터 검증 추가
+
+---
+
+## ✅ Phase 3: 문서화 (100% 완료)
+
+### README 작성
+- [x] 메인 README.md
+- [x] Frontend README.md
+- [x] Backend README.md
+- [x] 스크린샷 추가
+- [x] 설치 및 실행 가이드
+
+### 기타 문서
+- [x] CONTRIBUTING.md
+- [x] LICENSE (MIT)
+- [x] .gitignore (루트, Backend, Frontend)
+- [x] CHECKLIST.md (이 파일)
+
+### GitHub
+- [x] 저장소 생성
+- [x] 초기 커밋
+- [x] GitHub 프로필 README 업데이트
+- [x] 프로젝트 Description 작성
+
+---
+
+## 🚧 Phase 4: 추가 기능 (진행 중 - 0%)
+
+### 404 페이지 (다음 작업!)
+- [ ] NotFound 컴포넌트 생성
+- [ ] React Router 설치
+- [ ] 라우팅 설정
+- [ ] 404 페이지 디자인
+
+### 로딩 개선
+- [ ] Skeleton UI 검토
+- [ ] 더 나은 로딩 애니메이션
+- [ ] 프로그레스 바 추가
+
+### 검색 기능 개선
+- [ ] 자동완성 기능
+- [ ] 인기 종목 추천
+- [ ] 검색 히스토리 삭제 기능
+
+---
+
+## 📅 Phase 5: 차트 기능 확장 (예정)
+
+- [ ] 기간 선택 (7일/30일/90일/1년)
+- [ ] 차트 타입 선택 (라인/캔들)
+- [ ] 이동평균선 추가
+- [ ] 거래량 차트
+- [ ] 비교 차트 (여러 종목 비교)
+
+---
+
+## 🗄️ Phase 6: 데이터베이스 (예정)
+
+- [ ] PostgreSQL 설치 및 설정
+- [ ] JPA Entity 설계
+    - [ ] Stock Entity
+    - [ ] StockHistory Entity
+    - [ ] User Entity (선택)
 - [ ] Repository 구현
-- [ ] 주가 데이터 저장 로직
-- [ ] 스케줄러로 정기 수집
-
-### 1.4 추가 기능
-- [ ] 캐싱 (Redis/Spring Cache) ⬅️ **다음 우선순위!**
-- [ ] Rate Limiting
-- [ ] 로깅 강화
-- [ ] 단위 테스트 작성
+- [ ] Service Layer 리팩토링
+- [ ] 실시간 데이터 DB 저장
+- [ ] 데이터 캐싱 전략
 
 ---
 
-## Phase 2: Frontend 개발 (진행률: 60% 완료) 🔥
+## 🤖 Phase 7: AI 예측 모델 (예정)
 
-### 2.1 프로젝트 초기 설정
-- [X] React 프로젝트 생성 (Create React App)
-- [X] 폴더 구조 설계
-- [X] Chart.js 설치
-- [X] Axios 설치 ✅
-- [ ] Tailwind CSS 설치 (선택)
-
-### 2.2 기본 컴포넌트
-- [X] 헤더/네비게이션
-- [X] 검색 바 (SearchBar.js) ✅
-- [X] 주가 카드 컴포넌트 (StockCard.js) ✅
-- [X] 차트 컴포넌트 (StockChart.js) ✅
-
-### 2.3 API 연동
-- [X] Axios 인스턴스 설정 ✅
-- [X] API 서비스 함수 작성 (axios 사용) ✅
-- [X] 실시간 데이터 조회 ✅
-- [X] 에러 핸들링 ✅
-- [X] Backend API 연동 성공 ✅
-
-### 2.4 차트 구현
-- [X] Chart.js 설치 완료 ✅
-- [X] 주가 차트 컴포넌트 작성 ✅
-- [X] 30일 히스토리 차트 표시 ✅
-- [ ] 인터랙티브 기능 추가
-- [X] 반응형 디자인 ✅
-
-### 2.5 UI/UX
-- [X] 로딩 스피너 애니메이션 ✅
-- [X] 에러 메시지 스타일링 ✅
-- [X] 반응형 디자인 (모바일, 태블릿) ✅
-- [ ] 다크모드 (선택)
-- [ ] 애니메이션 효과 추가
-
-### 2.6 주요 페이지
-- [X] 홈 페이지 (기본) ✅
-- [ ] 종목 상세 페이지
-- [ ] 관심 목록 페이지
-- [ ] 예측 결과 페이지
+- [ ] Python 환경 설정
+- [ ] LSTM 모델 개발
+- [ ] 학습 데이터 수집 및 전처리
+- [ ] 모델 학습 및 평가
+- [ ] 예측 API 개발
+- [ ] Backend 연동
+- [ ] 예측 결과 시각화
 
 ---
 
-## Phase 3: ML 모델 개발 (진행률: 0%)
+## 🔐 Phase 8: 사용자 인증 (예정)
 
-### 3.1 데이터 수집
-- [ ] 과거 주가 데이터 수집
-- [ ] 데이터 전처리
-- [ ] 학습/테스트 데이터 분리
-
-### 3.2 모델 개발
-- [ ] LSTM 모델 구현
-- [ ] 모델 학습
-- [ ] 모델 평가
-- [ ] 하이퍼파라미터 튜닝
-
-### 3.3 모델 배포
-- [ ] Flask API 서버 구축
-- [ ] 예측 엔드포인트 구현
-- [ ] Backend와 연동
+- [ ] JWT 인증 구현
+- [ ] Spring Security 설정
+- [ ] 회원가입 API
+- [ ] 로그인 API
+- [ ] 사용자 프로필 관리
+- [ ] 관심 종목 저장 기능
+- [ ] 포트폴리오 관리
 
 ---
 
-## Phase 4: 통합 및 배포 (진행률: 0%)
+## 🚀 Phase 9: 배포 (예정)
 
-### 4.1 통합 테스트
-- [ ] Frontend-Backend 연동 테스트
-- [ ] Backend-ML 연동 테스트
-- [ ] E2E 테스트
+### Frontend 배포
+- [ ] Vercel 배포 준비
+- [ ] 환경 변수 설정
+- [ ] 빌드 최적화
+- [ ] 배포 및 테스트
 
-### 4.2 배포 준비
+### Backend 배포
+- [ ] AWS EC2 설정
 - [ ] Docker 컨테이너화
-- [ ] CI/CD 파이프라인
-- [ ] 환경변수 설정
-- [ ] 보안 설정
+- [ ] CI/CD 파이프라인 (GitHub Actions)
+- [ ] 모니터링 설정
 
-### 4.3 배포
-- [ ] Backend 배포 (AWS/Heroku)
-- [ ] Frontend 배포 (Vercel/Netlify)
-- [ ] ML 모델 배포
+### 기타
 - [ ] 도메인 연결
+- [ ] HTTPS 설정
+- [ ] 성능 최적화
+- [ ] SEO 최적화
 
 ---
 
-## 🔧 현재 작업 중
+## 📊 진행률 요약
 
-**날짜:** 2025-11-09  
-**작업:** UI/UX 개선 완료! 🎉  
-**다음:** 캐싱 추가 또는 추가 기능 개발
+| Phase | 내용 | 진행률 | 상태 |
+|-------|------|--------|------|
+| Phase 1 | 기본 구축 | 100% | ✅ 완료 |
+| Phase 2 | UI/UX 개선 | 100% | ✅ 완료 |
+| Phase 3 | 문서화 | 100% | ✅ 완료 |
+| Phase 4 | 추가 기능 | 0% | 🚧 시작 예정 |
+| Phase 5 | 차트 확장 | 0% | 📅 계획 중 |
+| Phase 6 | 데이터베이스 | 0% | 📅 계획 중 |
+| Phase 7 | AI 예측 | 0% | 📅 계획 중 |
+| Phase 8 | 사용자 인증 | 0% | 📅 계획 중 |
+| Phase 9 | 배포 | 0% | 📅 계획 중 |
 
-**완료 사항:**
-- ✅ axios 설치 및 fetch → axios 리팩토링
-- ✅ SearchBar 컴포넌트 확인
-- ✅ 실제 주가 테스트 (AAPL, MSFT - 429 에러 확인)
-- ✅ 로딩 스피너 애니메이션 추가
-- ✅ 에러 메시지 스타일 개선
-- ✅ 반응형 디자인 구현 (768px, 480px)
-- ✅ 모든 컴포넌트 모바일 최적화
-- ✅ Git 커밋 완료
-
-**파일 위치:**
-
-**Backend:**
-- `/backend/src/main/java/com/stock/predictor/controller/StockController.java`
-- `/backend/src/main/java/com/stock/predictor/service/YahooFinanceService.java`
-- `/backend/src/main/java/com/stock/predictor/dto/`
-
-**Frontend:**
-- `/frontend/src/App.js` (axios 적용, UI 개선)
-- `/frontend/src/App.css` (스피너, 반응형)
-- `/frontend/src/components/SearchBar.js`
-- `/frontend/src/components/SearchBar.css` (반응형)
-- `/frontend/src/components/StockCard.js`
-- `/frontend/src/components/StockCard.css` (반응형)
-- `/frontend/src/components/StockChart.js`
-- `/frontend/src/components/StockChart.css` (반응형)
-- `/frontend/package.json` (axios 추가)
+**전체 진행률**: 60% (Phase 1-3 완료)
 
 ---
 
-## 📝 다음 작업 (우선순위)
+## 🎯 다음 작업 (우선순위 순)
 
-### 1. **캐싱 추가** (30분) ⬅️ **추천!**
-- Spring Cache 또는 Redis
-- 같은 종목 5분간 캐싱
-- Yahoo API 429 에러 회피
+### 이번 주 목표
+1. ✅ ~~다크모드 구현~~ (완료!)
+2. 🔜 404 페이지 추가
+3. 🔜 로딩 애니메이션 개선
+4. 🔜 검색 기능 개선
 
-### 2. **API 대체** (1시간)
-- Alpha Vantage API
-- IEX Cloud API
-- Finnhub API
-
-### 3. **추가 기능** (1시간+)
-- 관심 종목 저장 (LocalStorage)
-- 여러 종목 비교
-- 검색 히스토리
-
-### 4. **ML 모델 연동 준비** (Phase 3 시작)
-- Python 환경 설정
-- 데이터 수집 스크립트
-- LSTM 모델 개발
+### 이번 달 목표
+- Phase 4 완료 (추가 기능)
+- Phase 5 시작 (차트 확장)
 
 ---
 
 ## 🐛 알려진 이슈
 
-### Backend:
-- ⚠️ **Yahoo Finance API 429 에러** (Too Many Requests)
-    - **현재 상황:** 실제 종목(AAPL, MSFT 등) 검색 시 발생
-    - **임시 해결:** TEST 심볼로 Mock 데이터 사용
-    - **영구 해결 방안:**
-        1. 캐싱 추가 (Redis/Spring Cache) - 최우선!
-        2. API 대체 (Alpha Vantage, IEX Cloud)
-        3. Rate Limiting 구현
+### 해결됨 ✅
+- ~~Backend 429 에러~~ → Spring Cache로 해결
+- ~~Frontend 데이터 미표시~~ → 컴포넌트 재작성으로 해결
+- ~~다크모드 렌더링 오류~~ → ThemeToggle 컴포넌트 추가로 해결
 
-### Frontend:
-- ~~StockCard price 속성 에러~~ ✅ 해결
-- ~~App.js history.data undefined 에러~~ ✅ 해결
-- ~~fetch 에러 처리 부족~~ ✅ 해결 (axios로 개선)
+### 진행 중 🚧
+- 없음
 
----
-
-## 💡 메모 / 아이디어
-
-### API 관련:
-- Yahoo Finance API는 무료 버전이라 호출 제한 있음
-- 한국 주식은 `.KS` 또는 `.KQ` 붙여야 함
-- Mock 엔드포인트:
-    - `/api/stocks/test/mock` (기존)
-    - `/api/stocks/TEST` (자동 Mock 반환) ✅
-    - `/api/stocks/TEST/history?days=30` (히스토리 Mock) ✅
-
-### 기술 스택:
-- Chart.js + react-chartjs-2 잘 작동! ✅
-- axios로 코드 20% 간소화 ✅
-- 반응형 디자인 3가지 브레이크포인트 (480px, 768px, desktop) ✅
-
-### 향후 계획:
-- WebSocket으로 실시간 업데이트 고려
-- TypeScript 마이그레이션 고려
-- Tailwind CSS 추가 고려
-- 다크모드 추가
-- PWA (Progressive Web App) 변환
+### 예정 📅
+- React Router 추가 필요
+- 자동완성 API 필요
+- 실시간 데이터 업데이트 필요
 
 ---
 
-## 📚 참고 자료
+## 📝 개발 노트
 
-### API:
-- [Yahoo Finance API](https://github.com/sstrickx/yahoofinance-api)
-- [Alpha Vantage](https://www.alphavantage.co/)
-- [IEX Cloud](https://iexcloud.io/)
-- [Finnhub](https://finnhub.io/)
+### 2024-11-12
+- ✅ 다크모드 완료 (ThemeToggle 컴포넌트)
+- ✅ StockCard/StockChart 컴포넌트 버그 수정
+- ✅ 에러 처리 강화
+- 📊 진행률: 50% → 60%
 
-### 프레임워크:
-- [Spring Boot Docs](https://spring.io/projects/spring-boot)
-- [React Docs](https://react.dev/)
-- [Chart.js](https://www.chartjs.org/)
-- [react-chartjs-2](https://react-chartjs-2.js.org/)
-- [Axios](https://axios-http.com/)
-
-### 디자인:
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Material-UI](https://mui.com/)
-- [Framer Motion](https://www.framer.com/motion/)
+### 이전 기록
+- 2024-11-11: Phase 1-3 완료, 기본 기능 구현
+- 2024-11-10: 프로젝트 시작, 초기 설정
 
 ---
 
-## 🔄 새 대화 시작 시 말할 것
+## 🔗 관련 링크
 
-```
-안녕! 주가예측 프로젝트 계속 진행 중이야.
-
-GitHub: https://github.com/hwan0050/stock-predictor
-
-[CHECKLIST.md 파일 업로드]
-
-현재 상황:
-- Backend: Yahoo Finance API 연동 완료 ✅
-- Frontend: axios 적용, UI/UX 개선 완료 ✅
-- 반응형 디자인 완료 ✅
-- 테스트: TEST 심볼로 정상 작동 ✅
-- 이슈: Yahoo API 429 에러 (캐싱 필요)
-
-환경:
-- IntelliJ IDEA
-- Windows PowerShell
-- localhost:8080 (Backend)
-- localhost:3000 (Frontend)
-
-다음 작업: 캐싱 추가 또는 추가 기능 개발
-
-CHECKLIST.md 보고 이어서 작업 도와줘!
-```
+- **GitHub**: https://github.com/hwan0050/stock-predictor
+- **Issues**: https://github.com/hwan0050/stock-predictor/issues
+- **Wiki**: https://github.com/hwan0050/stock-predictor/wiki
 
 ---
 
-## 🎯 최근 Git 커밋
+## 📞 연락처
 
-### 커밋 1 (2025-11-08)
-```
-feat: Yahoo Finance API 연동 구현
-- DTO/Service/Controller 구현
-- Mock 테스트 엔드포인트 추가
-```
-
-### 커밋 2 (2025-11-08)
-```
-docs: Backend API 연동 완료 체크리스트 업데이트
-- 진행률 업데이트 (25% → 30%)
-```
-
-### 커밋 3 (2025-11-09)
-```
-fix: Frontend API 연동 버그 수정
-- StockCard.js: price → currentPrice 수정
-- App.js: 에러 처리 개선
-```
-
-### 커밋 4 (2025-11-09)
-```
-feat: TEST 심볼 자동 Mock 데이터 반환
-- StockController: TEST 심볼 감지 시 Mock 반환
-```
-
-### 커밋 5 (2025-11-09)
-```
-feat: TEST 심볼 history Mock 데이터 추가
-- getTestMockHistory() 메서드 추가
-- Chart.js 정상 작동
-```
-
-### 커밋 6 (2025-11-09)
-```
-docs: Chart.js 작동 확인 및 진행 상황 업데이트
-- Phase 2.4 차트 구현 확인 완료 체크
-```
-
-### 커밋 7 (2025-11-09)
-```
-feat: fetch를 axios로 리팩토링
-- axios 설치 및 import
-- 에러 처리 개선
-```
-
-### 커밋 8 (2025-11-09) ⬅️ **최신**
-```
-feat: UI/UX 개선 및 반응형 디자인 추가
-- 로딩 스피너 애니메이션
-- 에러 메시지 스타일 개선
-- 반응형 디자인 구현 (768px, 480px)
-```
+- **GitHub**: [@hwan0050](https://github.com/hwan0050)
+- **Email**: akma0050@naver.com
 
 ---
 
-## 🎨 UI/UX 개선 내역
-
-### 로딩 상태:
-- ✅ 회전하는 스피너 애니메이션
-- ✅ "데이터를 불러오는 중..." 메시지
-- ✅ 부드러운 애니메이션 효과
-
-### 에러 메시지:
-- ✅ 그라디언트 배경 (빨강 → 주황)
-- ✅ ⚠️ 아이콘 추가
-- ✅ 그림자 효과
-- ✅ 개선된 타이포그래피
-
-### 반응형 디자인:
-- ✅ 모바일 (480px 이하): 작은 폰트, 세로 배치
-- ✅ 태블릿 (768px 이하): 중간 폰트, 최적화된 레이아웃
-- ✅ 데스크톱 (768px 이상): 원본 디자인 유지
-- ✅ SearchBar: 모바일에서 세로 배치
-- ✅ StockCard: 모바일에서 1열 그리드
-- ✅ StockChart: 모바일에서 높이 축소
-
----
-
-## 📈 진행 상황 요약
-
-### ✅ 완료 (50%):
-1. **Backend 기본 구조** (100%)
-2. **Yahoo Finance API 연동** (100%)
-3. **Mock 데이터 엔드포인트** (100%)
-4. **Frontend 프로젝트 설정** (100%)
-5. **React 컴포넌트 개발** (100%)
-6. **Backend-Frontend 연동** (100%)
-7. **axios 적용** (100%)
-8. **Chart.js 차트** (100%)
-9. **UI/UX 개선** (100%)
-10. **반응형 디자인** (100%)
-
-### 🔄 진행 중 (0%):
-- 없음 (다음 작업 대기)
-
-### ⏳ 대기 중:
-1. **캐싱 추가** (Yahoo API 429 에러 해결)
-2. **데이터베이스 연동**
-3. **추가 기능 개발**
-4. **ML 모델 개발**
-5. **배포**
-
----
-
-**마지막 업데이트:** 2025-11-09 01:00  
-**작업자:** Hwan Lee  
-**환경:** IntelliJ IDEA + Windows PowerShell  
-**상태:** UI/UX 개선 완료! 다음: 캐싱 또는 추가 기능 🚀
+**마지막 업데이트**: 2024-11-12 23:30  
+**다음 업데이트 예정**: Phase 4 완료 후
