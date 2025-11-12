@@ -1,7 +1,8 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import SearchBar from './components/SearchBar';
+import SearchHistory from './components/SearchHistory';
 import StockCard from './components/StockCard';
 import StockChart from './components/StockChart';
 
@@ -10,11 +11,55 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 const API_BASE_PATH = process.env.REACT_APP_API_BASE_PATH || '/api';
 const DEFAULT_HISTORY_DAYS = parseInt(process.env.REACT_APP_HISTORY_DAYS) || 30;
 
+// LocalStorage 키
+const SEARCH_HISTORY_KEY = 'stock-search-history';
+const MAX_HISTORY_ITEMS = 5;
+
 function App() {
   const [stock, setStock] = useState(null);
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [searchHistory, setSearchHistory] = useState([]);
+
+  // 컴포넌트 마운트 시 검색 히스토리 로드
+  useEffect(() => {
+    loadSearchHistory();
+  }, []);
+
+  // LocalStorage에서 검색 히스토리 로드
+  const loadSearchHistory = () => {
+    try {
+      const saved = localStorage.getItem(SEARCH_HISTORY_KEY);
+      if (saved) {
+        setSearchHistory(JSON.parse(saved));
+      }
+    } catch (error) {
+      console.error('Failed to load search history:', error);
+    }
+  };
+
+  // 검색 히스토리 저장
+  const saveToHistory = (symbol) => {
+    try {
+      // 중복 제거 및 최신 항목을 맨 앞에
+      const updatedHistory = [
+        symbol.toUpperCase(),
+        ...searchHistory.filter(item => item !== symbol.toUpperCase())
+      ].slice(0, MAX_HISTORY_ITEMS);
+
+      setSearchHistory(updatedHistory);
+      localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(updatedHistory));
+    } catch (error) {
+      console.error('Failed to save search history:', error);
+    }
+  };
+
+  // 검색 히스토리 전체 삭제
+  const clearSearchHistory = () => {
+    setSearchHistory([]);
+    localStorage.removeItem(SEARCH_HISTORY_KEY);
+  };
 
   const handleSearch = async (symbol) => {
     setLoading(true);
@@ -24,6 +69,9 @@ function App() {
       // 백엔드 API 호출 (환경 변수 사용)
       const stockResponse = await axios.get(`${API_URL}${API_BASE_PATH}/stocks/${symbol}`);
       setStock(stockResponse.data);
+
+      // 검색 성공 시 히스토리에 저장
+      saveToHistory(symbol);
 
       // History API 호출
       try {
@@ -78,6 +126,13 @@ function App() {
       <p>Stock Prediction Platform</p>
 
       <SearchBar onSearch={handleSearch} />
+
+      {/* 검색 히스토리 */}
+      <SearchHistory
+        history={searchHistory}
+        onSelect={handleSearch}
+        onClear={clearSearchHistory}
+      />
 
       {loading && (
         <div className="loading-container">
