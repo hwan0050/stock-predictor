@@ -1,151 +1,144 @@
+import React, { useState, useEffect } from 'react';
 import './App.css';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
 import SearchBar from './components/SearchBar';
-import SearchHistory from './components/SearchHistory';
 import StockCard from './components/StockCard';
 import StockChart from './components/StockChart';
+import SearchHistory from './components/SearchHistory';
+import ThemeToggle from './components/ThemeToggle';
+import axios from 'axios';
 
-// 환경 변수 설정
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 const API_BASE_PATH = process.env.REACT_APP_API_BASE_PATH || '/api';
-const DEFAULT_HISTORY_DAYS = parseInt(process.env.REACT_APP_HISTORY_DAYS) || 30;
-
-// LocalStorage 키
-const SEARCH_HISTORY_KEY = 'stock-search-history';
-const MAX_HISTORY_ITEMS = 5;
+const HISTORY_DAYS = parseInt(process.env.REACT_APP_HISTORY_DAYS) || 30;
 
 function App() {
-  const [stock, setStock] = useState(null);
-  const [chartData, setChartData] = useState([]);
+  const [stockData, setStockData] = useState(null);
+  const [historyData, setHistoryData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [searchHistory, setSearchHistory] = useState([]);
+  const [theme, setTheme] = useState('light');
 
-  // 컴포넌트 마운트 시 검색 히스토리 로드
+  // 테마 초기화 (localStorage에서 불러오기)
   useEffect(() => {
-    loadSearchHistory();
+    const savedTheme = localStorage.getItem('stock-app-theme') || 'light';
+    setTheme(savedTheme);
+    document.body.className = savedTheme === 'dark' ? 'dark-mode' : '';
   }, []);
 
-  // LocalStorage에서 검색 히스토리 로드
-  const loadSearchHistory = () => {
-    try {
-      const saved = localStorage.getItem(SEARCH_HISTORY_KEY);
-      if (saved) {
-        setSearchHistory(JSON.parse(saved));
-      }
-    } catch (error) {
-      console.error('Failed to load search history:', error);
-    }
-  };
-
-  // 검색 히스토리 저장
-  const saveToHistory = (symbol) => {
-    try {
-      // 중복 제거 및 최신 항목을 맨 앞에
-      const updatedHistory = [
-        symbol.toUpperCase(),
-        ...searchHistory.filter(item => item !== symbol.toUpperCase())
-      ].slice(0, MAX_HISTORY_ITEMS);
-
-      setSearchHistory(updatedHistory);
-      localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(updatedHistory));
-    } catch (error) {
-      console.error('Failed to save search history:', error);
-    }
-  };
-
-  // 검색 히스토리 전체 삭제
-  const clearSearchHistory = () => {
-    setSearchHistory([]);
-    localStorage.removeItem(SEARCH_HISTORY_KEY);
+  // 테마 토글 함수
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('stock-app-theme', newTheme);
+    document.body.className = newTheme === 'dark' ? 'dark-mode' : '';
   };
 
   const handleSearch = async (symbol) => {
+    console.log('🔍 검색 시작:', symbol);
     setLoading(true);
     setError(null);
+    setStockData(null);
+    setHistoryData(null);
 
     try {
-      // 백엔드 API 호출 (환경 변수 사용)
+      // 현재 주가 정보
       const stockResponse = await axios.get(`${API_URL}${API_BASE_PATH}/stocks/${symbol}`);
-      setStock(stockResponse.data);
+      console.log('✅ Stock Data:', stockResponse.data);
+      setStockData(stockResponse.data);
 
-      // 검색 성공 시 히스토리에 저장
+      // 과거 데이터 (30일)
+      const historyResponse = await axios.get(
+        `${API_URL}${API_BASE_PATH}/stocks/${symbol}/history?days=${HISTORY_DAYS}`
+      );
+      console.log('✅ History Data:', historyResponse.data);
+      setHistoryData(historyResponse.data);
+
+      // 검색 히스토리 저장
       saveToHistory(symbol);
-
-      // History API 호출
-      try {
-        const historyResponse = await axios.get(
-          `${API_URL}${API_BASE_PATH}/stocks/${symbol}/history`,
-          { params: { days: DEFAULT_HISTORY_DAYS } }
-        );
-
-        // 데이터 존재 여부 확인
-        if (historyResponse.data && historyResponse.data.data && Array.isArray(historyResponse.data.data)) {
-          // 차트 데이터 변환
-          const chartDataFormatted = historyResponse.data.data.map(item => ({
-            date: item.date ? item.date.substring(5) : '',
-            price: item.close || 0
-          }));
-
-          setChartData(chartDataFormatted);
-        } else {
-          console.warn('History data not available');
-          setChartData([]);
-        }
-      } catch (historyError) {
-        console.warn('History API failed, skipping chart:', historyError.message);
-        setChartData([]);
-      }
-
     } catch (err) {
-      console.error('API 호출 실패:', err);
-
-      // axios 에러 메시지 개선
+      console.error('❌ Error:', err);
       if (err.response) {
-        // 서버가 응답했지만 에러
-        setError(`서버 에러: ${err.response.status} - ${err.response.data.message || '데이터를 불러올 수 없습니다.'}`);
+        if (err.response.status === 404) {
+          setError('주식 종목을 찾을 수 없습니다. 심볼을 확인해주세요.');
+        } else if (err.response.status === 429) {
+          setError('요청이 너무 많습니다. 잠시 후 다시 시도해주세요.');
+        } else {
+          setError('데이터를 불러오는 중 오류가 발생했습니다.');
+        }
       } else if (err.request) {
-        // 요청은 보냈지만 응답 없음
-        setError('서버에 연결할 수 없습니다. Backend가 실행 중인지 확인해주세요.');
+        setError('서버에 연결할 수 없습니다. 백엔드 서버를 확인해주세요.');
       } else {
-        // 요청 설정 중 에러
-        setError('요청 설정 중 오류가 발생했습니다.');
+        setError('알 수 없는 오류가 발생했습니다.');
       }
-
-      setStock(null);
-      setChartData([]);
     } finally {
       setLoading(false);
     }
   };
 
+  const saveToHistory = (symbol) => {
+    try {
+      const history = JSON.parse(localStorage.getItem('stock-search-history') || '[]');
+      const newHistory = [
+        symbol,
+        ...history.filter(item => item !== symbol)
+      ].slice(0, 5); // 최대 5개
+      localStorage.setItem('stock-search-history', JSON.stringify(newHistory));
+    } catch (err) {
+      console.error('Error saving to history:', err);
+    }
+  };
+
+  const handleHistoryClick = (symbol) => {
+    handleSearch(symbol);
+  };
+
   return (
     <div className="App">
-      <h1>📈 주가 예측 플랫폼</h1>
-      <p>Stock Prediction Platform</p>
+      <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
 
-      <SearchBar onSearch={handleSearch} />
+      <header className="App-header">
+        <h1>📈 주가 예측</h1>
+        <p>실시간 주식 정보 검색</p>
+      </header>
 
-      {/* 검색 히스토리 */}
-      <SearchHistory
-        history={searchHistory}
-        onSelect={handleSearch}
-        onClear={clearSearchHistory}
-      />
+      <main className="App-main">
+        <SearchBar onSearch={handleSearch} disabled={loading} />
 
-      {loading && (
-        <div className="loading-container">
-          <div className="spinner"></div>
-          <p>데이터를 불러오는 중...</p>
-        </div>
-      )}
+        <SearchHistory onClick={handleHistoryClick} />
 
-      {error && <div className="error-message">{error}</div>}
+        {loading && (
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+            <p>데이터를 불러오는 중...</p>
+          </div>
+        )}
 
-      {stock && <StockCard stock={stock} />}
+        {error && (
+          <div className="error-message">
+            <p>⚠️ {error}</p>
+          </div>
+        )}
 
-      {chartData.length > 0 && <StockChart data={chartData} />}
+        {stockData && (
+          <div className="results-container">
+            <StockCard data={stockData} />
+            {historyData && (
+              <StockChart data={historyData} symbol={stockData.symbol} />
+            )}
+          </div>
+        )}
+
+        {!loading && !error && !stockData && (
+          <div className="welcome-message">
+            <p>🔍 주식 심볼을 검색해보세요!</p>
+            <p className="example">예시: AAPL, TSLA, GOOGL, TEST</p>
+          </div>
+        )}
+      </main>
+
+      <footer className="App-footer">
+        <p>Made with ❤️ by hwan0050</p>
+      </footer>
     </div>
   );
 }
