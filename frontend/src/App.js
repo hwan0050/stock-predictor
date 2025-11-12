@@ -5,6 +5,11 @@ import SearchBar from './components/SearchBar';
 import StockCard from './components/StockCard';
 import StockChart from './components/StockChart';
 
+// 환경 변수 설정
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+const API_BASE_PATH = process.env.REACT_APP_API_BASE_PATH || '/api';
+const DEFAULT_HISTORY_DAYS = parseInt(process.env.REACT_APP_HISTORY_DAYS) || 30;
+
 function App() {
   const [stock, setStock] = useState(null);
   const [chartData, setChartData] = useState([]);
@@ -16,15 +21,15 @@ function App() {
     setError(null);
 
     try {
-      // 백엔드 API 호출 (axios)
-      const stockResponse = await axios.get(`http://localhost:8080/api/stocks/${symbol}`);
+      // 백엔드 API 호출 (환경 변수 사용)
+      const stockResponse = await axios.get(`${API_URL}${API_BASE_PATH}/stocks/${symbol}`);
       setStock(stockResponse.data);
 
-      // History API 호출 (axios)
+      // History API 호출
       try {
         const historyResponse = await axios.get(
-          `http://localhost:8080/api/stocks/${symbol}/history`,
-          { params: { days: 30 } }
+          `${API_URL}${API_BASE_PATH}/stocks/${symbol}/history`,
+          { params: { days: DEFAULT_HISTORY_DAYS } }
         );
 
         // 데이터 존재 여부 확인
