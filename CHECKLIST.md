@@ -1,7 +1,7 @@
 # 📋 Stock Predictor - 개발 체크리스트
 
 > **최종 업데이트**: 2024-11-12  
-> **현재 진행률**: 65%  
+> **현재 진행률**: 70%  
 > **GitHub**: https://github.com/hwan0050/stock-predictor
 
 ---
@@ -12,7 +12,7 @@
 - **프로젝트명**: Stock Predictor (주가 예측 웹 애플리케이션)
 - **로컬 경로**: `F:\workspace\stock-predictor`
 - **포트**: Frontend(3000), Backend(8080)
-- **현재 버전**: v0.6.5
+- **현재 버전**: v0.7.0
 
 ### 기술 스택
 - **Frontend**: React 18, React Router 6, Chart.js 4, Axios, CSS Variables
@@ -41,14 +41,17 @@
 - [x] 필수 패키지 설치
     - [x] axios
     - [x] chart.js, react-chartjs-2
-    - [x] react-router-dom (NEW!)
+    - [x] react-router-dom
 - [x] Backend 연동 (API 통신)
 - [x] 컴포넌트 구조 설계
     - [x] SearchBar - 검색 바
     - [x] StockCard - 주가 정보 카드
     - [x] StockChart - 차트 컴포넌트
     - [x] SearchHistory - 검색 히스토리
-    - [x] NotFound - 404 페이지 (NEW!)
+    - [x] NotFound - 404 페이지
+    - [x] LoadingSpinner - 로딩 스피너 (NEW!)
+    - [x] SkeletonCard - 카드 skeleton (NEW!)
+    - [x] SkeletonChart - 차트 skeleton (NEW!)
 
 ### 기본 기능
 - [x] 주식 심볼 검색
@@ -115,9 +118,9 @@
 
 ---
 
-## 🚧 Phase 4: 추가 기능 (진행 중 - 33%)
+## ✅ Phase 4: 추가 기능 (완료! - 100%)
 
-### 404 페이지 (완료!)
+### 404 페이지
 - [x] NotFound 컴포넌트 생성
 - [x] React Router 설치
 - [x] 라우팅 설정 (/, *)
@@ -127,16 +130,22 @@
 - [x] 다크모드 지원
 - [x] 반응형 디자인
 
-### 로딩 개선 (다음 작업!)
-- [ ] Skeleton UI 검토
-- [ ] 더 나은 로딩 애니메이션
-- [ ] 프로그레스 바 추가
+### 로딩 애니메이션 개선 (완료!)
+- [x] LoadingSpinner 컴포넌트 (이중 회전)
+- [x] SkeletonCard 컴포넌트 (shimmer 효과)
+- [x] SkeletonChart 컴포넌트 (막대 애니메이션)
+- [x] 로딩 상태 세분화 (initial → skeleton → complete)
+- [x] 300ms 타이머 최적화
+- [x] clearTimeout 메모리 관리
+- [x] 다크모드 shimmer 효과
+- [x] 반응형 skeleton UI
 
-### 검색 기능 개선
+### 검색 기능 개선 (다음 작업!)
 - [ ] 자동완성 기능
 - [ ] 인기 종목 추천
 - [ ] 검색 히스토리 삭제 기능
 - [ ] 검색 결과 정렬
+- [ ] 검색어 유효성 검사
 
 ---
 
@@ -219,14 +228,14 @@
 | Phase 1 | 기본 구축 | 100% | ✅ 완료 |
 | Phase 2 | UI/UX 개선 | 100% | ✅ 완료 |
 | Phase 3 | 문서화 | 100% | ✅ 완료 |
-| Phase 4 | 추가 기능 | 33% | 🚧 진행 중 |
+| Phase 4 | 추가 기능 | 100% | ✅ 완료 |
 | Phase 5 | 차트 확장 | 0% | 📅 계획 중 |
 | Phase 6 | 데이터베이스 | 0% | 📅 계획 중 |
 | Phase 7 | AI 예측 | 0% | 📅 계획 중 |
 | Phase 8 | 사용자 인증 | 0% | 📅 계획 중 |
 | Phase 9 | 배포 | 0% | 📅 계획 중 |
 
-**전체 진행률**: 65% (Phase 1-3 완료 + Phase 4 1/3)
+**전체 진행률**: 70% (Phase 1-4 완료)
 
 ---
 
@@ -235,11 +244,11 @@
 ### 이번 주 목표
 1. ✅ ~~다크모드 구현~~ (완료!)
 2. ✅ ~~404 페이지 추가~~ (완료!)
-3. 🔜 로딩 애니메이션 개선
+3. ✅ ~~로딩 애니메이션 개선~~ (완료!)
 4. 🔜 검색 기능 개선
 
 ### 이번 달 목표
-- Phase 4 완료 (추가 기능)
+- Phase 4 완료 (추가 기능) ✅
 - Phase 5 시작 (차트 확장)
 
 ---
@@ -251,6 +260,8 @@
 - ~~Frontend 데이터 미표시~~ → 컴포넌트 재작성으로 해결
 - ~~다크모드 렌더링 오류~~ → ThemeToggle 컴포넌트 추가로 해결
 - ~~404 페이지 없음~~ → NotFound 컴포넌트 추가로 해결
+- ~~단순한 로딩 스피너~~ → Skeleton UI 추가로 해결
+- ~~setTimeout 상태 꼬임~~ → clearTimeout으로 해결
 
 ### 진행 중 🚧
 - 없음
@@ -258,23 +269,27 @@
 ### 예정 📅
 - 자동완성 API 필요
 - 실시간 데이터 업데이트 필요
-- Skeleton UI 라이브러리 선택
 
 ---
 
 ## 📝 개발 노트
 
+### 2024-11-12 (저녁)
+- ✅ 로딩 애니메이션 대폭 개선 완료
+- ✅ LoadingSpinner (이중 회전 + 점 애니메이션)
+- ✅ SkeletonCard (shimmer 효과)
+- ✅ SkeletonChart (막대 펄스 애니메이션)
+- ✅ 로딩 상태 최적화 (300ms 타이머)
+- 📊 진행률: 65% → 70%
+
 ### 2024-11-12 (오후)
 - ✅ 404 페이지 완료 (NotFound 컴포넌트)
 - ✅ React Router 설치 및 라우팅 설정
-- ✅ 홈/이전 페이지 네비게이션
-- ✅ 추천 검색어 태그
 - 📊 진행률: 60% → 65%
 
 ### 2024-11-12 (오전)
 - ✅ 다크모드 완료 (ThemeToggle 컴포넌트)
 - ✅ StockCard/StockChart 컴포넌트 버그 수정
-- ✅ 에러 처리 강화
 - 📊 진행률: 50% → 60%
 
 ### 이전 기록
@@ -298,5 +313,5 @@
 
 ---
 
-**마지막 업데이트**: 2024-11-12 23:45  
-**다음 업데이트 예정**: 로딩 애니메이션 개선 후
+**마지막 업데이트**: 2024-11-12 24:00  
+**다음 업데이트 예정**: 검색 기능 개선 후

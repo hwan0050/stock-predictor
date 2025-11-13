@@ -1,565 +1,317 @@
-# 📈 Stock Predictor - Frontend
+# 📋 Stock Predictor - 개발 체크리스트
 
-> React 기반 주가 예측 웹 애플리케이션 프론트엔드
-
-[![React](https://img.shields.io/badge/React-18.2.0-61DAFB?logo=react)](https://reactjs.org/)
-[![React Router](https://img.shields.io/badge/React_Router-6.20.0-CA4245?logo=reactrouter)](https://reactrouter.com/)
-[![Chart.js](https://img.shields.io/badge/Chart.js-4.4.0-FF6384?logo=chartdotjs)](https://www.chartjs.org/)
-[![Axios](https://img.shields.io/badge/Axios-1.6.0-5A29E4?logo=axios)](https://axios-http.com/)
+> **최종 업데이트**: 2024-11-12  
+> **현재 진행률**: 70%  
+> **GitHub**: https://github.com/hwan0050/stock-predictor
 
 ---
 
-## 🎯 개요
+## 🎯 프로젝트 개요
 
-Stock Predictor의 프론트엔드는 React를 기반으로 한 SPA(Single Page Application)입니다.  
-실시간 주가 정보를 시각화하고 사용자 친화적인 인터페이스를 제공합니다.
+### 기본 정보
+- **프로젝트명**: Stock Predictor (주가 예측 웹 애플리케이션)
+- **로컬 경로**: `F:\workspace\stock-predictor`
+- **포트**: Frontend(3000), Backend(8080)
+- **현재 버전**: v0.7.0
+
+### 기술 스택
+- **Frontend**: React 18, React Router 6, Chart.js 4, Axios, CSS Variables
+- **Backend**: Spring Boot 3, Gradle, Yahoo Finance API
+- **기타**: Git, IntelliJ IDEA, VSCode
 
 ---
 
-## ✨ 주요 기능
+## ✅ Phase 1: 기본 구축 (100% 완료)
+
+### Backend 구축
+- [x] Spring Boot 프로젝트 초기화
+- [x] Gradle 설정
+- [x] 기본 패키지 구조 생성
+- [x] Yahoo Finance API 연동
+- [x] RESTful API 구현
+    - [x] `/api/stocks/{symbol}` - 현재 주가 조회
+    - [x] `/api/stocks/{symbol}/history` - 과거 데이터 조회
+- [x] CORS 설정
+- [x] Mock 데이터 (TEST 심볼)
+- [x] Exception 처리 (GlobalExceptionHandler)
+- [x] Spring Cache 설정 (429 에러 대응)
+
+### Frontend 구축
+- [x] React 프로젝트 초기화 (Create React App)
+- [x] 필수 패키지 설치
+    - [x] axios
+    - [x] chart.js, react-chartjs-2
+    - [x] react-router-dom
+- [x] Backend 연동 (API 통신)
+- [x] 컴포넌트 구조 설계
+    - [x] SearchBar - 검색 바
+    - [x] StockCard - 주가 정보 카드
+    - [x] StockChart - 차트 컴포넌트
+    - [x] SearchHistory - 검색 히스토리
+    - [x] NotFound - 404 페이지
+    - [x] LoadingSpinner - 로딩 스피너 (NEW!)
+    - [x] SkeletonCard - 카드 skeleton (NEW!)
+    - [x] SkeletonChart - 차트 skeleton (NEW!)
 
 ### 기본 기능
-- 🔍 **주식 심볼 검색** - 실시간 주가 정보 조회
-- 📊 **데이터 시각화** - Chart.js를 활용한 인터랙티브 차트
-- 📱 **반응형 디자인** - 모바일/태블릿/데스크톱 대응
-- 💾 **검색 히스토리** - 최근 검색 종목 저장 (최대 5개)
-
-### 고급 기능
-- 🌙 **다크모드** - 라이트/다크 테마 전환
-- 🚫 **404 페이지** - 귀여운 에러 페이지 (NEW!)
-- 🧭 **라우팅** - React Router 기반 네비게이션 (NEW!)
-- ⚡ **빠른 로딩** - 최적화된 컴포넌트 렌더링
-- 🎨 **부드러운 애니메이션** - CSS 트랜지션 효과
-- 🛡️ **에러 처리** - 친절한 에러 메시지
+- [x] 주식 심볼 검색
+- [x] 현재 주가 표시
+- [x] 30일 히스토리 차트
+- [x] 로딩 스피너
+- [x] 에러 처리 및 메시지
 
 ---
 
-## 🏗️ 프로젝트 구조
+## ✅ Phase 2: UI/UX 개선 (100% 완료)
 
-```
-frontend/
-├── public/
-│   ├── index.html          # HTML 템플릿
-│   └── favicon.ico         # 파비콘 (📈)
-│
-├── src/
-│   ├── components/         # React 컴포넌트
-│   │   ├── SearchBar.js           # 검색 바
-│   │   ├── SearchBar.css
-│   │   ├── StockCard.js           # 주가 정보 카드
-│   │   ├── StockCard.css
-│   │   ├── StockChart.js          # 차트 컴포넌트
-│   │   ├── StockChart.css
-│   │   ├── SearchHistory.js       # 검색 히스토리
-│   │   ├── SearchHistory.css
-│   │   ├── ThemeToggle.js         # 테마 토글
-│   │   ├── ThemeToggle.css
-│   │   ├── NotFound.js            # 404 페이지 (NEW!)
-│   │   └── NotFound.css
-│   │
-│   ├── App.js              # 메인 앱 컴포넌트 (라우팅 설정)
-│   ├── App.css             # 전역 스타일 + 다크모드
-│   ├── index.js            # 진입점
-│   └── index.css           # 기본 스타일
-│
-├── .env                    # 환경 변수
-├── .gitignore
-├── package.json            # 의존성 관리
-├── package-lock.json
-└── README.md               # 이 파일
-```
+### 디자인
+- [x] 반응형 레이아웃 (모바일/태블릿/데스크톱)
+- [x] 깔끔한 UI 디자인
+- [x] 카드 스타일 컴포넌트
+- [x] 부드러운 애니메이션 효과
+- [x] 컬러 스킴 설정
+
+### 사용자 경험
+- [x] Favicon 추가 (📈)
+- [x] 환경 변수 설정 (.env)
+- [x] 검색 히스토리 (LocalStorage)
+- [x] 히스토리 클릭으로 재검색
+- [x] 친절한 에러 메시지
+- [x] Welcome 메시지
+
+### 다크모드
+- [x] ThemeToggle 컴포넌트 추가
+- [x] 라이트/다크 테마 전환
+- [x] LocalStorage 테마 저장
+- [x] CSS Variables 활용
+- [x] 부드러운 전환 애니메이션
+- [x] 모든 컴포넌트 테마 적용
+
+### 버그 수정
+- [x] StockCard 렌더링 오류 해결
+- [x] StockChart 데이터 구조 처리 개선
+- [x] 에러 처리 강화
+- [x] 데이터 검증 추가
 
 ---
 
-## 🚀 시작하기
+## ✅ Phase 3: 문서화 (100% 완료)
 
-### 1. 사전 요구사항
+### README 작성
+- [x] 메인 README.md
+- [x] Frontend README.md
+- [x] Backend README.md
+- [x] 스크린샷 추가
+- [x] 설치 및 실행 가이드
 
-- **Node.js**: 18.x 이상
-- **npm**: 9.x 이상
-- **Backend**: Spring Boot 서버 실행 중 (포트 8080)
+### 기타 문서
+- [x] CONTRIBUTING.md
+- [x] LICENSE (MIT)
+- [x] .gitignore (루트, Backend, Frontend)
+- [x] CHECKLIST.md (이 파일)
 
-### 2. 설치
-
-```bash
-# 1. 프로젝트 클론
-git clone https://github.com/hwan0050/stock-predictor.git
-cd stock-predictor/frontend
-
-# 2. 의존성 설치
-npm install
-
-# 3. 환경 변수 설정
-# .env 파일이 있는지 확인
-# 없으면 아래 내용으로 생성:
-# REACT_APP_API_URL=http://localhost:8080
-# REACT_APP_API_BASE_PATH=/api
-# REACT_APP_HISTORY_DAYS=30
-```
-
-### 3. 실행
-
-```bash
-# 개발 서버 실행
-npm start
-
-# 브라우저 자동 실행
-# http://localhost:3000
-```
-
-### 4. 빌드
-
-```bash
-# 프로덕션 빌드
-npm run build
-
-# build/ 폴더에 최적화된 파일 생성
-```
+### GitHub
+- [x] 저장소 생성
+- [x] 초기 커밋
+- [x] GitHub 프로필 README 업데이트
+- [x] 프로젝트 Description 작성
 
 ---
 
-## 🧭 라우팅 (NEW!)
+## ✅ Phase 4: 추가 기능 (완료! - 100%)
 
-### React Router 구조
+### 404 페이지
+- [x] NotFound 컴포넌트 생성
+- [x] React Router 설치
+- [x] 라우팅 설정 (/, *)
+- [x] 404 페이지 디자인
+- [x] 홈으로 돌아가기/이전 페이지 버튼
+- [x] 추천 검색어 태그
+- [x] 다크모드 지원
+- [x] 반응형 디자인
 
-| 경로 | 컴포넌트 | 설명 |
-|------|---------|------|
-| `/` | HomePage | 메인 검색 페이지 |
-| `/*` | NotFound | 404 에러 페이지 |
+### 로딩 애니메이션 개선 (완료!)
+- [x] LoadingSpinner 컴포넌트 (이중 회전)
+- [x] SkeletonCard 컴포넌트 (shimmer 효과)
+- [x] SkeletonChart 컴포넌트 (막대 애니메이션)
+- [x] 로딩 상태 세분화 (initial → skeleton → complete)
+- [x] 300ms 타이머 최적화
+- [x] clearTimeout 메모리 관리
+- [x] 다크모드 shimmer 효과
+- [x] 반응형 skeleton UI
 
-### 사용 예시
-
-```javascript
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-<BrowserRouter>
-  <Routes>
-    <Route path="/" element={<HomePage />} />
-    <Route path="*" element={<NotFound />} />
-  </Routes>
-</BrowserRouter>
-```
-
----
-
-## 🎨 주요 컴포넌트
-
-### 1. SearchBar
-검색 입력 컴포넌트
-
-**Props:**
-- `onSearch`: 검색 핸들러 함수
-- `disabled`: 로딩 중 비활성화
-
-**기능:**
-- Enter 키 검색
-- 빈 값 검증
-- 대문자 자동 변환
-
-### 2. StockCard
-주가 정보 카드 컴포넌트
-
-**Props:**
-- `data`: 주가 데이터 객체
-
-**표시 정보:**
-- 심볼, 회사명
-- 현재가, 변동액, 변동률
-- 시가, 고가, 저가, 전일종가
-- 거래량, 평균거래량, 시가총액
-
-### 3. StockChart
-차트 컴포넌트 (Chart.js)
-
-**Props:**
-- `data`: 히스토리 데이터 배열
-- `symbol`: 주식 심볼
-
-**기능:**
-- 30일 종가 라인 차트
-- 인터랙티브 툴팁
-- 반응형 차트 크기
-
-### 4. SearchHistory
-검색 히스토리 컴포넌트
-
-**Props:**
-- `onClick`: 히스토리 클릭 핸들러
-
-**기능:**
-- LocalStorage 연동
-- 최근 5개 저장
-- 중복 제거
-- 원클릭 재검색
-
-### 5. ThemeToggle
-테마 전환 컴포넌트
-
-**Props:**
-- `theme`: 현재 테마 ('light' or 'dark')
-- `toggleTheme`: 테마 전환 함수
-
-**기능:**
-- 라이트/다크 모드 전환
-- LocalStorage 저장
-- 부드러운 애니메이션
-
-### 6. NotFound (NEW!)
-404 에러 페이지 컴포넌트
-
-**Props:** 없음
-
-**기능:**
-- 🏠 홈으로 돌아가기 버튼
-- ← 이전 페이지 버튼
-- 🏷️ 추천 검색어 태그
-- 📉 튀는 이모지 애니메이션
-- 🌙 다크모드 지원
+### 검색 기능 개선 (다음 작업!)
+- [ ] 자동완성 기능
+- [ ] 인기 종목 추천
+- [ ] 검색 히스토리 삭제 기능
+- [ ] 검색 결과 정렬
+- [ ] 검색어 유효성 검사
 
 ---
 
-## 🎨 스타일링
+## 📅 Phase 5: 차트 기능 확장 (예정)
 
-### CSS Variables (다크모드 지원)
-
-```css
-:root {
-  --bg-color: #f5f7fa;
-  --card-bg: #ffffff;
-  --text-primary: #2c3e50;
-  --text-secondary: #7f8c8d;
-  --border-color: #e0e0e0;
-  --shadow: rgba(0, 0, 0, 0.1);
-  --primary-color: #3498db;
-  --success-color: #27ae60;
-  --danger-color: #e74c3c;
-}
-
-body.dark-mode {
-  --bg-color: #1a1a2e;
-  --card-bg: #16213e;
-  --text-primary: #eaeaea;
-  /* ... */
-}
-```
-
-### 반응형 브레이크포인트
-
-- **Desktop**: 1200px 이상
-- **Tablet**: 768px ~ 1199px
-- **Mobile**: 767px 이하
+- [ ] 기간 선택 (7일/30일/90일/1년)
+- [ ] 차트 타입 선택 (라인/캔들)
+- [ ] 이동평균선 추가
+- [ ] 거래량 차트
+- [ ] 비교 차트 (여러 종목 비교)
+- [ ] 차트 확대/축소
+- [ ] 차트 데이터 다운로드
 
 ---
 
-## 🔌 API 연동
+## 🗄️ Phase 6: 데이터베이스 (예정)
 
-### 환경 변수 (.env)
-
-```env
-REACT_APP_API_URL=http://localhost:8080
-REACT_APP_API_BASE_PATH=/api
-REACT_APP_HISTORY_DAYS=30
-```
-
-### API 엔드포인트
-
-#### 1. 현재 주가 조회
-```javascript
-GET /api/stocks/{symbol}
-
-// 응답 예시
-{
-  "symbol": "AAPL",
-  "name": "Apple Inc.",
-  "currentPrice": 150.25,
-  "change": 2.50,
-  "changePercent": 1.69,
-  // ...
-}
-```
-
-#### 2. 과거 데이터 조회
-```javascript
-GET /api/stocks/{symbol}/history?days=30
-
-// 응답 예시
-{
-  "symbol": "AAPL",
-  "data": [
-    {
-      "date": "2024-11-12",
-      "open": 148.50,
-      "high": 151.00,
-      "low": 147.80,
-      "close": 150.25,
-      "volume": 50000000
-    },
-    // ...
-  ],
-  "count": 30
-}
-```
+- [ ] PostgreSQL 설치 및 설정
+- [ ] JPA Entity 설계
+    - [ ] Stock Entity
+    - [ ] StockHistory Entity
+    - [ ] User Entity (선택)
+- [ ] Repository 구현
+- [ ] Service Layer 리팩토링
+- [ ] 실시간 데이터 DB 저장
+- [ ] 데이터 캐싱 전략
 
 ---
 
-## 💾 LocalStorage
+## 🤖 Phase 7: AI 예측 모델 (예정)
 
-### 저장 키
-
-1. **stock-search-history**
-    - 검색 히스토리 배열
-    - 최대 5개
-    - 중복 제거
-
-2. **stock-app-theme**
-    - 테마 설정 ('light' or 'dark')
-    - 자동 불러오기
-
-```javascript
-// 예시
-localStorage.getItem('stock-search-history')
-// ["AAPL", "TSLA", "GOOGL", "MSFT", "TEST"]
-
-localStorage.getItem('stock-app-theme')
-// "dark"
-```
+- [ ] Python 환경 설정
+- [ ] LSTM 모델 개발
+- [ ] 학습 데이터 수집 및 전처리
+- [ ] 모델 학습 및 평가
+- [ ] 예측 API 개발
+- [ ] Backend 연동
+- [ ] 예측 결과 시각화
 
 ---
 
-## 🧪 테스트
+## 🔐 Phase 8: 사용자 인증 (예정)
 
-### 테스트 시나리오
-
-1. **기본 검색**
-   ```
-   1. "TEST" 입력
-   2. 검색 버튼 클릭
-   3. StockCard 표시 확인
-   4. Chart 표시 확인
-   ```
-
-2. **검색 히스토리**
-   ```
-   1. 여러 종목 검색 (AAPL, TSLA, etc.)
-   2. 히스토리 표시 확인
-   3. 히스토리 클릭으로 재검색
-   ```
-
-3. **다크모드**
-   ```
-   1. 우상단 🌙 버튼 클릭
-   2. 테마 전환 확인
-   3. 새로고침 후 테마 유지 확인
-   ```
-
-4. **404 페이지** (NEW!)
-   ```
-   1. 잘못된 URL 입력 (예: /asdf123)
-   2. 404 페이지 표시 확인
-   3. 홈으로 버튼 클릭 → 홈 이동 확인
-   4. 이전 페이지 버튼 클릭 → 뒤로가기 확인
-   5. 추천 태그 클릭 → 홈 이동 확인
-   ```
-
-5. **에러 처리**
-   ```
-   1. 잘못된 심볼 입력
-   2. 에러 메시지 확인
-   3. Backend 종료 후 에러 확인
-   ```
+- [ ] JWT 인증 구현
+- [ ] Spring Security 설정
+- [ ] 회원가입 API
+- [ ] 로그인 API
+- [ ] 사용자 프로필 관리
+- [ ] 관심 종목 저장 기능
+- [ ] 포트폴리오 관리
 
 ---
 
-## 📦 의존성
+## 🚀 Phase 9: 배포 (예정)
 
-### 프로덕션 의존성
+### Frontend 배포
+- [ ] Vercel 배포 준비
+- [ ] 환경 변수 설정
+- [ ] 빌드 최적화
+- [ ] 배포 및 테스트
 
-```json
-{
-  "react": "^18.2.0",
-  "react-dom": "^18.2.0",
-  "react-router-dom": "^6.20.0",
-  "axios": "^1.6.0",
-  "chart.js": "^4.4.0",
-  "react-chartjs-2": "^5.2.0"
-}
-```
+### Backend 배포
+- [ ] AWS EC2 설정
+- [ ] Docker 컨테이너화
+- [ ] CI/CD 파이프라인 (GitHub Actions)
+- [ ] 모니터링 설정
 
-### 개발 의존성
-
-```json
-{
-  "react-scripts": "5.0.1"
-}
-```
+### 기타
+- [ ] 도메인 연결
+- [ ] HTTPS 설정
+- [ ] 성능 최적화
+- [ ] SEO 최적화
 
 ---
 
-## 🐛 문제 해결
+## 📊 진행률 요약
 
-### 1. Backend 연결 실패
-```
-Error: 서버에 연결할 수 없습니다
-```
+| Phase | 내용 | 진행률 | 상태 |
+|-------|------|--------|------|
+| Phase 1 | 기본 구축 | 100% | ✅ 완료 |
+| Phase 2 | UI/UX 개선 | 100% | ✅ 완료 |
+| Phase 3 | 문서화 | 100% | ✅ 완료 |
+| Phase 4 | 추가 기능 | 100% | ✅ 완료 |
+| Phase 5 | 차트 확장 | 0% | 📅 계획 중 |
+| Phase 6 | 데이터베이스 | 0% | 📅 계획 중 |
+| Phase 7 | AI 예측 | 0% | 📅 계획 중 |
+| Phase 8 | 사용자 인증 | 0% | 📅 계획 중 |
+| Phase 9 | 배포 | 0% | 📅 계획 중 |
 
-**해결책:**
-- Backend 서버 실행 확인 (포트 8080)
-- .env 파일 확인
-- CORS 설정 확인
-
-### 2. 차트가 안 보임
-```
-Chart not rendering
-```
-
-**해결책:**
-- Chart.js 등록 확인
-- 데이터 구조 확인
-- Console 에러 확인
-
-### 3. 다크모드 안 됨
-```
-Theme not switching
-```
-
-**해결책:**
-- ThemeToggle 컴포넌트 확인
-- LocalStorage 확인
-- CSS Variables 확인
-
-### 4. 404 페이지 안 나옴 (NEW!)
-```
-404 page not showing
-```
-
-**해결책:**
-- React Router 설치 확인
-- BrowserRouter 설정 확인
-- Routes 순서 확인 (/* 는 마지막!)
+**전체 진행률**: 70% (Phase 1-4 완료)
 
 ---
 
-## 🔧 커스터마이징
+## 🎯 다음 작업 (우선순위 순)
 
-### 1. 테마 색상 변경
+### 이번 주 목표
+1. ✅ ~~다크모드 구현~~ (완료!)
+2. ✅ ~~404 페이지 추가~~ (완료!)
+3. ✅ ~~로딩 애니메이션 개선~~ (완료!)
+4. 🔜 검색 기능 개선
 
-`src/App.css` 수정:
-```css
-:root {
-  --primary-color: #your-color;
-  --success-color: #your-color;
-  --danger-color: #your-color;
-}
-```
-
-### 2. 차트 기간 변경
-
-`.env` 수정:
-```env
-REACT_APP_HISTORY_DAYS=90
-```
-
-### 3. API URL 변경
-
-`.env` 수정:
-```env
-REACT_APP_API_URL=https://your-api-url.com
-```
-
-### 4. 404 페이지 커스터마이징
-
-`src/components/NotFound.js` 수정:
-- 이모지 변경
-- 메시지 수정
-- 버튼 추가/삭제
-- 추천 검색어 변경
+### 이번 달 목표
+- Phase 4 완료 (추가 기능) ✅
+- Phase 5 시작 (차트 확장)
 
 ---
 
-## 📊 성능 최적화
+## 🐛 알려진 이슈
 
-- ✅ React.memo 사용 고려
-- ✅ useCallback, useMemo 활용
-- ✅ Code Splitting
-- ✅ Lazy Loading
-- ✅ 이미지 최적화
+### 해결됨 ✅
+- ~~Backend 429 에러~~ → Spring Cache로 해결
+- ~~Frontend 데이터 미표시~~ → 컴포넌트 재작성으로 해결
+- ~~다크모드 렌더링 오류~~ → ThemeToggle 컴포넌트 추가로 해결
+- ~~404 페이지 없음~~ → NotFound 컴포넌트 추가로 해결
+- ~~단순한 로딩 스피너~~ → Skeleton UI 추가로 해결
+- ~~setTimeout 상태 꼬임~~ → clearTimeout으로 해결
 
----
+### 진행 중 🚧
+- 없음
 
-## 🚀 배포
-
-### Vercel 배포
-
-```bash
-# 1. Vercel CLI 설치
-npm install -g vercel
-
-# 2. 배포
-vercel
-
-# 3. 프로덕션 배포
-vercel --prod
-```
-
-### 환경 변수 설정
-Vercel Dashboard에서 환경 변수 추가:
-- `REACT_APP_API_URL`
-- `REACT_APP_API_BASE_PATH`
-- `REACT_APP_HISTORY_DAYS`
+### 예정 📅
+- 자동완성 API 필요
+- 실시간 데이터 업데이트 필요
 
 ---
 
-## 📝 체인지로그
+## 📝 개발 노트
 
-### v0.6.5 (2024-11-12)
-- ✨ 404 페이지 추가 (NotFound 컴포넌트)
-- 🧭 React Router 설치 및 라우팅 설정
-- 🎨 페이드인 애니메이션, 튀는 이모지
-- 🌙 다크모드 완벽 지원
-- 📱 반응형 디자인
+### 2024-11-12 (저녁)
+- ✅ 로딩 애니메이션 대폭 개선 완료
+- ✅ LoadingSpinner (이중 회전 + 점 애니메이션)
+- ✅ SkeletonCard (shimmer 효과)
+- ✅ SkeletonChart (막대 펄스 애니메이션)
+- ✅ 로딩 상태 최적화 (300ms 타이머)
+- 📊 진행률: 65% → 70%
 
-### v0.6.0 (2024-11-12)
-- ✨ 다크모드 추가
-- 🐛 StockCard/StockChart 버그 수정
-- 🎨 CSS Variables 도입
-- 🔧 에러 처리 강화
+### 2024-11-12 (오후)
+- ✅ 404 페이지 완료 (NotFound 컴포넌트)
+- ✅ React Router 설치 및 라우팅 설정
+- 📊 진행률: 60% → 65%
 
-### v0.5.0 (2024-11-11)
-- ✨ 검색 히스토리 추가
-- 🎨 반응형 디자인 개선
-- 📄 README 업데이트
+### 2024-11-12 (오전)
+- ✅ 다크모드 완료 (ThemeToggle 컴포넌트)
+- ✅ StockCard/StockChart 컴포넌트 버그 수정
+- 📊 진행률: 50% → 60%
 
-### v0.1.0 (2024-11-10)
-- 🎉 초기 버전
-- ✨ 기본 검색 기능
-- 📊 차트 구현
-
----
-
-## 🤝 기여하기
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'feat: Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-자세한 내용은 [CONTRIBUTING.md](../CONTRIBUTING.md) 참고
+### 이전 기록
+- 2024-11-11: Phase 1-3 완료, 기본 기능 구현
+- 2024-11-10: 프로젝트 시작, 초기 설정
 
 ---
 
-## 📄 라이센스
+## 🔗 관련 링크
 
-MIT License - [LICENSE](../LICENSE) 파일 참고
+- **GitHub**: https://github.com/hwan0050/stock-predictor
+- **Issues**: https://github.com/hwan0050/stock-predictor/issues
+- **Wiki**: https://github.com/hwan0050/stock-predictor/wiki
 
 ---
 
-## 📞 문의
+## 📞 연락처
 
 - **GitHub**: [@hwan0050](https://github.com/hwan0050)
 - **Email**: akma0050@naver.com
-- **Issues**: https://github.com/hwan0050/stock-predictor/issues
 
 ---
 
-**Made with ❤️ by hwan0050**
+**마지막 업데이트**: 2024-11-12 24:00  
+**다음 업데이트 예정**: 검색 기능 개선 후
