@@ -7,6 +7,9 @@ import StockChart from './components/StockChart';
 import SearchHistory from './components/SearchHistory';
 import ThemeToggle from './components/ThemeToggle';
 import NotFound from './components/NotFound';
+import LoadingSpinner from './components/LoadingSpinner';
+import SkeletonCard from './components/SkeletonCard';
+import SkeletonChart from './components/SkeletonChart';
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
@@ -17,14 +20,22 @@ function HomePage() {
   const [stockData, setStockData] = useState(null);
   const [historyData, setHistoryData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(false);
   const [error, setError] = useState(null);
 
   const handleSearch = async (symbol) => {
     console.log('🔍 검색 시작:', symbol);
+
     setLoading(true);
+    setShowSkeleton(false);
     setError(null);
     setStockData(null);
     setHistoryData(null);
+
+    // 약간의 지연 후 Skeleton 표시
+    const skeletonTimer = setTimeout(() => {
+      setShowSkeleton(true);
+    }, 300);
 
     try {
       // 현재 주가 정보
@@ -32,7 +43,7 @@ function HomePage() {
       console.log('✅ Stock Data:', stockResponse.data);
       setStockData(stockResponse.data);
 
-      // 과거 데이터 (30일)
+      // 과거 데이터
       const historyResponse = await axios.get(
         `${API_URL}${API_BASE_PATH}/stocks/${symbol}/history?days=${HISTORY_DAYS}`
       );
@@ -43,6 +54,7 @@ function HomePage() {
       saveToHistory(symbol);
     } catch (err) {
       console.error('❌ Error:', err);
+
       if (err.response) {
         if (err.response.status === 404) {
           setError('주식 종목을 찾을 수 없습니다. 심볼을 확인해주세요.');
@@ -57,7 +69,9 @@ function HomePage() {
         setError('알 수 없는 오류가 발생했습니다.');
       }
     } finally {
+      clearTimeout(skeletonTimer);
       setLoading(false);
+      setShowSkeleton(false);
     }
   };
 
@@ -67,7 +81,7 @@ function HomePage() {
       const newHistory = [
         symbol,
         ...history.filter(item => item !== symbol)
-      ].slice(0, 5); // 최대 5개
+      ].slice(0, 5);
       localStorage.setItem('stock-search-history', JSON.stringify(newHistory));
     } catch (err) {
       console.error('Error saving to history:', err);
@@ -90,20 +104,28 @@ function HomePage() {
 
         <SearchHistory onClick={handleHistoryClick} />
 
-        {loading && (
-          <div className="loading-spinner">
-            <div className="spinner"></div>
-            <p>데이터를 불러오는 중...</p>
+        {/* 로딩 초기: LoadingSpinner */}
+        {loading && !showSkeleton && (
+          <LoadingSpinner message="검색 중..." />
+        )}
+
+        {/* 로딩 중: Skeleton UI (Card + Chart) */}
+        {loading && showSkeleton && (
+          <div className="results-container">
+            <SkeletonCard />
+            <SkeletonChart />
           </div>
         )}
 
+        {/* 에러 */}
         {error && (
           <div className="error-message">
             <p>⚠️ {error}</p>
           </div>
         )}
 
-        {stockData && (
+        {/* 데이터 표시 */}
+        {!loading && stockData && (
           <div className="results-container">
             <StockCard data={stockData} />
             {historyData && (
@@ -112,6 +134,7 @@ function HomePage() {
           </div>
         )}
 
+        {/* Welcome 메시지 */}
         {!loading && !error && !stockData && (
           <div className="welcome-message">
             <p>🔍 주식 심볼을 검색해보세요!</p>
@@ -130,14 +153,12 @@ function HomePage() {
 function App() {
   const [theme, setTheme] = useState('light');
 
-  // 테마 초기화 (localStorage에서 불러오기)
   useEffect(() => {
     const savedTheme = localStorage.getItem('stock-app-theme') || 'light';
     setTheme(savedTheme);
     document.body.className = savedTheme === 'dark' ? 'dark-mode' : '';
   }, []);
 
-  // 테마 토글 함수
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
