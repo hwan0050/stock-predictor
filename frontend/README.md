@@ -3,6 +3,7 @@
 > React 기반 주가 예측 웹 애플리케이션 프론트엔드
 
 [![React](https://img.shields.io/badge/React-18.2.0-61DAFB?logo=react)](https://reactjs.org/)
+[![React Router](https://img.shields.io/badge/React_Router-6.20.0-CA4245?logo=reactrouter)](https://reactrouter.com/)
 [![Chart.js](https://img.shields.io/badge/Chart.js-4.4.0-FF6384?logo=chartdotjs)](https://www.chartjs.org/)
 [![Axios](https://img.shields.io/badge/Axios-1.6.0-5A29E4?logo=axios)](https://axios-http.com/)
 
@@ -24,7 +25,9 @@ Stock Predictor의 프론트엔드는 React를 기반으로 한 SPA(Single Page 
 - 💾 **검색 히스토리** - 최근 검색 종목 저장 (최대 5개)
 
 ### 고급 기능
-- 🌙 **다크모드** - 라이트/다크 테마 전환 (NEW!)
+- 🌙 **다크모드** - 라이트/다크 테마 전환
+- 🚫 **404 페이지** - 귀여운 에러 페이지 (NEW!)
+- 🧭 **라우팅** - React Router 기반 네비게이션 (NEW!)
 - ⚡ **빠른 로딩** - 최적화된 컴포넌트 렌더링
 - 🎨 **부드러운 애니메이션** - CSS 트랜지션 효과
 - 🛡️ **에러 처리** - 친절한 에러 메시지
@@ -49,10 +52,12 @@ frontend/
 │   │   ├── StockChart.css
 │   │   ├── SearchHistory.js       # 검색 히스토리
 │   │   ├── SearchHistory.css
-│   │   ├── ThemeToggle.js         # 테마 토글 (NEW!)
-│   │   └── ThemeToggle.css
+│   │   ├── ThemeToggle.js         # 테마 토글
+│   │   ├── ThemeToggle.css
+│   │   ├── NotFound.js            # 404 페이지 (NEW!)
+│   │   └── NotFound.css
 │   │
-│   ├── App.js              # 메인 앱 컴포넌트
+│   ├── App.js              # 메인 앱 컴포넌트 (라우팅 설정)
 │   ├── App.css             # 전역 스타일 + 다크모드
 │   ├── index.js            # 진입점
 │   └── index.css           # 기본 스타일
@@ -113,6 +118,30 @@ npm run build
 
 ---
 
+## 🧭 라우팅 (NEW!)
+
+### React Router 구조
+
+| 경로 | 컴포넌트 | 설명 |
+|------|---------|------|
+| `/` | HomePage | 메인 검색 페이지 |
+| `/*` | NotFound | 404 에러 페이지 |
+
+### 사용 예시
+
+```javascript
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+<BrowserRouter>
+  <Routes>
+    <Route path="/" element={<HomePage />} />
+    <Route path="*" element={<NotFound />} />
+  </Routes>
+</BrowserRouter>
+```
+
+---
+
 ## 🎨 주요 컴포넌트
 
 ### 1. SearchBar
@@ -163,7 +192,7 @@ npm run build
 - 중복 제거
 - 원클릭 재검색
 
-### 5. ThemeToggle (NEW!)
+### 5. ThemeToggle
 테마 전환 컴포넌트
 
 **Props:**
@@ -174,6 +203,18 @@ npm run build
 - 라이트/다크 모드 전환
 - LocalStorage 저장
 - 부드러운 애니메이션
+
+### 6. NotFound (NEW!)
+404 에러 페이지 컴포넌트
+
+**Props:** 없음
+
+**기능:**
+- 🏠 홈으로 돌아가기 버튼
+- ← 이전 페이지 버튼
+- 🏷️ 추천 검색어 태그
+- 📉 튀는 이모지 애니메이션
+- 🌙 다크모드 지원
 
 ---
 
@@ -270,7 +311,7 @@ GET /api/stocks/{symbol}/history?days=30
     - 최대 5개
     - 중복 제거
 
-2. **stock-app-theme** (NEW!)
+2. **stock-app-theme**
     - 테마 설정 ('light' or 'dark')
     - 자동 불러오기
 
@@ -304,14 +345,23 @@ localStorage.getItem('stock-app-theme')
    3. 히스토리 클릭으로 재검색
    ```
 
-3. **다크모드** (NEW!)
+3. **다크모드**
    ```
    1. 우상단 🌙 버튼 클릭
    2. 테마 전환 확인
    3. 새로고침 후 테마 유지 확인
    ```
 
-4. **에러 처리**
+4. **404 페이지** (NEW!)
+   ```
+   1. 잘못된 URL 입력 (예: /asdf123)
+   2. 404 페이지 표시 확인
+   3. 홈으로 버튼 클릭 → 홈 이동 확인
+   4. 이전 페이지 버튼 클릭 → 뒤로가기 확인
+   5. 추천 태그 클릭 → 홈 이동 확인
+   ```
+
+5. **에러 처리**
    ```
    1. 잘못된 심볼 입력
    2. 에러 메시지 확인
@@ -328,6 +378,7 @@ localStorage.getItem('stock-app-theme')
 {
   "react": "^18.2.0",
   "react-dom": "^18.2.0",
+  "react-router-dom": "^6.20.0",
   "axios": "^1.6.0",
   "chart.js": "^4.4.0",
   "react-chartjs-2": "^5.2.0"
@@ -376,6 +427,16 @@ Theme not switching
 - LocalStorage 확인
 - CSS Variables 확인
 
+### 4. 404 페이지 안 나옴 (NEW!)
+```
+404 page not showing
+```
+
+**해결책:**
+- React Router 설치 확인
+- BrowserRouter 설정 확인
+- Routes 순서 확인 (/* 는 마지막!)
+
 ---
 
 ## 🔧 커스터마이징
@@ -404,6 +465,14 @@ REACT_APP_HISTORY_DAYS=90
 ```env
 REACT_APP_API_URL=https://your-api-url.com
 ```
+
+### 4. 404 페이지 커스터마이징
+
+`src/components/NotFound.js` 수정:
+- 이모지 변경
+- 메시지 수정
+- 버튼 추가/삭제
+- 추천 검색어 변경
 
 ---
 
@@ -441,6 +510,13 @@ Vercel Dashboard에서 환경 변수 추가:
 ---
 
 ## 📝 체인지로그
+
+### v0.6.5 (2024-11-12)
+- ✨ 404 페이지 추가 (NotFound 컴포넌트)
+- 🧭 React Router 설치 및 라우팅 설정
+- 🎨 페이드인 애니메이션, 튀는 이모지
+- 🌙 다크모드 완벽 지원
+- 📱 반응형 디자인
 
 ### v0.6.0 (2024-11-12)
 - ✨ 다크모드 추가
