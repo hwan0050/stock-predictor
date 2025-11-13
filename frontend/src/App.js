@@ -1,37 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import SearchBar from './components/SearchBar';
 import StockCard from './components/StockCard';
 import StockChart from './components/StockChart';
 import SearchHistory from './components/SearchHistory';
 import ThemeToggle from './components/ThemeToggle';
+import NotFound from './components/NotFound';
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 const API_BASE_PATH = process.env.REACT_APP_API_BASE_PATH || '/api';
 const HISTORY_DAYS = parseInt(process.env.REACT_APP_HISTORY_DAYS) || 30;
 
-function App() {
+function HomePage() {
   const [stockData, setStockData] = useState(null);
   const [historyData, setHistoryData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [theme, setTheme] = useState('light');
-
-  // 테마 초기화 (localStorage에서 불러오기)
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('stock-app-theme') || 'light';
-    setTheme(savedTheme);
-    document.body.className = savedTheme === 'dark' ? 'dark-mode' : '';
-  }, []);
-
-  // 테마 토글 함수
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('stock-app-theme', newTheme);
-    document.body.className = newTheme === 'dark' ? 'dark-mode' : '';
-  };
 
   const handleSearch = async (symbol) => {
     console.log('🔍 검색 시작:', symbol);
@@ -94,8 +80,6 @@ function App() {
 
   return (
     <div className="App">
-      <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
-
       <header className="App-header">
         <h1>📈 주가 예측</h1>
         <p>실시간 주식 정보 검색</p>
@@ -140,6 +124,35 @@ function App() {
         <p>Made with ❤️ by hwan0050</p>
       </footer>
     </div>
+  );
+}
+
+function App() {
+  const [theme, setTheme] = useState('light');
+
+  // 테마 초기화 (localStorage에서 불러오기)
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('stock-app-theme') || 'light';
+    setTheme(savedTheme);
+    document.body.className = savedTheme === 'dark' ? 'dark-mode' : '';
+  }, []);
+
+  // 테마 토글 함수
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('stock-app-theme', newTheme);
+    document.body.className = newTheme === 'dark' ? 'dark-mode' : '';
+  };
+
+  return (
+    <BrowserRouter>
+      <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
