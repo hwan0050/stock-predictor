@@ -11,11 +11,11 @@ import LoadingSpinner from './components/LoadingSpinner';
 import SkeletonCard from './components/SkeletonCard';
 import SkeletonChart from './components/SkeletonChart';
 import PopularStocks from './components/PopularStocks';
+import PeriodSelector from './components/PeriodSelector'; // 🆕 추가
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 const API_BASE_PATH = process.env.REACT_APP_API_BASE_PATH || '/api';
-const HISTORY_DAYS = parseInt(process.env.REACT_APP_HISTORY_DAYS) || 30;
 
 function HomePage() {
   const [stockData, setStockData] = useState(null);
@@ -23,6 +23,7 @@ function HomePage() {
   const [loading, setLoading] = useState(false);
   const [showSkeleton, setShowSkeleton] = useState(false);
   const [error, setError] = useState(null);
+  const [selectedPeriod, setSelectedPeriod] = useState(30); // 🆕 기간 state (기본 30일)
 
   const handleSearch = async (symbol) => {
     console.log('🔍 검색 시작:', symbol);
@@ -44,9 +45,9 @@ function HomePage() {
       console.log('✅ Stock Data:', stockResponse.data);
       setStockData(stockResponse.data);
 
-      // 과거 데이터
+      // 과거 데이터 (selectedPeriod 사용) 🆕
       const historyResponse = await axios.get(
-        `${API_URL}${API_BASE_PATH}/stocks/${symbol}/history?days=${HISTORY_DAYS}`
+        `${API_URL}${API_BASE_PATH}/stocks/${symbol}/history?days=${selectedPeriod}`
       );
       console.log('✅ History Data:', historyResponse.data);
       setHistoryData(historyResponse.data);
@@ -97,6 +98,17 @@ function HomePage() {
     handleSearch(symbol);
   };
 
+  // 🆕 기간 변경 핸들러
+  const handlePeriodChange = (newPeriod) => {
+    console.log('📅 기간 변경:', newPeriod);
+    setSelectedPeriod(newPeriod);
+
+    // 현재 검색된 종목이 있으면 다시 조회
+    if (stockData && stockData.symbol) {
+      handleSearch(stockData.symbol);
+    }
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -110,6 +122,15 @@ function HomePage() {
 
         {/* 검색 히스토리 (삭제 기능) */}
         <SearchHistory onClick={handleHistoryClick} />
+
+        {/* 🆕 기간 선택 버튼 (데이터가 있거나 로딩 중일 때만 표시) */}
+        {(stockData || loading) && (
+          <PeriodSelector
+            selectedPeriod={selectedPeriod}
+            onPeriodChange={handlePeriodChange}
+            disabled={loading}
+          />
+        )}
 
         {/* 로딩 초기: LoadingSpinner */}
         {loading && !showSkeleton && (
