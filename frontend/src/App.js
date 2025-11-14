@@ -10,6 +10,7 @@ import NotFound from './components/NotFound';
 import LoadingSpinner from './components/LoadingSpinner';
 import SkeletonCard from './components/SkeletonCard';
 import SkeletonChart from './components/SkeletonChart';
+import PopularStocks from './components/PopularStocks';
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
@@ -92,6 +93,10 @@ function HomePage() {
     handleSearch(symbol);
   };
 
+  const handlePopularClick = (symbol) => {
+    handleSearch(symbol);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -100,8 +105,10 @@ function HomePage() {
       </header>
 
       <main className="App-main">
+        {/* 검색 바 (자동완성 + 유효성 검사) */}
         <SearchBar onSearch={handleSearch} disabled={loading} />
 
+        {/* 검색 히스토리 (삭제 기능) */}
         <SearchHistory onClick={handleHistoryClick} />
 
         {/* 로딩 초기: LoadingSpinner */}
@@ -109,7 +116,7 @@ function HomePage() {
           <LoadingSpinner message="검색 중..." />
         )}
 
-        {/* 로딩 중: Skeleton UI (Card + Chart) */}
+        {/* 로딩 중: Skeleton UI */}
         {loading && showSkeleton && (
           <div className="results-container">
             <SkeletonCard />
@@ -134,12 +141,17 @@ function HomePage() {
           </div>
         )}
 
-        {/* Welcome 메시지 */}
+        {/* Welcome 메시지 + 인기 종목 */}
         {!loading && !error && !stockData && (
-          <div className="welcome-message">
-            <p>🔍 주식 심볼을 검색해보세요!</p>
-            <p className="example">예시: AAPL, TSLA, GOOGL, TEST</p>
-          </div>
+          <>
+            <div className="welcome-message">
+              <p>🔍 주식 심볼을 검색해보세요!</p>
+              <p className="example">예시: AAPL, TSLA, GOOGL, TEST</p>
+            </div>
+
+            {/* 인기 종목 추천 */}
+            <PopularStocks onStockClick={handlePopularClick} disabled={loading} />
+          </>
         )}
       </main>
 
