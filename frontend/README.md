@@ -1,317 +1,378 @@
-# 📋 Stock Predictor - 개발 체크리스트
+# 📈 Stock Predictor - Frontend
 
-> **최종 업데이트**: 2024-11-12  
-> **현재 진행률**: 70%  
-> **GitHub**: https://github.com/hwan0050/stock-predictor
+> React 기반 주가 예측 웹 애플리케이션 프론트엔드
 
----
-
-## 🎯 프로젝트 개요
-
-### 기본 정보
-- **프로젝트명**: Stock Predictor (주가 예측 웹 애플리케이션)
-- **로컬 경로**: `F:\workspace\stock-predictor`
-- **포트**: Frontend(3000), Backend(8080)
-- **현재 버전**: v0.7.0
-
-### 기술 스택
-- **Frontend**: React 18, React Router 6, Chart.js 4, Axios, CSS Variables
-- **Backend**: Spring Boot 3, Gradle, Yahoo Finance API
-- **기타**: Git, IntelliJ IDEA, VSCode
+[![React](https://img.shields.io/badge/React-18.2.0-61DAFB?logo=react)](https://reactjs.org/)
+[![React Router](https://img.shields.io/badge/React_Router-6.20.0-CA4245?logo=reactrouter)](https://reactrouter.com/)
+[![Chart.js](https://img.shields.io/badge/Chart.js-4.4.0-FF6384?logo=chartdotjs)](https://www.chartjs.org/)
+[![Axios](https://img.shields.io/badge/Axios-1.6.0-5A29E4?logo=axios)](https://axios-http.com/)
 
 ---
 
-## ✅ Phase 1: 기본 구축 (100% 완료)
+## 🎯 개요
 
-### Backend 구축
-- [x] Spring Boot 프로젝트 초기화
-- [x] Gradle 설정
-- [x] 기본 패키지 구조 생성
-- [x] Yahoo Finance API 연동
-- [x] RESTful API 구현
-    - [x] `/api/stocks/{symbol}` - 현재 주가 조회
-    - [x] `/api/stocks/{symbol}/history` - 과거 데이터 조회
-- [x] CORS 설정
-- [x] Mock 데이터 (TEST 심볼)
-- [x] Exception 처리 (GlobalExceptionHandler)
-- [x] Spring Cache 설정 (429 에러 대응)
+Stock Predictor의 프론트엔드는 React를 기반으로 한 SPA(Single Page Application)입니다.  
+실시간 주가 정보를 시각화하고 사용자 친화적인 인터페이스를 제공합니다.
 
-### Frontend 구축
-- [x] React 프로젝트 초기화 (Create React App)
-- [x] 필수 패키지 설치
-    - [x] axios
-    - [x] chart.js, react-chartjs-2
-    - [x] react-router-dom
-- [x] Backend 연동 (API 통신)
-- [x] 컴포넌트 구조 설계
-    - [x] SearchBar - 검색 바
-    - [x] StockCard - 주가 정보 카드
-    - [x] StockChart - 차트 컴포넌트
-    - [x] SearchHistory - 검색 히스토리
-    - [x] NotFound - 404 페이지
-    - [x] LoadingSpinner - 로딩 스피너 (NEW!)
-    - [x] SkeletonCard - 카드 skeleton (NEW!)
-    - [x] SkeletonChart - 차트 skeleton (NEW!)
+---
+
+## ✨ 주요 기능
 
 ### 기본 기능
-- [x] 주식 심볼 검색
-- [x] 현재 주가 표시
-- [x] 30일 히스토리 차트
-- [x] 로딩 스피너
-- [x] 에러 처리 및 메시지
+- 🔍 **주식 심볼 검색** - 실시간 주가 정보 조회
+- 📊 **데이터 시각화** - Chart.js를 활용한 인터랙티브 차트
+- 📱 **반응형 디자인** - 모바일/태블릿/데스크톱 대응
+- 💾 **검색 히스토리** - 최근 검색 종목 저장 (최대 5개)
+
+### 고급 기능
+- 🌙 **다크모드** - 라이트/다크 테마 전환
+- 🚫 **404 페이지** - 귀여운 에러 페이지
+- 🧭 **라우팅** - React Router 기반 네비게이션
+- ⚡ **로딩 애니메이션** - Spinner + Skeleton UI
+- 🎨 **Shimmer 효과** - 프로페셔널 로딩
+
+### 검색 기능 (NEW!)
+- 🔎 **자동완성** - 50개 주요 종목 실시간 검색
+- ✅ **유효성 검사** - 실시간 입력 검증
+- 🗑️ **히스토리 삭제** - 개별/전체 삭제 기능
+- 🔥 **인기 종목** - 원클릭 검색
 
 ---
 
-## ✅ Phase 2: UI/UX 개선 (100% 완료)
+## 🏗️ 프로젝트 구조
 
-### 디자인
-- [x] 반응형 레이아웃 (모바일/태블릿/데스크톱)
-- [x] 깔끔한 UI 디자인
-- [x] 카드 스타일 컴포넌트
-- [x] 부드러운 애니메이션 효과
-- [x] 컬러 스킴 설정
-
-### 사용자 경험
-- [x] Favicon 추가 (📈)
-- [x] 환경 변수 설정 (.env)
-- [x] 검색 히스토리 (LocalStorage)
-- [x] 히스토리 클릭으로 재검색
-- [x] 친절한 에러 메시지
-- [x] Welcome 메시지
-
-### 다크모드
-- [x] ThemeToggle 컴포넌트 추가
-- [x] 라이트/다크 테마 전환
-- [x] LocalStorage 테마 저장
-- [x] CSS Variables 활용
-- [x] 부드러운 전환 애니메이션
-- [x] 모든 컴포넌트 테마 적용
-
-### 버그 수정
-- [x] StockCard 렌더링 오류 해결
-- [x] StockChart 데이터 구조 처리 개선
-- [x] 에러 처리 강화
-- [x] 데이터 검증 추가
-
----
-
-## ✅ Phase 3: 문서화 (100% 완료)
-
-### README 작성
-- [x] 메인 README.md
-- [x] Frontend README.md
-- [x] Backend README.md
-- [x] 스크린샷 추가
-- [x] 설치 및 실행 가이드
-
-### 기타 문서
-- [x] CONTRIBUTING.md
-- [x] LICENSE (MIT)
-- [x] .gitignore (루트, Backend, Frontend)
-- [x] CHECKLIST.md (이 파일)
-
-### GitHub
-- [x] 저장소 생성
-- [x] 초기 커밋
-- [x] GitHub 프로필 README 업데이트
-- [x] 프로젝트 Description 작성
+```
+frontend/
+├── public/
+│   ├── index.html          # HTML 템플릿
+│   └── favicon.ico         # 파비콘 (📈)
+│
+├── src/
+│   ├── components/         # React 컴포넌트
+│   │   ├── SearchBar.js           # 검색 바 (자동완성 + 유효성)
+│   │   ├── SearchBar.css
+│   │   ├── StockCard.js           # 주가 정보 카드
+│   │   ├── StockCard.css
+│   │   ├── StockChart.js          # 차트 컴포넌트
+│   │   ├── StockChart.css
+│   │   ├── SearchHistory.js       # 검색 히스토리 (삭제)
+│   │   ├── SearchHistory.css
+│   │   ├── ThemeToggle.js         # 테마 토글
+│   │   ├── ThemeToggle.css
+│   │   ├── NotFound.js            # 404 페이지
+│   │   ├── NotFound.css
+│   │   ├── LoadingSpinner.js      # 로딩 스피너
+│   │   ├── LoadingSpinner.css
+│   │   ├── SkeletonCard.js        # 카드 skeleton
+│   │   ├── SkeletonCard.css
+│   │   ├── SkeletonChart.js       # 차트 skeleton
+│   │   ├── SkeletonChart.css
+│   │   ├── PopularStocks.js       # 인기 종목 (NEW!)
+│   │   └── PopularStocks.css
+│   │
+│   ├── App.js              # 메인 앱 컴포넌트
+│   ├── App.css             # 전역 스타일
+│   ├── index.js            # 진입점
+│   └── index.css           # 기본 스타일
+│
+├── .env                    # 환경 변수
+├── .gitignore
+├── package.json            # 의존성 관리
+├── package-lock.json
+└── README.md               # 이 파일
+```
 
 ---
 
-## ✅ Phase 4: 추가 기능 (완료! - 100%)
+## 🚀 시작하기
 
-### 404 페이지
-- [x] NotFound 컴포넌트 생성
-- [x] React Router 설치
-- [x] 라우팅 설정 (/, *)
-- [x] 404 페이지 디자인
-- [x] 홈으로 돌아가기/이전 페이지 버튼
-- [x] 추천 검색어 태그
-- [x] 다크모드 지원
-- [x] 반응형 디자인
+### 1. 사전 요구사항
 
-### 로딩 애니메이션 개선 (완료!)
-- [x] LoadingSpinner 컴포넌트 (이중 회전)
-- [x] SkeletonCard 컴포넌트 (shimmer 효과)
-- [x] SkeletonChart 컴포넌트 (막대 애니메이션)
-- [x] 로딩 상태 세분화 (initial → skeleton → complete)
-- [x] 300ms 타이머 최적화
-- [x] clearTimeout 메모리 관리
-- [x] 다크모드 shimmer 효과
-- [x] 반응형 skeleton UI
+- **Node.js**: 18.x 이상
+- **npm**: 9.x 이상
+- **Backend**: Spring Boot 서버 실행 중 (포트 8080)
 
-### 검색 기능 개선 (다음 작업!)
-- [ ] 자동완성 기능
-- [ ] 인기 종목 추천
-- [ ] 검색 히스토리 삭제 기능
-- [ ] 검색 결과 정렬
-- [ ] 검색어 유효성 검사
+### 2. 설치
 
----
+```bash
+# 1. 프로젝트 클론
+git clone https://github.com/hwan0050/stock-predictor.git
+cd stock-predictor/frontend
 
-## 📅 Phase 5: 차트 기능 확장 (예정)
+# 2. 의존성 설치
+npm install
 
-- [ ] 기간 선택 (7일/30일/90일/1년)
-- [ ] 차트 타입 선택 (라인/캔들)
-- [ ] 이동평균선 추가
-- [ ] 거래량 차트
-- [ ] 비교 차트 (여러 종목 비교)
-- [ ] 차트 확대/축소
-- [ ] 차트 데이터 다운로드
+# 3. 환경 변수 설정
+# .env 파일이 있는지 확인
+```
+
+### 3. 실행
+
+```bash
+# 개발 서버 실행
+npm start
+
+# 브라우저 자동 실행
+# http://localhost:3000
+```
 
 ---
 
-## 🗄️ Phase 6: 데이터베이스 (예정)
+## 🎨 주요 컴포넌트
 
-- [ ] PostgreSQL 설치 및 설정
-- [ ] JPA Entity 설계
-    - [ ] Stock Entity
-    - [ ] StockHistory Entity
-    - [ ] User Entity (선택)
-- [ ] Repository 구현
-- [ ] Service Layer 리팩토링
-- [ ] 실시간 데이터 DB 저장
-- [ ] 데이터 캐싱 전략
+### 1. SearchBar (자동완성 + 유효성 검사) ⭐ NEW!
 
----
+**Props:**
+- `onSearch`: 검색 핸들러 함수
+- `disabled`: 로딩 중 비활성화
 
-## 🤖 Phase 7: AI 예측 모델 (예정)
+**기능:**
+- 🔎 **자동완성**
+    - 50개 주요 종목 데이터
+    - 심볼 + 회사명 검색
+    - 키보드 네비게이션 (↑↓ Enter ESC)
+    - 최대 8개 결과 표시
+    - 외부 클릭 시 자동 닫기
+- ✅ **유효성 검사**
+    - 알파벳만 허용
+    - 1-6자 길이 제한
+    - 실시간 에러 메시지
 
-- [ ] Python 환경 설정
-- [ ] LSTM 모델 개발
-- [ ] 학습 데이터 수집 및 전처리
-- [ ] 모델 학습 및 평가
-- [ ] 예측 API 개발
-- [ ] Backend 연동
-- [ ] 예측 결과 시각화
+### 2. SearchHistory (삭제 기능) ⭐ NEW!
 
----
+**Props:**
+- `onClick`: 히스토리 클릭 핸들러
 
-## 🔐 Phase 8: 사용자 인증 (예정)
+**기능:**
+- 🗑️ **개별 삭제**: ✕ 버튼 클릭
+- 🗑️ **전체 삭제**: 전체 삭제 버튼
+- ⚠️ **삭제 확인**: window.confirm 대화상자
+- 💾 **실시간 저장**: LocalStorage 즉시 업데이트
 
-- [ ] JWT 인증 구현
-- [ ] Spring Security 설정
-- [ ] 회원가입 API
-- [ ] 로그인 API
-- [ ] 사용자 프로필 관리
-- [ ] 관심 종목 저장 기능
-- [ ] 포트폴리오 관리
+### 3. PopularStocks ⭐ NEW!
 
----
+**Props:**
+- `onStockClick`: 종목 클릭 핸들러
+- `disabled`: 로딩 중 비활성화
 
-## 🚀 Phase 9: 배포 (예정)
+**기능:**
+- 🔥 **8개 인기 종목** (AAPL, TSLA, GOOGL, etc.)
+- 🎨 **이모지 + 심볼 + 이름**
+- 🖱️ **원클릭 검색**
+- 📱 **반응형 그리드**
 
-### Frontend 배포
-- [ ] Vercel 배포 준비
-- [ ] 환경 변수 설정
-- [ ] 빌드 최적화
-- [ ] 배포 및 테스트
+### 4. LoadingSpinner
 
-### Backend 배포
-- [ ] AWS EC2 설정
-- [ ] Docker 컨테이너화
-- [ ] CI/CD 파이프라인 (GitHub Actions)
-- [ ] 모니터링 설정
+**Props:**
+- `message`: 로딩 메시지
 
-### 기타
-- [ ] 도메인 연결
-- [ ] HTTPS 설정
-- [ ] 성능 최적화
-- [ ] SEO 최적화
+**기능:**
+- ⭕⭕ 이중 회전 애니메이션
+- • • • 튀는 점 애니메이션
+- 🌙 다크모드 지원
 
----
+### 5. SkeletonCard / SkeletonChart
 
-## 📊 진행률 요약
+**Props:** 없음
 
-| Phase | 내용 | 진행률 | 상태 |
-|-------|------|--------|------|
-| Phase 1 | 기본 구축 | 100% | ✅ 완료 |
-| Phase 2 | UI/UX 개선 | 100% | ✅ 완료 |
-| Phase 3 | 문서화 | 100% | ✅ 완료 |
-| Phase 4 | 추가 기능 | 100% | ✅ 완료 |
-| Phase 5 | 차트 확장 | 0% | 📅 계획 중 |
-| Phase 6 | 데이터베이스 | 0% | 📅 계획 중 |
-| Phase 7 | AI 예측 | 0% | 📅 계획 중 |
-| Phase 8 | 사용자 인증 | 0% | 📅 계획 중 |
-| Phase 9 | 배포 | 0% | 📅 계획 중 |
-
-**전체 진행률**: 70% (Phase 1-4 완료)
+**기능:**
+- ✨ Shimmer 효과
+- 📐 실제 레이아웃 모방
+- 🌙 다크모드 최적화
 
 ---
 
-## 🎯 다음 작업 (우선순위 순)
+## 🔍 검색 시스템 (NEW!)
 
-### 이번 주 목표
-1. ✅ ~~다크모드 구현~~ (완료!)
-2. ✅ ~~404 페이지 추가~~ (완료!)
-3. ✅ ~~로딩 애니메이션 개선~~ (완료!)
-4. 🔜 검색 기능 개선
+### 자동완성 작동 원리
 
-### 이번 달 목표
-- Phase 4 완료 (추가 기능) ✅
-- Phase 5 시작 (차트 확장)
+```javascript
+// 1. 입력 시 실시간 필터링
+const filtered = stocksData.filter(stock => 
+  stock.symbol.toLowerCase().startsWith(value.toLowerCase()) ||
+  stock.name.toLowerCase().includes(value.toLowerCase())
+).slice(0, 8);
 
----
+// 2. 키보드 네비게이션
+- ArrowDown: 다음 항목
+- ArrowUp: 이전 항목
+- Enter: 선택
+- Escape: 닫기
 
-## 🐛 알려진 이슈
+// 3. 외부 클릭 감지
+useEffect(() => {
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => document.removeEventListener('mousedown', handleClickOutside);
+}, []);
+```
 
-### 해결됨 ✅
-- ~~Backend 429 에러~~ → Spring Cache로 해결
-- ~~Frontend 데이터 미표시~~ → 컴포넌트 재작성으로 해결
-- ~~다크모드 렌더링 오류~~ → ThemeToggle 컴포넌트 추가로 해결
-- ~~404 페이지 없음~~ → NotFound 컴포넌트 추가로 해결
-- ~~단순한 로딩 스피너~~ → Skeleton UI 추가로 해결
-- ~~setTimeout 상태 꼬임~~ → clearTimeout으로 해결
+### 유효성 검사 규칙
 
-### 진행 중 🚧
-- 없음
+```javascript
+// 1. 빈 값 체크
+if (!value.trim()) return '검색어를 입력해주세요.';
 
-### 예정 📅
-- 자동완성 API 필요
-- 실시간 데이터 업데이트 필요
+// 2. 알파벳만 허용
+if (!/^[A-Za-z.]+$/.test(value)) return '알파벳만 입력 가능합니다.';
 
----
+// 3. 길이 제한
+if (value.length < 1 || value.length > 6) return '1-6자 이내로 입력해주세요.';
+```
 
-## 📝 개발 노트
+### 히스토리 삭제 시스템
 
-### 2024-11-12 (저녁)
-- ✅ 로딩 애니메이션 대폭 개선 완료
-- ✅ LoadingSpinner (이중 회전 + 점 애니메이션)
-- ✅ SkeletonCard (shimmer 효과)
-- ✅ SkeletonChart (막대 펄스 애니메이션)
-- ✅ 로딩 상태 최적화 (300ms 타이머)
-- 📊 진행률: 65% → 70%
+```javascript
+// 개별 삭제
+const removeFromHistory = (symbolToRemove, e) => {
+  e.stopPropagation(); // 부모 클릭 방지
+  const newHistory = history.filter(symbol => symbol !== symbolToRemove);
+  localStorage.setItem('stock-search-history', JSON.stringify(newHistory));
+};
 
-### 2024-11-12 (오후)
-- ✅ 404 페이지 완료 (NotFound 컴포넌트)
-- ✅ React Router 설치 및 라우팅 설정
-- 📊 진행률: 60% → 65%
-
-### 2024-11-12 (오전)
-- ✅ 다크모드 완료 (ThemeToggle 컴포넌트)
-- ✅ StockCard/StockChart 컴포넌트 버그 수정
-- 📊 진행률: 50% → 60%
-
-### 이전 기록
-- 2024-11-11: Phase 1-3 완료, 기본 기능 구현
-- 2024-11-10: 프로젝트 시작, 초기 설정
+// 전체 삭제
+const clearAllHistory = () => {
+  if (window.confirm('모든 검색 기록을 삭제하시겠습니까?')) {
+    localStorage.removeItem('stock-search-history');
+  }
+};
+```
 
 ---
 
-## 🔗 관련 링크
+## ⚡ 로딩 시스템
 
-- **GitHub**: https://github.com/hwan0050/stock-predictor
-- **Issues**: https://github.com/hwan0050/stock-predictor/issues
-- **Wiki**: https://github.com/hwan0050/stock-predictor/wiki
+### 로딩 단계
+
+```
+검색 시작
+   ↓
+⭕⭕ LoadingSpinner (0.3초)
+   ↓
+████░░░ SkeletonCard
+│││││││ SkeletonChart
+   ↓
+📊 실제 데이터 표시!
+```
 
 ---
 
-## 📞 연락처
+## 🎨 스타일링
+
+### CSS Variables
+
+```css
+:root {
+  --bg-color: #f5f7fa;
+  --card-bg: #ffffff;
+  --text-primary: #2c3e50;
+  --border-color: #e0e0e0;
+  --primary-color: #3498db;
+}
+
+body.dark-mode {
+  --bg-color: #1a1a2e;
+  --card-bg: #16213e;
+  --text-primary: #eaeaea;
+}
+```
+
+---
+
+## 💾 LocalStorage
+
+### 저장 키
+
+1. **stock-search-history**
+    - 검색 히스토리 배열
+    - 최대 5개
+    - 중복 제거
+
+2. **stock-app-theme**
+    - 테마 설정 ('light' or 'dark')
+
+---
+
+## 🧪 테스트
+
+### 자동완성 테스트 (NEW!)
+```
+1. 검색창에 "AA" 입력
+2. AAPL, AAL 등 자동완성 표시 확인
+3. ↓ 키로 이동
+4. Enter로 선택
+5. 검색 실행 확인
+```
+
+### 유효성 검사 테스트 (NEW!)
+```
+1. "123" 입력 → 에러 메시지
+2. "TOOLONG" 입력 → 에러 메시지
+3. 빈 값 검색 → 에러 메시지
+```
+
+### 히스토리 삭제 테스트 (NEW!)
+```
+1. 여러 종목 검색
+2. 히스토리에 ✕ 버튼 확인
+3. 클릭 시 삭제 확인
+4. "전체 삭제" 버튼 클릭
+5. 확인 대화상자 확인
+```
+
+### 인기 종목 테스트 (NEW!)
+```
+1. Welcome 화면에서 인기 종목 카드 확인
+2. Apple 카드 클릭
+3. AAPL 검색 실행 확인
+```
+
+---
+
+## 📝 체인지로그
+
+### v0.7.5 (2024-11-12)
+- ✨ 검색 기능 대폭 개선
+- 🔎 자동완성 추가 (50개 종목)
+- ✅ 유효성 검사 추가
+- 🗑️ 히스토리 삭제 기능
+- 🔥 인기 종목 추천 추가
+
+### v0.7.0 (2024-11-12)
+- ✨ 로딩 애니메이션 개선
+- ⭕ LoadingSpinner 추가
+- ✨ Skeleton UI 추가
+
+### v0.6.5 (2024-11-12)
+- ✨ 404 페이지 추가
+- 🧭 React Router 설치
+
+### v0.6.0 (2024-11-12)
+- ✨ 다크모드 추가
+- 🐛 버그 수정
+
+---
+
+## 🤝 기여하기
+
+1. Fork the Project
+2. Create your Feature Branch
+3. Commit your Changes
+4. Push to the Branch
+5. Open a Pull Request
+
+---
+
+## 📄 라이센스
+
+MIT License - [LICENSE](../LICENSE) 파일 참고
+
+---
+
+## 📞 문의
 
 - **GitHub**: [@hwan0050](https://github.com/hwan0050)
 - **Email**: akma0050@naver.com
 
 ---
 
-**마지막 업데이트**: 2024-11-12 24:00  
-**다음 업데이트 예정**: 검색 기능 개선 후
+**Made with ❤️ by hwan0050**
