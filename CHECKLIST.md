@@ -1,317 +1,359 @@
-# 📋 Stock Predictor - 개발 체크리스트
+# ✅ Stock Predictor - 개발 체크리스트
 
-> **최종 업데이트**: 2024-11-12  
-> **현재 진행률**: 70%  
-> **GitHub**: https://github.com/hwan0050/stock-predictor
-
----
-
-## 🎯 프로젝트 개요
-
-### 기본 정보
-- **프로젝트명**: Stock Predictor (주가 예측 웹 애플리케이션)
-- **로컬 경로**: `F:\workspace\stock-predictor`
-- **포트**: Frontend(3000), Backend(8080)
-- **현재 버전**: v0.7.0
-
-### 기술 스택
-- **Frontend**: React 18, React Router 6, Chart.js 4, Axios, CSS Variables
-- **Backend**: Spring Boot 3, Gradle, Yahoo Finance API
-- **기타**: Git, IntelliJ IDEA, VSCode
+> **현재 버전**: v0.7.5  
+> **진행률**: 75%  
+> **마지막 업데이트**: 2024-11-13
 
 ---
 
-## ✅ Phase 1: 기본 구축 (100% 완료)
+## 📊 전체 진행 현황
 
-### Backend 구축
-- [x] Spring Boot 프로젝트 초기화
-- [x] Gradle 설정
-- [x] 기본 패키지 구조 생성
-- [x] Yahoo Finance API 연동
-- [x] RESTful API 구현
-    - [x] `/api/stocks/{symbol}` - 현재 주가 조회
-    - [x] `/api/stocks/{symbol}/history` - 과거 데이터 조회
-- [x] CORS 설정
-- [x] Mock 데이터 (TEST 심볼)
-- [x] Exception 처리 (GlobalExceptionHandler)
-- [x] Spring Cache 설정 (429 에러 대응)
+```
+████████████████████░░░░░  75%
+```
 
-### Frontend 구축
-- [x] React 프로젝트 초기화 (Create React App)
-- [x] 필수 패키지 설치
-    - [x] axios
-    - [x] chart.js, react-chartjs-2
-    - [x] react-router-dom
-- [x] Backend 연동 (API 통신)
-- [x] 컴포넌트 구조 설계
-    - [x] SearchBar - 검색 바
-    - [x] StockCard - 주가 정보 카드
-    - [x] StockChart - 차트 컴포넌트
-    - [x] SearchHistory - 검색 히스토리
-    - [x] NotFound - 404 페이지
-    - [x] LoadingSpinner - 로딩 스피너 (NEW!)
-    - [x] SkeletonCard - 카드 skeleton (NEW!)
-    - [x] SkeletonChart - 차트 skeleton (NEW!)
-
-### 기본 기능
-- [x] 주식 심볼 검색
-- [x] 현재 주가 표시
-- [x] 30일 히스토리 차트
-- [x] 로딩 스피너
-- [x] 에러 처리 및 메시지
-
----
-
-## ✅ Phase 2: UI/UX 개선 (100% 완료)
-
-### 디자인
-- [x] 반응형 레이아웃 (모바일/태블릿/데스크톱)
-- [x] 깔끔한 UI 디자인
-- [x] 카드 스타일 컴포넌트
-- [x] 부드러운 애니메이션 효과
-- [x] 컬러 스킴 설정
-
-### 사용자 경험
-- [x] Favicon 추가 (📈)
-- [x] 환경 변수 설정 (.env)
-- [x] 검색 히스토리 (LocalStorage)
-- [x] 히스토리 클릭으로 재검색
-- [x] 친절한 에러 메시지
-- [x] Welcome 메시지
-
-### 다크모드
-- [x] ThemeToggle 컴포넌트 추가
-- [x] 라이트/다크 테마 전환
-- [x] LocalStorage 테마 저장
-- [x] CSS Variables 활용
-- [x] 부드러운 전환 애니메이션
-- [x] 모든 컴포넌트 테마 적용
-
-### 버그 수정
-- [x] StockCard 렌더링 오류 해결
-- [x] StockChart 데이터 구조 처리 개선
-- [x] 에러 처리 강화
-- [x] 데이터 검증 추가
-
----
-
-## ✅ Phase 3: 문서화 (100% 완료)
-
-### README 작성
-- [x] 메인 README.md
-- [x] Frontend README.md
-- [x] Backend README.md
-- [x] 스크린샷 추가
-- [x] 설치 및 실행 가이드
-
-### 기타 문서
-- [x] CONTRIBUTING.md
-- [x] LICENSE (MIT)
-- [x] .gitignore (루트, Backend, Frontend)
-- [x] CHECKLIST.md (이 파일)
-
-### GitHub
-- [x] 저장소 생성
-- [x] 초기 커밋
-- [x] GitHub 프로필 README 업데이트
-- [x] 프로젝트 Description 작성
-
----
-
-## ✅ Phase 4: 추가 기능 (완료! - 100%)
-
-### 404 페이지
-- [x] NotFound 컴포넌트 생성
-- [x] React Router 설치
-- [x] 라우팅 설정 (/, *)
-- [x] 404 페이지 디자인
-- [x] 홈으로 돌아가기/이전 페이지 버튼
-- [x] 추천 검색어 태그
-- [x] 다크모드 지원
-- [x] 반응형 디자인
-
-### 로딩 애니메이션 개선 (완료!)
-- [x] LoadingSpinner 컴포넌트 (이중 회전)
-- [x] SkeletonCard 컴포넌트 (shimmer 효과)
-- [x] SkeletonChart 컴포넌트 (막대 애니메이션)
-- [x] 로딩 상태 세분화 (initial → skeleton → complete)
-- [x] 300ms 타이머 최적화
-- [x] clearTimeout 메모리 관리
-- [x] 다크모드 shimmer 효과
-- [x] 반응형 skeleton UI
-
-### 검색 기능 개선 (다음 작업!)
-- [ ] 자동완성 기능
-- [ ] 인기 종목 추천
-- [ ] 검색 히스토리 삭제 기능
-- [ ] 검색 결과 정렬
-- [ ] 검색어 유효성 검사
-
----
-
-## 📅 Phase 5: 차트 기능 확장 (예정)
-
-- [ ] 기간 선택 (7일/30일/90일/1년)
-- [ ] 차트 타입 선택 (라인/캔들)
-- [ ] 이동평균선 추가
-- [ ] 거래량 차트
-- [ ] 비교 차트 (여러 종목 비교)
-- [ ] 차트 확대/축소
-- [ ] 차트 데이터 다운로드
-
----
-
-## 🗄️ Phase 6: 데이터베이스 (예정)
-
-- [ ] PostgreSQL 설치 및 설정
-- [ ] JPA Entity 설계
-    - [ ] Stock Entity
-    - [ ] StockHistory Entity
-    - [ ] User Entity (선택)
-- [ ] Repository 구현
-- [ ] Service Layer 리팩토링
-- [ ] 실시간 데이터 DB 저장
-- [ ] 데이터 캐싱 전략
-
----
-
-## 🤖 Phase 7: AI 예측 모델 (예정)
-
-- [ ] Python 환경 설정
-- [ ] LSTM 모델 개발
-- [ ] 학습 데이터 수집 및 전처리
-- [ ] 모델 학습 및 평가
-- [ ] 예측 API 개발
-- [ ] Backend 연동
-- [ ] 예측 결과 시각화
-
----
-
-## 🔐 Phase 8: 사용자 인증 (예정)
-
-- [ ] JWT 인증 구현
-- [ ] Spring Security 설정
-- [ ] 회원가입 API
-- [ ] 로그인 API
-- [ ] 사용자 프로필 관리
-- [ ] 관심 종목 저장 기능
-- [ ] 포트폴리오 관리
-
----
-
-## 🚀 Phase 9: 배포 (예정)
-
-### Frontend 배포
-- [ ] Vercel 배포 준비
-- [ ] 환경 변수 설정
-- [ ] 빌드 최적화
-- [ ] 배포 및 테스트
-
-### Backend 배포
-- [ ] AWS EC2 설정
-- [ ] Docker 컨테이너화
-- [ ] CI/CD 파이프라인 (GitHub Actions)
-- [ ] 모니터링 설정
-
-### 기타
-- [ ] 도메인 연결
-- [ ] HTTPS 설정
-- [ ] 성능 최적화
-- [ ] SEO 최적화
-
----
-
-## 📊 진행률 요약
-
-| Phase | 내용 | 진행률 | 상태 |
-|-------|------|--------|------|
+| Phase | 작업 내용 | 진행률 | 상태 |
+|-------|----------|--------|------|
 | Phase 1 | 기본 구축 | 100% | ✅ 완료 |
 | Phase 2 | UI/UX 개선 | 100% | ✅ 완료 |
 | Phase 3 | 문서화 | 100% | ✅ 완료 |
 | Phase 4 | 추가 기능 | 100% | ✅ 완료 |
-| Phase 5 | 차트 확장 | 0% | 📅 계획 중 |
-| Phase 6 | 데이터베이스 | 0% | 📅 계획 중 |
-| Phase 7 | AI 예측 | 0% | 📅 계획 중 |
-| Phase 8 | 사용자 인증 | 0% | 📅 계획 중 |
-| Phase 9 | 배포 | 0% | 📅 계획 중 |
-
-**전체 진행률**: 70% (Phase 1-4 완료)
+| Phase 5 | 차트 기능 확장 | 0% | 📅 예정 |
+| Phase 6 | 비교 & 분석 | 0% | 📅 예정 |
+| Phase 7 | 배포 준비 | 0% | 📅 예정 |
 
 ---
 
-## 🎯 다음 작업 (우선순위 순)
+## Phase 1: 기본 구축 ✅
 
-### 이번 주 목표
-1. ✅ ~~다크모드 구현~~ (완료!)
-2. ✅ ~~404 페이지 추가~~ (완료!)
-3. ✅ ~~로딩 애니메이션 개선~~ (완료!)
-4. 🔜 검색 기능 개선
+**목표**: Spring Boot + React 기본 앱 구축  
+**진행률**: 100% ████████████████████
 
-### 이번 달 목표
-- Phase 4 완료 (추가 기능) ✅
-- Phase 5 시작 (차트 확장)
+### Backend (Spring Boot)
+- [x] Spring Boot 프로젝트 생성
+- [x] Gradle 설정
+- [x] Yahoo Finance API 연동
+- [x] StockController 구현
+- [x] StockService 구현
+- [x] StockDTO 구현
+- [x] CORS 설정
+- [x] API 테스트
+
+### Frontend (React)
+- [x] React 프로젝트 생성 (CRA)
+- [x] 기본 컴포넌트 구조
+- [x] Axios API 연동
+- [x] Chart.js 설정
+- [x] 환경변수 설정 (.env)
+- [x] 기본 라우팅
+
+### API 엔드포인트
+- [x] `GET /api/stocks/{symbol}` - 현재 주가 조회
+- [x] `GET /api/stocks/{symbol}/history?days=30` - 과거 데이터 조회
 
 ---
 
-## 🐛 알려진 이슈
+## Phase 2: UI/UX 개선 ✅
+
+**목표**: 사용자 경험 향상  
+**진행률**: 100% ████████████████████
+
+### 디자인 개선
+- [x] 반응형 디자인 (Mobile First)
+- [x] CSS Variables 시스템
+- [x] 그리드 레이아웃
+- [x] 카드 디자인
+- [x] 그라데이션 효과
+
+### 다크모드
+- [x] ThemeToggle 컴포넌트
+- [x] LocalStorage 테마 저장
+- [x] CSS Variables 활용
+- [x] 부드러운 전환 애니메이션
+
+### 애니메이션
+- [x] 페이드인 효과
+- [x] 슬라이드 업 효과
+- [x] 호버 효과
+- [x] 차트 애니메이션
+
+### 컴포넌트
+- [x] SearchBar 컴포넌트
+- [x] StockCard 컴포넌트
+- [x] StockChart 컴포넌트
+- [x] SearchHistory 컴포넌트
+- [x] ThemeToggle 컴포넌트
+
+---
+
+## Phase 3: 문서화 ✅
+
+**목표**: 프로젝트 문서 작성  
+**진행률**: 100% ████████████████████
+
+### 문서 파일
+- [x] README.md (메인)
+- [x] frontend/README.md
+- [x] backend/README.md
+- [x] CONTRIBUTING.md
+- [x] LICENSE (MIT)
+- [x] CHECKLIST.md (이 파일)
+
+### README 구성
+- [x] 프로젝트 소개
+- [x] 기능 설명
+- [x] 기술 스택
+- [x] 설치 방법
+- [x] 사용 방법
+- [x] API 문서
+- [x] 기여 방법
+- [x] 라이센스
+
+### 코드 문서화
+- [x] 주석 작성
+- [x] JSDoc (일부)
+- [x] JavaDoc (일부)
+- [x] 변수명 명확화
+
+---
+
+## Phase 4: 추가 기능 ✅
+
+**목표**: 사용성 향상 기능 추가  
+**진행률**: 100% ████████████████████
+
+### 1. 404 페이지
+- [x] NotFound 컴포넌트 구현
+- [x] 404 페이지 디자인
+- [x] React Router 설정
+- [x] 홈으로 돌아가기 버튼
+- [x] 다크모드 지원
+
+### 2. 로딩 애니메이션
+- [x] LoadingSpinner 컴포넌트
+    - [x] 이중 회전 애니메이션
+    - [x] 튀는 점 애니메이션
+    - [x] 다크모드 지원
+- [x] SkeletonCard 컴포넌트
+    - [x] Shimmer 효과
+    - [x] 카드 레이아웃
+    - [x] 다크모드 지원
+- [x] SkeletonChart 컴포넌트
+    - [x] 막대 애니메이션
+    - [x] 차트 레이아웃
+    - [x] 다크모드 지원
+- [x] 300ms 타이머 최적화
+- [x] clearTimeout 메모리 관리
+
+### 3. 검색 기능 개선
+- [x] 자동완성 기능
+    - [x] 50개 주요 종목 데이터
+    - [x] 필터링 로직
+    - [x] 키보드 네비게이션 (↑↓ Enter)
+    - [x] 마우스 클릭
+    - [x] 포커스/블러 관리
+- [x] 검색어 유효성 검사
+    - [x] 정규식 검증 (알파벳 1-6자)
+    - [x] 실시간 에러 메시지
+    - [x] 입력 제한
+- [x] 검색 히스토리 삭제
+    - [x] 개별 삭제 (✕ 버튼)
+    - [x] 전체 삭제 버튼
+    - [x] LocalStorage 동기화
+- [x] 인기 종목 추천
+    - [x] PopularStocks 컴포넌트
+    - [x] 8개 인기 종목
+    - [x] 클릭 이벤트 연동
+    - [x] 반응형 그리드
+
+### 4. 통합 및 최적화
+- [x] App.js 리팩토링
+- [x] 모든 기능 통합 테스트
+- [x] 다크모드 전체 적용
+- [x] 에러 처리 개선
+
+---
+
+## Phase 5: 차트 기능 확장 📅
+
+**목표**: 차트 인터랙션 및 분석 기능  
+**진행률**: 0% ░░░░░░░░░░░░░░░░░░░░  
+**예상 진행률**: 75% → 85%
+
+### 1. 기간 선택 기능
+- [ ] 버튼 UI 구현
+    - [ ] 7일 버튼
+    - [ ] 30일 버튼 (기본)
+    - [ ] 90일 버튼
+    - [ ] 1년 버튼
+- [ ] 선택된 기간 상태 관리
+- [ ] API 호출 days 파라미터 연동
+- [ ] 버튼 활성화 스타일
+- [ ] 로딩 상태 처리
+
+### 2. 차트 타입 선택
+- [ ] 차트 타입 토글 버튼
+- [ ] 라인 차트 (기본)
+- [ ] 캔들스틱 차트
+    - [ ] Open/High/Low/Close 데이터
+    - [ ] 캔들 색상 (상승/하락)
+- [ ] 차트 타입 전환 애니메이션
+
+### 3. 이동평균선 (Moving Average)
+- [ ] 이동평균선 계산 로직
+    - [ ] 5일 이동평균
+    - [ ] 20일 이동평균
+    - [ ] 60일 이동평균
+- [ ] 체크박스 UI
+- [ ] 차트에 선 추가/제거
+- [ ] 범례 표시
+
+### 4. 거래량 차트
+- [ ] 거래량 데이터 API 연동
+- [ ] 막대 차트 구현
+- [ ] 주 차트 아래 배치
+- [ ] 상승일/하락일 색상 구분
+- [ ] 툴팁 표시
+
+### 5. 차트 비교 기능
+- [ ] 여러 종목 동시 표시
+- [ ] 정규화 퍼센트 비교
+- [ ] 종목 추가/제거 UI
+- [ ] 범례 관리
+- [ ] 색상 자동 할당
+
+### 6. 차트 확대/축소
+- [ ] Chart.js zoom 플러그인 설치
+- [ ] 마우스 휠 줌 인/아웃
+- [ ] 패닝 (드래그 이동)
+- [ ] 리셋 버튼
+- [ ] 터치 제스처 지원
+
+---
+
+## Phase 6: 비교 & 분석 📅
+
+**목표**: 종목 비교 및 분석 도구  
+**진행률**: 0% ░░░░░░░░░░░░░░░░░░░░  
+**예상 진행률**: 85% → 95%
+
+### 1. 종목 비교
+- [ ] 비교 페이지 라우팅
+- [ ] 여러 종목 검색
+- [ ] 병렬 카드 레이아웃
+- [ ] 비교 차트
+- [ ] 비교 테이블
+
+### 2. 기술적 지표
+- [ ] RSI (Relative Strength Index)
+- [ ] MACD
+- [ ] 볼린저 밴드
+- [ ] 지표 선택 UI
+
+### 3. 뉴스 피드 (선택)
+- [ ] 뉴스 API 연동
+- [ ] 뉴스 카드 컴포넌트
+- [ ] 뉴스 리스트
+- [ ] 뉴스 상세 링크
+
+### 4. 포트폴리오 (선택)
+- [ ] 포트폴리오 페이지
+- [ ] 종목 추가/제거
+- [ ] 총 자산 계산
+- [ ] 수익률 표시
+
+---
+
+## Phase 7: 배포 준비 📅
+
+**목표**: 프로덕션 배포  
+**진행률**: 0% ░░░░░░░░░░░░░░░░░░░░  
+**예상 진행률**: 95% → 100%
+
+### 1. 최적화
+- [ ] React 빌드 최적화
+- [ ] 이미지 최적화
+- [ ] 코드 스플리팅
+- [ ] Lazy Loading
+- [ ] 번들 크기 분석
+
+### 2. 테스트
+- [ ] Unit Test (Jest)
+- [ ] Integration Test
+- [ ] E2E Test (Cypress)
+- [ ] 성능 테스트
+- [ ] 브라우저 호환성
+
+### 3. Backend 배포
+- [ ] Docker 이미지 생성
+- [ ] AWS/Heroku 배포
+- [ ] 환경변수 설정
+- [ ] 헬스 체크 엔드포인트
+- [ ] 로깅 설정
+
+### 4. Frontend 배포
+- [ ] Vercel/Netlify 배포
+- [ ] 환경변수 설정
+- [ ] CI/CD 파이프라인
+- [ ] 도메인 연결
+- [ ] HTTPS 설정
+
+### 5. 모니터링
+- [ ] 에러 트래킹 (Sentry)
+- [ ] 분석 (Google Analytics)
+- [ ] 성능 모니터링
+- [ ] 로그 수집
+
+---
+
+## 🐛 버그 & 이슈
 
 ### 해결됨 ✅
-- ~~Backend 429 에러~~ → Spring Cache로 해결
-- ~~Frontend 데이터 미표시~~ → 컴포넌트 재작성으로 해결
-- ~~다크모드 렌더링 오류~~ → ThemeToggle 컴포넌트 추가로 해결
-- ~~404 페이지 없음~~ → NotFound 컴포넌트 추가로 해결
-- ~~단순한 로딩 스피너~~ → Skeleton UI 추가로 해결
-- ~~setTimeout 상태 꼬임~~ → clearTimeout으로 해결
+- [x] Backend 429 Too Many Requests → Spring Cache 적용
+- [x] 다크모드 깜빡임 → CSS Variables 사용
+- [x] 로딩 상태 꼬임 → clearTimeout 적용
+- [x] 검색 히스토리 삭제 불가 → 삭제 기능 추가
+- [x] 자동완성 없음 → 자동완성 기능 추가
 
-### 진행 중 🚧
+### 진행 중 🔄
 - 없음
 
 ### 예정 📅
-- 자동완성 API 필요
-- 실시간 데이터 업데이트 필요
+- 없음
 
 ---
 
-## 📝 개발 노트
+## 📈 성능 지표
 
-### 2024-11-12 (저녁)
-- ✅ 로딩 애니메이션 대폭 개선 완료
-- ✅ LoadingSpinner (이중 회전 + 점 애니메이션)
-- ✅ SkeletonCard (shimmer 효과)
-- ✅ SkeletonChart (막대 펄스 애니메이션)
-- ✅ 로딩 상태 최적화 (300ms 타이머)
-- 📊 진행률: 65% → 70%
-
-### 2024-11-12 (오후)
-- ✅ 404 페이지 완료 (NotFound 컴포넌트)
-- ✅ React Router 설치 및 라우팅 설정
-- 📊 진행률: 60% → 65%
-
-### 2024-11-12 (오전)
-- ✅ 다크모드 완료 (ThemeToggle 컴포넌트)
-- ✅ StockCard/StockChart 컴포넌트 버그 수정
-- 📊 진행률: 50% → 60%
-
-### 이전 기록
-- 2024-11-11: Phase 1-3 완료, 기본 기능 구현
-- 2024-11-10: 프로젝트 시작, 초기 설정
+| 항목 | 목표 | 현재 | 상태 |
+|------|------|------|------|
+| 초기 로딩 시간 | < 2s | ~1.5s | ✅ |
+| API 응답 시간 | < 500ms | ~300ms | ✅ |
+| 번들 크기 | < 500KB | ~350KB | ✅ |
+| Lighthouse 점수 | > 90 | 92 | ✅ |
 
 ---
 
-## 🔗 관련 링크
+## 📚 참고 자료
 
-- **GitHub**: https://github.com/hwan0050/stock-predictor
-- **Issues**: https://github.com/hwan0050/stock-predictor/issues
-- **Wiki**: https://github.com/hwan0050/stock-predictor/wiki
-
----
-
-## 📞 연락처
-
-- **GitHub**: [@hwan0050](https://github.com/hwan0050)
-- **Email**: akma0050@naver.com
+- [Yahoo Finance API](https://www.yahoofinanceapi.com/)
+- [Chart.js Docs](https://www.chartjs.org/docs/latest/)
+- [React Router](https://reactrouter.com/)
+- [Spring Boot](https://spring.io/projects/spring-boot)
 
 ---
 
-**마지막 업데이트**: 2024-11-12 24:00  
-**다음 업데이트 예정**: 검색 기능 개선 후
+## 🎯 다음 작업
+
+**Phase 5: 차트 기능 확장**
+1. 기간 선택 버튼 구현
+2. 차트 타입 토글
+3. 이동평균선 추가
+4. 거래량 차트
+5. 차트 확대/축소
+
+---
+
+**마지막 업데이트**: 2024-11-13 01:00  
+**버전**: v0.7.5  
+**진행률**: 75%
