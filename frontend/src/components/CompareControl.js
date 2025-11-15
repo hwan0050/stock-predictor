@@ -54,7 +54,7 @@ const CompareControl = ({
       </div>
 
       {/* 🆕 비활성화 메시지 추가 */}
-      {disabled && !compareMode && (
+      {disabled && (
         <div className="compare-disabled-message">
           캔들스틱 차트는 비교 모드를 지원하지 않습니다. 라인 차트를 선택해주세요.
         </div>
