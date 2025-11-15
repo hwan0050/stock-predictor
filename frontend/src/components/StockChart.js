@@ -230,14 +230,28 @@ const StockChart = ({
 
     const sortedData = [...chartData].sort((a, b) => new Date(a.date) - new Date(b.date));
 
+    // 라벨 생성 (날짜 포맷)
+    const labels = sortedData.map(item => {
+      const date = new Date(item.date);
+      return `${date.getMonth() + 1}/${date.getDate()}`;
+    });
+
     // 캔들스틱 데이터 준비 (BigDecimal은 자동으로 number로 변환됨)
-    const candlestickData = sortedData.map(item => ({
-      x: new Date(item.date),
-      o: item.open,
-      h: item.high,
-      l: item.low,
-      c: item.close || item.closePrice
-    }));
+    const candlestickData = sortedData.map(item => {
+      const open = item.open;
+      const close = item.close || item.closePrice;
+      const isUp = close >= open;
+
+      return {
+        o: open,
+        h: item.high,
+        l: item.low,
+        c: close,
+        // 각 캔들에 색상 직접 지정
+        borderColor: isUp ? 'rgb(39, 174, 96)' : 'rgb(231, 76, 60)',
+        backgroundColor: isUp ? 'rgba(39, 174, 96, 0.3)' : 'rgba(231, 76, 60, 0.3)'
+      };
+    });
 
     const volumes = sortedData.map(item => item.volume || 0);
     const hasVolume = volumes.some(v => v > 0);
@@ -259,17 +273,9 @@ const StockChart = ({
         type: 'candlestick',
         data: candlestickData,
         yAxisID: 'y-price',
-        borderColor: {
-          up: 'rgb(39, 174, 96)',
-          down: 'rgb(231, 76, 60)',
-          unchanged: 'rgb(52, 152, 219)'
-        },
-        backgroundColor: {
-          up: 'rgba(39, 174, 96, 0.3)',
-          down: 'rgba(231, 76, 60, 0.3)',
-          unchanged: 'rgba(52, 152, 219, 0.3)'
-        },
-        order: 1
+        order: 1,
+        barPercentage: 0.4,  // 🆕 막대 두께 조정 (0.4~0.8)
+        categoryPercentage: 0.8  // 🆕 카테고리 너비 조정
       }
     ];
 
@@ -288,13 +294,7 @@ const StockChart = ({
 
     const scales = {
       x: {
-        type: 'time',
-        time: {
-          unit: 'day',
-          displayFormats: {
-            day: 'M/d'
-          }
-        },
+        type: 'category',
         grid: {
           color: 'rgba(0, 0, 0, 0.05)',
           drawBorder: false
@@ -353,8 +353,9 @@ const StockChart = ({
 
     try {
       chartInstance.current = new Chart(ctx, {
-        type: 'candlestick',
+        type: 'bar',  // ✅ bar로 수정
         data: {
+          labels: labels,
           datasets: datasets
         },
         options: {
