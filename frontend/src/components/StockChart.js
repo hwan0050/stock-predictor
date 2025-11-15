@@ -1,21 +1,22 @@
 import React, { useEffect, useRef } from 'react';
 import { Chart, registerables } from 'chart.js';
-// 🆕 캔들스틱 import 추가
 import { CandlestickController, CandlestickElement } from 'chartjs-chart-financial';
+import zoomPlugin from 'chartjs-plugin-zoom'; // 🆕 zoom 플러그인 추가
 import { calculateMultipleMA } from '../utils/movingAverage';
 import { getChartColor } from './CompareControl';
 import './StockChart.css';
 
-// 🆕 캔들스틱 컨트롤러와 요소 등록
-Chart.register(...registerables, CandlestickController, CandlestickElement);
+// 🆕 zoom 플러그인 등록
+Chart.register(...registerables, CandlestickController, CandlestickElement, zoomPlugin);
 
 const StockChart = ({
   data,
   symbol,
   selectedMA = {},
   compareMode = false,
-  compareData = [], // [{ symbol: 'AAPL', data: [...] }, ...]
-  chartType = 'line' // 🆕 차트 타입 prop 추가
+  compareData = [],
+  chartType = 'line',
+  onChartReady // 🆕 차트 준비 완료 콜백
 }) => {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
@@ -24,7 +25,7 @@ const StockChart = ({
     console.log('🎨 StockChart useEffect 실행');
     console.log('📊 Compare Mode:', compareMode);
     console.log('📊 Compare Data:', compareData);
-    console.log('📊 Chart Type:', chartType); // 🆕 추가
+    console.log('📊 Chart Type:', chartType);
 
     // 비교 모드일 때
     if (compareMode && compareData.length > 0) {
@@ -32,7 +33,7 @@ const StockChart = ({
       return;
     }
 
-    // 🆕 캔들스틱 차트
+    // 캔들스틱 차트
     if (chartType === 'candlestick') {
       renderCandlestickChart();
       return;
@@ -41,9 +42,30 @@ const StockChart = ({
     // 일반 모드 (라인 차트)
     renderNormalChart();
 
-  }, [data, symbol, selectedMA, compareMode, compareData, chartType]); // 🆕 chartType dependency 추가
+  }, [data, symbol, selectedMA, compareMode, compareData, chartType]);
 
-  // 🆕 비교 모드 차트
+  // 🆕 줌 옵션 설정
+  const getZoomOptions = () => ({
+    zoom: {
+      wheel: {
+        enabled: true,
+        speed: 0.1,
+      },
+      pinch: {
+        enabled: true
+      },
+      mode: 'x',
+    },
+    pan: {
+      enabled: true,
+      mode: 'x',
+    },
+    limits: {
+      x: { min: 'original', max: 'original' }
+    }
+  });
+
+  // 비교 모드 차트
   const renderCompareChart = () => {
     const ctx = chartRef.current?.getContext('2d');
     if (!ctx) return;
@@ -52,11 +74,9 @@ const StockChart = ({
       chartInstance.current.destroy();
     }
 
-    // 모든 데이터 정규화 (첫날 = 100%)
     const normalizedDatasets = compareData.map((item, index) => {
       let chartData = item.data;
 
-      // data.data 구조 처리
       if (!Array.isArray(chartData) && chartData.data && Array.isArray(chartData.data)) {
         chartData = chartData.data;
       }
@@ -67,8 +87,6 @@ const StockChart = ({
 
       const sortedData = [...chartData].sort((a, b) => new Date(a.date) - new Date(b.date));
       const prices = sortedData.map(d => d.closePrice || d.close);
-
-      // 정규화: 첫날 가격을 100%로
       const basePrice = prices[0];
       const normalizedPrices = prices.map(price => ((price / basePrice) * 100));
 
@@ -91,7 +109,6 @@ const StockChart = ({
       return;
     }
 
-    // 가장 긴 데이터셋의 날짜를 라벨로 사용
     const longestDataset = normalizedDatasets.reduce((prev, current) =>
       (current.data.length > prev.data.length) ? current : prev
     );
@@ -151,7 +168,8 @@ const StockChart = ({
                 return `${context.dataset.label}: ${context.parsed.y.toFixed(2)}%`;
               }
             }
-          }
+          },
+          zoom: getZoomOptions() // 🆕 zoom 옵션 추가
         },
         scales: {
           x: {
@@ -190,10 +208,15 @@ const StockChart = ({
       }
     });
 
+    // 🆕 차트 준비 완료 콜백
+    if (onChartReady) {
+      onChartReady(chartInstance.current);
+    }
+
     console.log('✅ Compare chart created!');
   };
 
-  // 🆕 캔들스틱 차트
+  // 캔들스틱 차트
   const renderCandlestickChart = () => {
     if (!data) {
       console.log('❌ Data is null/undefined');
@@ -230,13 +253,11 @@ const StockChart = ({
 
     const sortedData = [...chartData].sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    // 라벨 생성 (날짜 포맷)
     const labels = sortedData.map(item => {
       const date = new Date(item.date);
       return `${date.getMonth() + 1}/${date.getDate()}`;
     });
 
-    // 캔들스틱 데이터 준비 (BigDecimal은 자동으로 number로 변환됨)
     const candlestickData = sortedData.map(item => {
       const open = item.open;
       const close = item.close || item.closePrice;
@@ -247,7 +268,6 @@ const StockChart = ({
         h: item.high,
         l: item.low,
         c: close,
-        // 각 캔들에 색상 직접 지정
         borderColor: isUp ? 'rgb(39, 174, 96)' : 'rgb(231, 76, 60)',
         backgroundColor: isUp ? 'rgba(39, 174, 96, 0.3)' : 'rgba(231, 76, 60, 0.3)'
       };
@@ -274,8 +294,8 @@ const StockChart = ({
         data: candlestickData,
         yAxisID: 'y-price',
         order: 1,
-        barPercentage: 0.4,  // 🆕 막대 두께 조정 (0.4~0.8)
-        categoryPercentage: 0.8  // 🆕 카테고리 너비 조정
+        barPercentage: 0.6,
+        categoryPercentage: 0.8
       }
     ];
 
@@ -353,7 +373,7 @@ const StockChart = ({
 
     try {
       chartInstance.current = new Chart(ctx, {
-        type: 'bar',  // ✅ bar로 수정
+        type: 'bar',
         data: {
           labels: labels,
           datasets: datasets
@@ -415,7 +435,8 @@ const StockChart = ({
                   return '';
                 }
               }
-            }
+            },
+            zoom: getZoomOptions() // 🆕 zoom 옵션 추가
           },
           scales: scales,
           animation: {
@@ -425,13 +446,18 @@ const StockChart = ({
         }
       });
 
+      // 🆕 차트 준비 완료 콜백
+      if (onChartReady) {
+        onChartReady(chartInstance.current);
+      }
+
       console.log('✅ Candlestick chart created successfully!');
     } catch (error) {
       console.error('❌ Candlestick chart creation error:', error);
     }
   };
 
-  // 일반 모드 차트 (기존 코드)
+  // 일반 모드 차트 (라인 차트)
   const renderNormalChart = () => {
     if (!data) {
       console.log('❌ Data is null/undefined');
@@ -665,7 +691,8 @@ const StockChart = ({
                   return label;
                 }
               }
-            }
+            },
+            zoom: getZoomOptions() // 🆕 zoom 옵션 추가
           },
           scales: scales,
           animation: {
@@ -674,6 +701,11 @@ const StockChart = ({
           }
         }
       });
+
+      // 🆕 차트 준비 완료 콜백
+      if (onChartReady) {
+        onChartReady(chartInstance.current);
+      }
 
       console.log('✅ Normal chart created successfully!');
     } catch (error) {
