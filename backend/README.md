@@ -28,7 +28,8 @@ Yahoo Finance API를 활용한 실시간 주가 데이터 제공 REST API 서버
 
 ### 2. 📈 과거 데이터 조회
 - 7일/30일/90일/1년 기간 선택
-- 일별 종가 및 거래량
+- 일별 OHLC 데이터 (시가/고가/저가/종가)
+- 거래량 데이터
 - 날짜별 정렬
 
 ### 3. 🔧 최적화
@@ -65,7 +66,7 @@ backend/
 │   │
 │   ├── dto/
 │   │   ├── StockDataDto.java        # 현재 주가 DTO
-│   │   └── StockHistoryDto.java     # 🆕 과거 데이터 DTO (volume 추가)
+│   │   └── StockHistoryDto.java     # 과거 데이터 DTO (OHLC + volume)
 │   │
 │   ├── exception/
 │   │   └── GlobalExceptionHandler.java  # 전역 예외 처리
@@ -165,11 +166,17 @@ curl "http://localhost:8080/api/stocks/AAPL/history?days=30"
   "data": [
     {
       "date": "2025-10-16",
+      "open": 149.50,
+      "high": 151.20,
+      "low": 148.30,
       "close": 150.25,
       "volume": 45680000
     },
     {
       "date": "2025-10-17",
+      "open": 150.50,
+      "high": 152.00,
+      "low": 149.80,
       "close": 151.50,
       "volume": 48000000
     }
@@ -238,7 +245,7 @@ public class YahooFinanceService {
 
 ---
 
-### StockHistoryDto (업데이트)
+### StockHistoryDto
 ```java
 @Data
 @NoArgsConstructor
@@ -246,14 +253,14 @@ public class YahooFinanceService {
 @Builder
 public class StockHistoryDto {
     private String date;
-    private Double close;
-    private Long volume;      // 🆕 거래량 추가
+    private Double open;      // 시가
+    private Double high;      // 고가
+    private Double low;       // 저가
+    private Double close;     // 종가
+    private Long volume;      // 거래량
     
-    // 추가 필드 (선택)
-    private Double open;
-    private Double high;
-    private Double low;
-    private Double adjClose;
+    // 선택 필드
+    private Double adjClose;  // 조정 종가
 }
 ```
 
@@ -364,6 +371,10 @@ curl "http://localhost:8080/api/stocks/AAPL/history?days=30"
 
 # 과거 데이터 (7일)
 curl "http://localhost:8080/api/stocks/AAPL/history?days=7"
+
+# Mock 데이터
+curl http://localhost:8080/api/stocks/TEST
+curl "http://localhost:8080/api/stocks/TEST/history?days=30"
 ```
 
 ---
@@ -474,3 +485,8 @@ Pull Request를 환영합니다!
 ---
 
 **Made with ❤️ by hwan0050**
+
+---
+
+**버전**: v0.9.2  
+**마지막 업데이트**: 2025-11-16
