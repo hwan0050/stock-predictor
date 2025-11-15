@@ -11,7 +11,8 @@ import LoadingSpinner from './components/LoadingSpinner';
 import SkeletonCard from './components/SkeletonCard';
 import SkeletonChart from './components/SkeletonChart';
 import PopularStocks from './components/PopularStocks';
-import PeriodSelector from './components/PeriodSelector'; // 🆕 추가
+import PeriodSelector from './components/PeriodSelector';
+import MovingAverageControl from './components/MovingAverageControl'; // 🆕 추가
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
@@ -23,7 +24,14 @@ function HomePage() {
   const [loading, setLoading] = useState(false);
   const [showSkeleton, setShowSkeleton] = useState(false);
   const [error, setError] = useState(null);
-  const [selectedPeriod, setSelectedPeriod] = useState(30); // 🆕 기간 state (기본 30일)
+  const [selectedPeriod, setSelectedPeriod] = useState(30); // 기본 30일
+
+  // 🆕 이동평균선 state
+  const [selectedMA, setSelectedMA] = useState({
+    ma5: false,
+    ma20: false,
+    ma60: false
+  });
 
   const handleSearch = async (symbol) => {
     console.log('🔍 검색 시작:', symbol);
@@ -45,7 +53,7 @@ function HomePage() {
       console.log('✅ Stock Data:', stockResponse.data);
       setStockData(stockResponse.data);
 
-      // 과거 데이터 (selectedPeriod 사용) 🆕
+      // 과거 데이터 (selectedPeriod 사용)
       const historyResponse = await axios.get(
         `${API_URL}${API_BASE_PATH}/stocks/${symbol}/history?days=${selectedPeriod}`
       );
@@ -98,7 +106,7 @@ function HomePage() {
     handleSearch(symbol);
   };
 
-  // 🆕 기간 변경 핸들러
+  // 기간 변경 핸들러
   const handlePeriodChange = (newPeriod) => {
     console.log('📅 기간 변경:', newPeriod);
     setSelectedPeriod(newPeriod);
@@ -107,6 +115,12 @@ function HomePage() {
     if (stockData && stockData.symbol) {
       handleSearch(stockData.symbol);
     }
+  };
+
+  // 🆕 이동평균선 변경 핸들러
+  const handleMAChange = (newMA) => {
+    console.log('📊 이동평균선 변경:', newMA);
+    setSelectedMA(newMA);
   };
 
   return (
@@ -123,13 +137,23 @@ function HomePage() {
         {/* 검색 히스토리 (삭제 기능) */}
         <SearchHistory onClick={handleHistoryClick} />
 
-        {/* 🆕 기간 선택 버튼 (데이터가 있거나 로딩 중일 때만 표시) */}
+        {/* 기간 선택 & 이동평균선 컨트롤 (데이터가 있거나 로딩 중일 때만 표시) */}
         {(stockData || loading) && (
-          <PeriodSelector
-            selectedPeriod={selectedPeriod}
-            onPeriodChange={handlePeriodChange}
-            disabled={loading}
-          />
+          <>
+            {/* 기간 선택 버튼 */}
+            <PeriodSelector
+              selectedPeriod={selectedPeriod}
+              onPeriodChange={handlePeriodChange}
+              disabled={loading}
+            />
+
+            {/* 🆕 이동평균선 컨트롤 */}
+            <MovingAverageControl
+              selectedMA={selectedMA}
+              onMAChange={handleMAChange}
+              disabled={loading}
+            />
+          </>
         )}
 
         {/* 로딩 초기: LoadingSpinner */}
@@ -157,7 +181,11 @@ function HomePage() {
           <div className="results-container">
             <StockCard data={stockData} />
             {historyData && (
-              <StockChart data={historyData} symbol={stockData.symbol} />
+              <StockChart
+                data={historyData}
+                symbol={stockData.symbol}
+                selectedMA={selectedMA} // 🆕 이동평균선 props 전달
+              />
             )}
           </div>
         )}

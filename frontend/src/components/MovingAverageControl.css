@@ -1,0 +1,149 @@
+.ma-control {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.3s ease-out;
+  margin-bottom: 1.5rem;
+}
+
+.ma-control-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  min-width: 80px;
+}
+
+.ma-checkboxes {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.ma-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  user-select: none;
+}
+
+.ma-checkbox:hover:not(.disabled) {
+  background: var(--bg-color);
+}
+
+.ma-checkbox.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ma-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.ma-checkbox-indicator {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-color);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background: var(--card-bg);
+}
+
+.ma-checkbox.active .ma-checkbox-indicator {
+  background: var(--card-bg);
+}
+
+.ma-checkbox-indicator svg {
+  width: 12px;
+  height: 12px;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s ease;
+}
+
+.ma-checkbox.active .ma-checkbox-indicator svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.ma-checkbox-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.ma-line-preview {
+  width: 30px;
+  height: 3px;
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .ma-control {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .ma-control-label {
+    font-size: 0.9rem;
+  }
+
+  .ma-checkboxes {
+    width: 100%;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .ma-checkbox {
+    flex: 1;
+    min-width: calc(33.333% - 0.7rem);
+    justify-content: center;
+    padding: 0.6rem 0.5rem;
+  }
+
+  .ma-checkbox-label {
+    font-size: 0.85rem;
+  }
+
+  .ma-line-preview {
+    width: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ma-checkboxes {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .ma-checkbox {
+    width: 100%;
+    min-width: auto;
+    justify-content: flex-start;
+  }
+}
+
+/* 애니메이션 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

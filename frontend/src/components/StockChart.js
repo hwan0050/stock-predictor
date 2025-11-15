@@ -1,34 +1,29 @@
 import React, { useEffect, useRef } from 'react';
 import { Chart, registerables } from 'chart.js';
+import { calculateMultipleMA } from '../utils/movingAverage';
 import './StockChart.css';
 
 Chart.register(...registerables);
 
-const StockChart = ({ data, symbol }) => {
+const StockChart = ({ data, symbol, selectedMA = {} }) => {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
 
   useEffect(() => {
     console.log('🎨 StockChart useEffect 실행');
-    console.log('📊 Received data:', data);
-    console.log('📊 Data type:', typeof data);
+    console.log('📊 Selected MA:', selectedMA);
 
-    // 🆕 데이터 유효성 검사
     if (!data) {
       console.log('❌ Data is null/undefined');
       return;
     }
 
-    // 🔧 data가 객체이고 data.data가 배열이면 그걸 사용
+    // data가 객체이고 data.data가 배열이면 추출
     let chartData = data;
     if (!Array.isArray(data) && data.data && Array.isArray(data.data)) {
       console.log('🔧 Data is wrapped in object, extracting data.data');
       chartData = data.data;
     }
-
-    console.log('📊 Chart data:', chartData);
-    console.log('📊 Is Array:', Array.isArray(chartData));
-    console.log('📊 Length:', chartData?.length);
 
     if (!Array.isArray(chartData)) {
       console.log('❌ Data is not an array');
@@ -41,7 +36,6 @@ const StockChart = ({ data, symbol }) => {
     }
 
     console.log('✅ Data validation passed!');
-    console.log('📊 First item:', chartData[0]);
 
     const ctx = chartRef.current?.getContext('2d');
     if (!ctx) {
@@ -49,14 +43,12 @@ const StockChart = ({ data, symbol }) => {
       return;
     }
 
-    // 기존 차트 제거
     if (chartInstance.current) {
       chartInstance.current.destroy();
     }
 
-    // 데이터 정렬 (날짜 오름차순)
+    // 데이터 정렬
     const sortedData = [...chartData].sort((a, b) => new Date(a.date) - new Date(b.date));
-    console.log('📊 Sorted data length:', sortedData.length);
 
     // 라벨 (날짜)
     const labels = sortedData.map(item => {
@@ -64,19 +56,22 @@ const StockChart = ({ data, symbol }) => {
       return `${date.getMonth() + 1}/${date.getDate()}`;
     });
 
-    // 가격 데이터 (closePrice 또는 close)
+    // 가격 데이터
     const prices = sortedData.map(item => item.closePrice || item.close);
-    console.log('💰 Prices:', prices.slice(0, 3), '...');
 
-    // 거래량 데이터 (volume이 없으면 0으로 처리)
+    // 🆕 이동평균선 계산
+    const maData = calculateMultipleMA(prices, [5, 20, 60]);
+    console.log('📈 MA Data calculated:', {
+      ma5: maData.ma5?.length,
+      ma20: maData.ma20?.length,
+      ma60: maData.ma60?.length
+    });
+
+    // 거래량 데이터
     const volumes = sortedData.map(item => item.volume || 0);
-    console.log('📈 Volumes:', volumes.slice(0, 3), '...');
-
-    // 거래량이 모두 0이면 거래량 차트 표시 안 함
     const hasVolume = volumes.some(v => v > 0);
-    console.log('📊 Has volume data:', hasVolume);
 
-    // 거래량 색상 (상승: 초록, 하락: 빨강)
+    // 거래량 색상
     const volumeColors = sortedData.map((item, index) => {
       if (index === 0) return 'rgba(52, 152, 219, 0.6)';
       const prevPrice = sortedData[index - 1].closePrice || sortedData[index - 1].close;
@@ -91,12 +86,11 @@ const StockChart = ({ data, symbol }) => {
     const maxPrice = Math.max(...prices);
     const priceRange = maxPrice - minPrice;
     const pricePadding = priceRange * 0.1;
-
-    // 최대 거래량
     const maxVolume = Math.max(...volumes);
 
     // 데이터셋 구성
     const datasets = [
+      // 가격 라인
       {
         label: '종가 ($)',
         data: prices,
@@ -110,10 +104,38 @@ const StockChart = ({ data, symbol }) => {
         pointBackgroundColor: 'rgb(52, 152, 219)',
         pointBorderColor: '#fff',
         pointBorderWidth: 2,
-        yAxisID: 'y-price'
+        yAxisID: 'y-price',
+        order: 1
       }
     ];
 
+    // 🆕 이동평균선 추가 (선택된 것만)
+    const maConfigs = [
+      { key: 'ma5', label: 'MA 5일', color: 'rgb(255, 99, 132)', borderWidth: 2 },
+      { key: 'ma20', label: 'MA 20일', color: 'rgb(153, 102, 255)', borderWidth: 2 },
+      { key: 'ma60', label: 'MA 60일', color: 'rgb(75, 192, 192)', borderWidth: 2 }
+    ];
+
+    maConfigs.forEach(({ key, label, color, borderWidth }) => {
+      if (selectedMA[key]) {
+        datasets.push({
+          label: label,
+          data: maData[key],
+          borderColor: color,
+          backgroundColor: 'transparent',
+          borderWidth: borderWidth,
+          fill: false,
+          tension: 0.4,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          yAxisID: 'y-price',
+          order: 2
+        });
+        console.log(`📊 Added ${key} to chart`);
+      }
+    });
+
+    // 거래량 데이터셋
     if (hasVolume) {
       datasets.push({
         label: '거래량',
@@ -123,10 +145,11 @@ const StockChart = ({ data, symbol }) => {
         borderColor: volumeColors.map(color => color.replace('0.6', '1')),
         borderWidth: 1,
         yAxisID: 'y-volume',
-        order: 2
+        order: 3
       });
     }
 
+    // Y축 스케일
     const scales = {
       x: {
         grid: {
@@ -185,7 +208,7 @@ const StockChart = ({ data, symbol }) => {
       };
     }
 
-    console.log('🎨 Creating chart...');
+    console.log('🎨 Creating chart with', datasets.length, 'datasets');
 
     try {
       chartInstance.current = new Chart(ctx, {
@@ -211,7 +234,8 @@ const StockChart = ({ data, symbol }) => {
                 font: { size: 12, weight: '500' },
                 padding: 15,
                 usePointStyle: true,
-                pointStyle: 'circle'
+                pointStyle: 'line',
+                boxWidth: 40
               }
             },
             title: {
@@ -232,11 +256,15 @@ const StockChart = ({ data, symbol }) => {
               displayColors: true,
               callbacks: {
                 label: function(context) {
-                  if (context.datasetIndex === 0) {
+                  const label = context.dataset.label || '';
+                  if (label.includes('MA')) {
+                    return `${label}: $${context.parsed.y?.toFixed(2) || 'N/A'}`;
+                  } else if (label === '종가 ($)') {
                     return `종가: $${context.parsed.y.toFixed(2)}`;
-                  } else {
+                  } else if (label === '거래량') {
                     return `거래량: ${context.parsed.y.toLocaleString()}`;
                   }
+                  return label;
                 }
               }
             }
@@ -257,10 +285,9 @@ const StockChart = ({ data, symbol }) => {
     return () => {
       if (chartInstance.current) {
         chartInstance.current.destroy();
-        console.log('🗑️ Chart destroyed');
       }
     };
-  }, [data, symbol]);
+  }, [data, symbol, selectedMA]);
 
   return (
     <div className="stock-chart">
