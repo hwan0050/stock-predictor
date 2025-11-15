@@ -1,0 +1,232 @@
+.compare-control {
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.compare-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.compare-toggle {
+  padding: 0.7rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-color);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.compare-toggle:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+}
+
+.compare-toggle.active {
+  background: linear-gradient(135deg, var(--primary-color), #2980b9);
+  color: white;
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.compare-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.compare-info {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.compare-body {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.compare-input-group {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.compare-input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  background: var(--bg-color);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.compare-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.compare-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.compare-add-btn {
+  padding: 0.8rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, var(--success-color), #229954);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.compare-add-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+}
+
+.compare-add-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.compare-symbols-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.compare-list-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.compare-chips {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.compare-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: var(--bg-color);
+  border: 2px solid;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  animation: chipIn 0.3s ease-out;
+}
+
+.compare-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.compare-chip-symbol {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.compare-chip-remove {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--danger-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.compare-chip-remove:hover:not(:disabled) {
+  transform: scale(1.2);
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+}
+
+.compare-chip-remove:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .compare-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .compare-info {
+    font-size: 0.85rem;
+  }
+
+  .compare-input-group {
+    flex-direction: column;
+  }
+
+  .compare-add-btn {
+    width: 100%;
+  }
+
+  .compare-chips {
+    gap: 0.5rem;
+  }
+
+  .compare-chip {
+    padding: 0.5rem 0.8rem;
+  }
+
+  .compare-chip-symbol {
+    font-size: 0.85rem;
+  }
+}
+
+/* 애니메이션 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes chipIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

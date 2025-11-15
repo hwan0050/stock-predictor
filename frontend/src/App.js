@@ -12,7 +12,8 @@ import SkeletonCard from './components/SkeletonCard';
 import SkeletonChart from './components/SkeletonChart';
 import PopularStocks from './components/PopularStocks';
 import PeriodSelector from './components/PeriodSelector';
-import MovingAverageControl from './components/MovingAverageControl'; // 🆕 추가
+import MovingAverageControl from './components/MovingAverageControl';
+import CompareControl from './components/CompareControl'; // 🆕 추가
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
@@ -24,14 +25,18 @@ function HomePage() {
   const [loading, setLoading] = useState(false);
   const [showSkeleton, setShowSkeleton] = useState(false);
   const [error, setError] = useState(null);
-  const [selectedPeriod, setSelectedPeriod] = useState(30); // 기본 30일
+  const [selectedPeriod, setSelectedPeriod] = useState(30);
 
-  // 🆕 이동평균선 state
   const [selectedMA, setSelectedMA] = useState({
     ma5: false,
     ma20: false,
     ma60: false
   });
+
+  // 🆕 비교 모드 state
+  const [compareMode, setCompareMode] = useState(false);
+  const [compareSymbols, setCompareSymbols] = useState([]);
+  const [compareData, setCompareData] = useState([]); // [{ symbol, data }, ...]
 
   const handleSearch = async (symbol) => {
     console.log('🔍 검색 시작:', symbol);
@@ -42,25 +47,21 @@ function HomePage() {
     setStockData(null);
     setHistoryData(null);
 
-    // 약간의 지연 후 Skeleton 표시
     const skeletonTimer = setTimeout(() => {
       setShowSkeleton(true);
     }, 300);
 
     try {
-      // 현재 주가 정보
       const stockResponse = await axios.get(`${API_URL}${API_BASE_PATH}/stocks/${symbol}`);
       console.log('✅ Stock Data:', stockResponse.data);
       setStockData(stockResponse.data);
 
-      // 과거 데이터 (selectedPeriod 사용)
       const historyResponse = await axios.get(
         `${API_URL}${API_BASE_PATH}/stocks/${symbol}/history?days=${selectedPeriod}`
       );
       console.log('✅ History Data:', historyResponse.data);
       setHistoryData(historyResponse.data);
 
-      // 검색 히스토리 저장
       saveToHistory(symbol);
     } catch (err) {
       console.error('❌ Error:', err);
@@ -106,21 +107,95 @@ function HomePage() {
     handleSearch(symbol);
   };
 
-  // 기간 변경 핸들러
   const handlePeriodChange = (newPeriod) => {
     console.log('📅 기간 변경:', newPeriod);
     setSelectedPeriod(newPeriod);
 
-    // 현재 검색된 종목이 있으면 다시 조회
     if (stockData && stockData.symbol) {
       handleSearch(stockData.symbol);
     }
+
+    // 🆕 비교 모드일 때 비교 데이터도 갱신
+    if (compareMode && compareSymbols.length > 0) {
+      fetchCompareData(compareSymbols, newPeriod);
+    }
   };
 
-  // 🆕 이동평균선 변경 핸들러
   const handleMAChange = (newMA) => {
     console.log('📊 이동평균선 변경:', newMA);
     setSelectedMA(newMA);
+  };
+
+  // 🆕 비교 모드 토글
+  const handleCompareModeChange = (enabled) => {
+    console.log('🔄 비교 모드:', enabled);
+    setCompareMode(enabled);
+
+    if (!enabled) {
+      // 비교 모드 끄면 초기화
+      setCompareSymbols([]);
+      setCompareData([]);
+    } else {
+      // 비교 모드 켜면 현재 종목 추가
+      if (stockData && stockData.symbol) {
+        setCompareSymbols([stockData.symbol]);
+        setCompareData([{ symbol: stockData.symbol, data: historyData }]);
+      }
+    }
+  };
+
+  // 🆕 비교 종목 추가
+  const handleAddSymbol = async (symbol) => {
+    console.log('➕ 종목 추가:', symbol);
+
+    setLoading(true);
+    try {
+      const historyResponse = await axios.get(
+        `${API_URL}${API_BASE_PATH}/stocks/${symbol}/history?days=${selectedPeriod}`
+      );
+
+      setCompareSymbols(prev => [...prev, symbol]);
+      setCompareData(prev => [...prev, { symbol, data: historyResponse.data }]);
+
+      console.log('✅ 종목 추가 성공:', symbol);
+    } catch (err) {
+      console.error('❌ 종목 추가 실패:', err);
+      alert(`${symbol} 종목을 찾을 수 없습니다.`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 🆕 비교 종목 제거
+  const handleRemoveSymbol = (symbol) => {
+    console.log('➖ 종목 제거:', symbol);
+    setCompareSymbols(prev => prev.filter(s => s !== symbol));
+    setCompareData(prev => prev.filter(d => d.symbol !== symbol));
+  };
+
+  // 🆕 비교 데이터 일괄 갱신
+  const fetchCompareData = async (symbols, days) => {
+    console.log('🔄 비교 데이터 갱신:', symbols);
+
+    setLoading(true);
+    try {
+      const promises = symbols.map(symbol =>
+        axios.get(`${API_URL}${API_BASE_PATH}/stocks/${symbol}/history?days=${days}`)
+      );
+
+      const responses = await Promise.all(promises);
+      const newCompareData = symbols.map((symbol, index) => ({
+        symbol,
+        data: responses[index].data
+      }));
+
+      setCompareData(newCompareData);
+      console.log('✅ 비교 데이터 갱신 완료');
+    } catch (err) {
+      console.error('❌ 비교 데이터 갱신 실패:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -131,37 +206,41 @@ function HomePage() {
       </header>
 
       <main className="App-main">
-        {/* 검색 바 (자동완성 + 유효성 검사) */}
         <SearchBar onSearch={handleSearch} disabled={loading} />
-
-        {/* 검색 히스토리 (삭제 기능) */}
         <SearchHistory onClick={handleHistoryClick} />
 
-        {/* 기간 선택 & 이동평균선 컨트롤 (데이터가 있거나 로딩 중일 때만 표시) */}
         {(stockData || loading) && (
           <>
-            {/* 기간 선택 버튼 */}
             <PeriodSelector
               selectedPeriod={selectedPeriod}
               onPeriodChange={handlePeriodChange}
               disabled={loading}
             />
 
-            {/* 🆕 이동평균선 컨트롤 */}
-            <MovingAverageControl
-              selectedMA={selectedMA}
-              onMAChange={handleMAChange}
+            {!compareMode && (
+              <MovingAverageControl
+                selectedMA={selectedMA}
+                onMAChange={handleMAChange}
+                disabled={loading}
+              />
+            )}
+
+            {/* 🆕 비교 모드 컨트롤 */}
+            <CompareControl
+              compareMode={compareMode}
+              onCompareModeChange={handleCompareModeChange}
+              compareSymbols={compareSymbols}
+              onAddSymbol={handleAddSymbol}
+              onRemoveSymbol={handleRemoveSymbol}
               disabled={loading}
             />
           </>
         )}
 
-        {/* 로딩 초기: LoadingSpinner */}
         {loading && !showSkeleton && (
           <LoadingSpinner message="검색 중..." />
         )}
 
-        {/* 로딩 중: Skeleton UI */}
         {loading && showSkeleton && (
           <div className="results-container">
             <SkeletonCard />
@@ -169,36 +248,34 @@ function HomePage() {
           </div>
         )}
 
-        {/* 에러 */}
         {error && (
           <div className="error-message">
             <p>⚠️ {error}</p>
           </div>
         )}
 
-        {/* 데이터 표시 */}
         {!loading && stockData && (
           <div className="results-container">
-            <StockCard data={stockData} />
+            {!compareMode && <StockCard data={stockData} />}
+
             {historyData && (
               <StockChart
                 data={historyData}
                 symbol={stockData.symbol}
-                selectedMA={selectedMA} // 🆕 이동평균선 props 전달
+                selectedMA={selectedMA}
+                compareMode={compareMode} // 🆕
+                compareData={compareData} // 🆕
               />
             )}
           </div>
         )}
 
-        {/* Welcome 메시지 + 인기 종목 */}
         {!loading && !error && !stockData && (
           <>
             <div className="welcome-message">
               <p>🔍 주식 심볼을 검색해보세요!</p>
               <p className="example">예시: AAPL, TSLA, GOOGL, TEST</p>
             </div>
-
-            {/* 인기 종목 추천 */}
             <PopularStocks onStockClick={handlePopularClick} disabled={loading} />
           </>
         )}
