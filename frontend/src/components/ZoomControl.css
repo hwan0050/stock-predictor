@@ -1,0 +1,86 @@
+/* Zoom Control Styles */
+.zoom-control {
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.zoom-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.zoom-icon {
+  font-size: 1.3rem;
+}
+
+.zoom-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.zoom-reset-btn {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, var(--primary-color), #2980b9);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
+}
+
+.zoom-reset-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.zoom-reset-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.zoom-reset-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--bg-secondary);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .zoom-control {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .zoom-reset-btn {
+    width: 100%;
+  }
+
+  .zoom-text {
+    font-size: 0.85rem;
+  }
+}
+
+/* 애니메이션 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
