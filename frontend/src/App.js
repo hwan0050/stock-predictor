@@ -13,7 +13,8 @@ import SkeletonChart from './components/SkeletonChart';
 import PopularStocks from './components/PopularStocks';
 import PeriodSelector from './components/PeriodSelector';
 import MovingAverageControl from './components/MovingAverageControl';
-import CompareControl from './components/CompareControl'; // 🆕 추가
+import CompareControl from './components/CompareControl';
+import ChartTypeControl from './components/ChartTypeControl'; // 🆕 추가
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
@@ -33,10 +34,13 @@ function HomePage() {
     ma60: false
   });
 
-  // 🆕 비교 모드 state
+  // 비교 모드 state
   const [compareMode, setCompareMode] = useState(false);
   const [compareSymbols, setCompareSymbols] = useState([]);
   const [compareData, setCompareData] = useState([]); // [{ symbol, data }, ...]
+
+  // 🆕 차트 타입 state
+  const [chartType, setChartType] = useState('line');
 
   const handleSearch = async (symbol) => {
     console.log('🔍 검색 시작:', symbol);
@@ -115,7 +119,7 @@ function HomePage() {
       handleSearch(stockData.symbol);
     }
 
-    // 🆕 비교 모드일 때 비교 데이터도 갱신
+    // 비교 모드일 때 비교 데이터도 갱신
     if (compareMode && compareSymbols.length > 0) {
       fetchCompareData(compareSymbols, newPeriod);
     }
@@ -126,7 +130,20 @@ function HomePage() {
     setSelectedMA(newMA);
   };
 
-  // 🆕 비교 모드 토글
+  // 🆕 차트 타입 변경 핸들러
+  const handleChartTypeChange = (type) => {
+    console.log('📊 차트 타입 변경:', type);
+    setChartType(type);
+
+    // 캔들스틱은 비교 모드와 함께 사용 불가
+    if (type === 'candlestick' && compareMode) {
+      setCompareMode(false);
+      setCompareSymbols([]);
+      setCompareData([]);
+    }
+  };
+
+  // 비교 모드 토글
   const handleCompareModeChange = (enabled) => {
     console.log('🔄 비교 모드:', enabled);
     setCompareMode(enabled);
@@ -144,7 +161,7 @@ function HomePage() {
     }
   };
 
-  // 🆕 비교 종목 추가
+  // 비교 종목 추가
   const handleAddSymbol = async (symbol) => {
     console.log('➕ 종목 추가:', symbol);
 
@@ -166,14 +183,14 @@ function HomePage() {
     }
   };
 
-  // 🆕 비교 종목 제거
+  // 비교 종목 제거
   const handleRemoveSymbol = (symbol) => {
     console.log('➖ 종목 제거:', symbol);
     setCompareSymbols(prev => prev.filter(s => s !== symbol));
     setCompareData(prev => prev.filter(d => d.symbol !== symbol));
   };
 
-  // 🆕 비교 데이터 일괄 갱신
+  // 비교 데이터 일괄 갱신
   const fetchCompareData = async (symbols, days) => {
     console.log('🔄 비교 데이터 갱신:', symbols);
 
@@ -217,7 +234,16 @@ function HomePage() {
               disabled={loading}
             />
 
+            {/* 🆕 차트 타입 선택 (비교 모드가 아닐 때만) */}
             {!compareMode && (
+              <ChartTypeControl
+                chartType={chartType}
+                onChartTypeChange={handleChartTypeChange}
+              />
+            )}
+
+            {/* 🔧 이동평균선 (라인 차트일 때만) */}
+            {!compareMode && chartType === 'line' && (
               <MovingAverageControl
                 selectedMA={selectedMA}
                 onMAChange={handleMAChange}
@@ -225,14 +251,14 @@ function HomePage() {
               />
             )}
 
-            {/* 🆕 비교 모드 컨트롤 */}
+            {/* 🔧 비교 모드 (캔들스틱일 때 비활성화) */}
             <CompareControl
               compareMode={compareMode}
               onCompareModeChange={handleCompareModeChange}
               compareSymbols={compareSymbols}
               onAddSymbol={handleAddSymbol}
               onRemoveSymbol={handleRemoveSymbol}
-              disabled={loading}
+              disabled={loading || chartType === 'candlestick'} // 🆕 추가
             />
           </>
         )}
@@ -263,8 +289,9 @@ function HomePage() {
                 data={historyData}
                 symbol={stockData.symbol}
                 selectedMA={selectedMA}
-                compareMode={compareMode} // 🆕
-                compareData={compareData} // 🆕
+                compareMode={compareMode}
+                compareData={compareData}
+                chartType={chartType} // 🆕 추가
               />
             )}
           </div>
