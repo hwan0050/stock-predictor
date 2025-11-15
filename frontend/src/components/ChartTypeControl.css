@@ -1,0 +1,72 @@
+/* Chart Type Control Styles */
+.chart-type-control {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+
+.chart-type-control h3 {
+  margin: 0 0 15px 0;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.chart-type-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.chart-type-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 20px;
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.chart-type-btn .icon {
+  font-size: 1.5rem;
+}
+
+.chart-type-btn .label {
+  font-weight: 500;
+}
+
+.chart-type-btn:hover {
+  background: var(--hover-bg);
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.chart-type-btn.active {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.chart-type-btn.active .label {
+  font-weight: 600;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .chart-type-buttons {
+    flex-direction: column;
+  }
+
+  .chart-type-btn {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
