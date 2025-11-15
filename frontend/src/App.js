@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import SearchBar from './components/SearchBar';
@@ -14,7 +14,8 @@ import PopularStocks from './components/PopularStocks';
 import PeriodSelector from './components/PeriodSelector';
 import MovingAverageControl from './components/MovingAverageControl';
 import CompareControl from './components/CompareControl';
-import ChartTypeControl from './components/ChartTypeControl'; // 🆕 추가
+import ChartTypeControl from './components/ChartTypeControl';
+import ZoomControl from './components/ZoomControl'; // 🆕 추가
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
@@ -34,13 +35,14 @@ function HomePage() {
     ma60: false
   });
 
-  // 비교 모드 state
   const [compareMode, setCompareMode] = useState(false);
   const [compareSymbols, setCompareSymbols] = useState([]);
-  const [compareData, setCompareData] = useState([]); // [{ symbol, data }, ...]
+  const [compareData, setCompareData] = useState([]);
 
-  // 🆕 차트 타입 state
   const [chartType, setChartType] = useState('line');
+
+  // 🆕 차트 인스턴스 ref
+  const chartInstanceRef = useRef(null);
 
   const handleSearch = async (symbol) => {
     console.log('🔍 검색 시작:', symbol);
@@ -119,7 +121,6 @@ function HomePage() {
       handleSearch(stockData.symbol);
     }
 
-    // 비교 모드일 때 비교 데이터도 갱신
     if (compareMode && compareSymbols.length > 0) {
       fetchCompareData(compareSymbols, newPeriod);
     }
@@ -130,12 +131,10 @@ function HomePage() {
     setSelectedMA(newMA);
   };
 
-  // 🆕 차트 타입 변경 핸들러
   const handleChartTypeChange = (type) => {
     console.log('📊 차트 타입 변경:', type);
     setChartType(type);
 
-    // 캔들스틱은 비교 모드와 함께 사용 불가
     if (type === 'candlestick' && compareMode) {
       setCompareMode(false);
       setCompareSymbols([]);
@@ -143,17 +142,14 @@ function HomePage() {
     }
   };
 
-  // 비교 모드 토글
   const handleCompareModeChange = (enabled) => {
     console.log('🔄 비교 모드:', enabled);
     setCompareMode(enabled);
 
     if (!enabled) {
-      // 비교 모드 끄면 초기화
       setCompareSymbols([]);
       setCompareData([]);
     } else {
-      // 비교 모드 켜면 현재 종목 추가
       if (stockData && stockData.symbol) {
         setCompareSymbols([stockData.symbol]);
         setCompareData([{ symbol: stockData.symbol, data: historyData }]);
@@ -161,7 +157,6 @@ function HomePage() {
     }
   };
 
-  // 비교 종목 추가
   const handleAddSymbol = async (symbol) => {
     console.log('➕ 종목 추가:', symbol);
 
@@ -183,14 +178,12 @@ function HomePage() {
     }
   };
 
-  // 비교 종목 제거
   const handleRemoveSymbol = (symbol) => {
     console.log('➖ 종목 제거:', symbol);
     setCompareSymbols(prev => prev.filter(s => s !== symbol));
     setCompareData(prev => prev.filter(d => d.symbol !== symbol));
   };
 
-  // 비교 데이터 일괄 갱신
   const fetchCompareData = async (symbols, days) => {
     console.log('🔄 비교 데이터 갱신:', symbols);
 
@@ -215,6 +208,19 @@ function HomePage() {
     }
   };
 
+  // 🆕 차트 준비 완료 콜백
+  const handleChartReady = (chartInstance) => {
+    chartInstanceRef.current = chartInstance;
+  };
+
+  // 🆕 줌 리셋 핸들러
+  const handleZoomReset = () => {
+    if (chartInstanceRef.current) {
+      chartInstanceRef.current.resetZoom();
+      console.log('🔄 Zoom reset');
+    }
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -234,7 +240,6 @@ function HomePage() {
               disabled={loading}
             />
 
-            {/* 🆕 차트 타입 선택 (비교 모드가 아닐 때만) */}
             {!compareMode && (
               <ChartTypeControl
                 chartType={chartType}
@@ -242,7 +247,6 @@ function HomePage() {
               />
             )}
 
-            {/* 🔧 이동평균선 (라인 차트일 때만) */}
             {!compareMode && chartType === 'line' && (
               <MovingAverageControl
                 selectedMA={selectedMA}
@@ -251,14 +255,19 @@ function HomePage() {
               />
             )}
 
-            {/* 🔧 비교 모드 (캔들스틱일 때 비활성화) */}
             <CompareControl
               compareMode={compareMode}
               onCompareModeChange={handleCompareModeChange}
               compareSymbols={compareSymbols}
               onAddSymbol={handleAddSymbol}
               onRemoveSymbol={handleRemoveSymbol}
-              disabled={loading || chartType === 'candlestick'} // 🆕 추가
+              disabled={loading || chartType === 'candlestick'}
+            />
+
+            {/* 🆕 줌 컨트롤 추가 */}
+            <ZoomControl
+              onReset={handleZoomReset}
+              disabled={loading}
             />
           </>
         )}
@@ -291,7 +300,8 @@ function HomePage() {
                 selectedMA={selectedMA}
                 compareMode={compareMode}
                 compareData={compareData}
-                chartType={chartType} // 🆕 추가
+                chartType={chartType}
+                onChartReady={handleChartReady} // 🆕 차트 준비 콜백
               />
             )}
           </div>
