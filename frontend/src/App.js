@@ -15,7 +15,8 @@ import PeriodSelector from './components/PeriodSelector';
 import MovingAverageControl from './components/MovingAverageControl';
 import CompareControl from './components/CompareControl';
 import ChartTypeControl from './components/ChartTypeControl';
-import ZoomControl from './components/ZoomControl'; // 🆕 추가
+import ZoomControl from './components/ZoomControl';
+import WatchlistControl from './components/WatchlistControl'; // 🆕 관심 종목 추가
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
@@ -41,7 +42,7 @@ function HomePage() {
 
   const [chartType, setChartType] = useState('line');
 
-  // 🆕 차트 인스턴스 ref
+  // 차트 인스턴스 ref
   const chartInstanceRef = useRef(null);
 
   const handleSearch = async (symbol) => {
@@ -110,6 +111,12 @@ function HomePage() {
   };
 
   const handlePopularClick = (symbol) => {
+    handleSearch(symbol);
+  };
+
+  // 🆕 관심 종목에서 빠른 검색
+  const handleQuickSearch = (symbol) => {
+    console.log('⭐ Quick search from watchlist:', symbol);
     handleSearch(symbol);
   };
 
@@ -208,12 +215,12 @@ function HomePage() {
     }
   };
 
-  // 🆕 차트 준비 완료 콜백
+  // 차트 준비 완료 콜백
   const handleChartReady = (chartInstance) => {
     chartInstanceRef.current = chartInstance;
   };
 
-  // 🆕 줌 리셋 핸들러
+  // 줌 리셋 핸들러
   const handleZoomReset = () => {
     if (chartInstanceRef.current) {
       chartInstanceRef.current.resetZoom();
@@ -231,6 +238,12 @@ function HomePage() {
       <main className="App-main">
         <SearchBar onSearch={handleSearch} disabled={loading} />
         <SearchHistory onClick={handleHistoryClick} />
+
+        {/* 🆕 관심 종목 컴포넌트 */}
+        <WatchlistControl
+          currentSymbol={stockData?.symbol}
+          onQuickSearch={handleQuickSearch}
+        />
 
         {(stockData || loading) && (
           <>
@@ -264,7 +277,7 @@ function HomePage() {
               disabled={loading || chartType === 'candlestick'}
             />
 
-            {/* 🆕 줌 컨트롤 추가 */}
+            {/* 줌 컨트롤 */}
             <ZoomControl
               onReset={handleZoomReset}
               disabled={loading}
@@ -301,7 +314,7 @@ function HomePage() {
                 compareMode={compareMode}
                 compareData={compareData}
                 chartType={chartType}
-                onChartReady={handleChartReady} // 🆕 차트 준비 콜백
+                onChartReady={handleChartReady}
               />
             )}
           </div>

@@ -1,0 +1,221 @@
+.watchlist-control {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.watchlist-control:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.watchlist-control h3 {
+  margin: 0 0 15px 0;
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 현재 종목 영역 */
+.watchlist-current {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: var(--bg-primary);
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border: 1px solid var(--border-color);
+}
+
+.current-symbol-label {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.current-symbol-label strong {
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+/* 버튼 스타일 */
+.watchlist-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.watchlist-btn-add {
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  color: white;
+}
+
+.watchlist-btn-add:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(243, 156, 18, 0.3);
+}
+
+.watchlist-btn-add:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.watchlist-btn-remove {
+  background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+  color: white;
+}
+
+.watchlist-btn-remove:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(149, 165, 166, 0.3);
+}
+
+/* 관심 종목 목록 */
+.watchlist-body {
+  margin-top: 15px;
+}
+
+.watchlist-empty {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 30px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.watchlist-header-label {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+/* 칩 컨테이너 */
+.watchlist-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* 개별 칩 */
+.watchlist-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
+  border-radius: 20px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.watchlist-chip:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+}
+
+.watchlist-chip.active {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  border-color: #2980b9;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.watchlist-chip.active .watchlist-chip-symbol {
+  color: white;
+  font-weight: 600;
+}
+
+.watchlist-chip.active .watchlist-chip-remove {
+  color: white;
+}
+
+/* 칩 심볼 */
+.watchlist-chip-symbol {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 14px;
+  user-select: none;
+}
+
+/* 칩 제거 버튼 */
+.watchlist-chip-remove {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.watchlist-chip-remove:hover {
+  background: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+}
+
+/* 다크모드 */
+@media (prefers-color-scheme: dark) {
+  .watchlist-chip:hover {
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+  }
+
+  .watchlist-chip.active {
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+  }
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .watchlist-current {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .watchlist-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .watchlist-chips {
+    justify-content: center;
+  }
+}
+
+/* 애니메이션 */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.watchlist-chip {
+  animation: slideIn 0.3s ease;
+}
