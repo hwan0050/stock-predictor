@@ -1,53 +1,17 @@
-# 🚀 Stock Predictor - Backend
+# 📈 Stock Predictor - Backend
 
-> Spring Boot 기반 실시간 주가 조회 REST API 서버
-
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.0-6DB33F?logo=springboot)](https://spring.io/projects/spring-boot)
-[![Java](https://img.shields.io/badge/Java-17-007396?logo=java)](https://www.oracle.com/java/)
-[![Gradle](https://img.shields.io/badge/Gradle-8.0-02303A?logo=gradle)](https://gradle.org/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](../LICENSE)
+Spring Boot 기반의 주가 데이터 REST API 서버입니다.
 
 ---
 
-## 🎯 프로젝트 개요
+## 🛠️ 기술 스택
 
-Yahoo Finance API를 활용한 실시간 주가 데이터 제공 REST API 서버입니다.
-
-**GitHub**: [https://github.com/hwan0050/stock-predictor](https://github.com/hwan0050/stock-predictor)
-
----
-
-## ✨ 주요 기능
-
-### 1. 📊 실시간 주가 조회
-- 현재 주가 정보 (실시간)
-- 시가/종가/고가/저가
-- 거래량/평균거래량
-- 시가총액
-- 등락률 및 등락금액
-
-### 2. 📈 과거 데이터 조회
-- 7일/30일/90일/1년 기간 선택
-- 일별 OHLC 데이터 (시가/고가/저가/종가)
-- 거래량 데이터
-- 날짜별 정렬
-
-### 3. 🔧 최적화
-- **Spring Cache**: API 호출 캐싱 (5분)
-- **CORS 설정**: Frontend 연동
-- **예외 처리**: GlobalExceptionHandler
-
----
-
-## 🛠 기술 스택
-
-| 카테고리 | 기술 |
-|---------|-----|
-| **Framework** | Spring Boot 3.x |
-| **Language** | Java 17 |
-| **Build Tool** | Gradle 8.x |
-| **External API** | Yahoo Finance (yahoofinance-api) |
-| **Caching** | Spring Cache |
+- **Spring Boot** 3.2.0
+- **Spring Web** - REST API
+- **Spring Web Client** - HTTP 클라이언트
+- **Lombok** - 보일러플레이트 감소
+- **Jackson** - JSON 처리
+- **Maven** - 빌드 도구
 
 ---
 
@@ -55,213 +19,163 @@ Yahoo Finance API를 활용한 실시간 주가 데이터 제공 REST API 서버
 
 ```
 backend/
-├── src/main/java/com/stock/predictor/
-│   ├── config/
-│   │   ├── CacheConfig.java         # 캐시 설정
-│   │   └── WebConfig.java           # CORS 설정
-│   │
+├── src/main/java/com/stock/
+│   ├── StockPredictorApplication.java  # 메인 클래스
 │   ├── controller/
-│   │   ├── HelloController.java     # 테스트 컨트롤러
-│   │   └── StockController.java     # 주가 API 컨트롤러
-│   │
-│   ├── dto/
-│   │   ├── StockDataDto.java        # 현재 주가 DTO
-│   │   └── StockHistoryDto.java     # 과거 데이터 DTO (OHLC + volume)
-│   │
-│   ├── exception/
-│   │   └── GlobalExceptionHandler.java  # 전역 예외 처리
-│   │
+│   │   ├── StockController.java        # 주식 API 컨트롤러
+│   │   └── NewsController.java         # 뉴스 API 컨트롤러 (선택)
 │   ├── service/
-│   │   └── YahooFinanceService.java     # Yahoo Finance 연동
-│   │
-│   └── PredictorApplication.java    # 메인 애플리케이션
-│
+│   │   ├── StockService.java           # 주식 비즈니스 로직
+│   │   └── NewsService.java            # 뉴스 비즈니스 로직 (선택)
+│   ├── model/
+│   │   ├── StockData.java              # 주식 데이터 모델
+│   │   ├── HistoricalData.java         # 과거 데이터 모델
+│   │   └── NewsItem.java               # 뉴스 아이템 모델 (선택)
+│   └── config/
+│       └── CorsConfig.java             # CORS 설정
 ├── src/main/resources/
-│   └── application.properties       # 설정 파일
-│
-├── build.gradle                     # Gradle 빌드 파일
+│   ├── application.properties          # 애플리케이션 설정
+│   └── application-dev.properties      # 개발 환경 설정
+├── src/test/java/
+│   └── com/stock/
+│       └── StockPredictorApplicationTests.java
+├── pom.xml                             # Maven 설정
 └── README.md
 ```
 
 ---
 
-## 🚀 설치 및 실행
+## 🚀 시작하기
 
 ### 사전 요구사항
-- Java 17+
-- Gradle 8.0+
+- Java 11 이상
+- Maven 3.6 이상
 
-### 설치
+### 빌드 및 실행
+
+#### Maven Wrapper 사용 (권장)
 ```bash
-cd backend
-./gradlew clean build
+# 빌드
+./mvnw clean install
+
+# 실행
+./mvnw spring-boot:run
 ```
 
-### 실행
+#### Maven 직접 사용
 ```bash
-# 방법 1: Gradle
-./gradlew bootRun
+# 빌드
+mvn clean install
 
-# 방법 2: JAR 파일
-java -jar build/libs/predictor-0.0.1-SNAPSHOT.jar
-
-# 방법 3: IntelliJ IDEA
-# PredictorApplication.java 우클릭 → Run
+# 실행
+mvn spring-boot:run
 ```
 
-- URL: http://localhost:8080
+서버는 http://localhost:8080 에서 실행됩니다.
+
+### JAR 파일로 실행
+```bash
+# 빌드
+./mvnw clean package
+
+# 실행
+java -jar target/stock-predictor-0.0.1-SNAPSHOT.jar
+```
 
 ---
 
 ## 📡 API 엔드포인트
 
-### 1. 현재 주가 조회
-```http
+### 1. 주식 정보 조회
+```
 GET /api/stocks/{symbol}
 ```
 
-**Request:**
-```bash
-curl http://localhost:8080/api/stocks/AAPL
-```
+**파라미터:**
+- `symbol` (path) - 주식 심볼 (예: AAPL, TSLA)
 
-**Response:**
+**응답:**
 ```json
 {
   "symbol": "AAPL",
   "name": "Apple Inc.",
   "currentPrice": 150.25,
-  "open": 148.50,
-  "dayHigh": 151.00,
-  "dayLow": 147.80,
-  "previousClose": 149.50,
-  "change": 0.75,
-  "changePercent": 0.50,
-  "volume": 45680000,
-  "avgVolume": 50000000,
-  "marketCap": 2500000000000
+  "change": 2.5,
+  "changePercent": 1.69,
+  "volume": 75234567,
+  "marketCap": 2450000000000,
+  "high52Week": 180.0,
+  "low52Week": 120.0
 }
 ```
 
----
-
 ### 2. 과거 데이터 조회
-```http
+```
 GET /api/stocks/{symbol}/history?days={days}
 ```
 
-**Parameters:**
-- `symbol`: 주식 심볼 (예: AAPL)
-- `days`: 조회 기간 (7, 30, 90, 365)
+**파라미터:**
+- `symbol` (path) - 주식 심볼
+- `days` (query) - 조회 기간 (7, 30, 90, 365, 또는 all)
 
-**Request:**
-```bash
-curl "http://localhost:8080/api/stocks/AAPL/history?days=30"
-```
-
-**Response:**
+**응답:**
 ```json
 {
   "symbol": "AAPL",
   "data": [
     {
-      "date": "2025-10-16",
-      "open": 149.50,
-      "high": 151.20,
-      "low": 148.30,
-      "close": 150.25,
-      "volume": 45680000
+      "date": "2024-01-15",
+      "openPrice": 148.5,
+      "highPrice": 151.0,
+      "lowPrice": 147.8,
+      "closePrice": 150.25,
+      "volume": 65432100
     },
-    {
-      "date": "2025-10-17",
-      "open": 150.50,
-      "high": 152.00,
-      "low": 149.80,
-      "close": 151.50,
-      "volume": 48000000
-    }
+    ...
   ],
   "count": 30
 }
 ```
 
----
-
-### 3. 헬스 체크
-```http
-GET /api/hello
+### 3. 인기 종목 조회
+```
+GET /api/stocks/popular
 ```
 
-**Response:**
+**응답:**
 ```json
-{
-  "message": "Hello, Stock Predictor!"
-}
+[
+  {
+    "symbol": "AAPL",
+    "name": "Apple Inc.",
+    "category": "Technology"
+  },
+  ...
+]
 ```
 
----
-
-## 🔧 주요 클래스 설명
-
-### StockController
-```java
-@RestController
-@RequestMapping("/api/stocks")
-public class StockController {
-    
-    @GetMapping("/{symbol}")
-    public ResponseEntity<StockDataDto> getStockData(@PathVariable String symbol) {
-        // 현재 주가 조회
-    }
-    
-    @GetMapping("/{symbol}/history")
-    public ResponseEntity<Map<String, Object>> getStockHistory(
-        @PathVariable String symbol,
-        @RequestParam(defaultValue = "30") int days
-    ) {
-        // 과거 데이터 조회
-    }
-}
+### 4. 뉴스 조회 (선택적)
+```
+GET /api/news/{symbol}
 ```
 
----
+**파라미터:**
+- `symbol` (path) - 주식 심볼
 
-### YahooFinanceService
-```java
-@Service
-public class YahooFinanceService {
-    
-    @Cacheable(value = "stockData", key = "#symbol")
-    public StockDataDto getStockData(String symbol) {
-        // Yahoo Finance API 호출 (5분 캐싱)
-    }
-    
-    @Cacheable(value = "stockHistory", key = "#symbol + '_' + #days")
-    public List<StockHistoryDto> getStockHistory(String symbol, int days) {
-        // 과거 데이터 조회 (캐싱)
-    }
-}
-```
-
----
-
-### StockHistoryDto
-```java
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class StockHistoryDto {
-    private String date;
-    private Double open;      // 시가
-    private Double high;      // 고가
-    private Double low;       // 저가
-    private Double close;     // 종가
-    private Long volume;      // 거래량
-    
-    // 선택 필드
-    private Double adjClose;  // 조정 종가
-}
+**응답:**
+```json
+[
+  {
+    "id": 1,
+    "title": "Apple announces new product",
+    "description": "...",
+    "source": "Reuters",
+    "publishedAt": "2024-01-15T10:30:00Z",
+    "url": "https://...",
+    "sentiment": "positive"
+  },
+  ...
+]
 ```
 
 ---
@@ -273,83 +187,107 @@ public class StockHistoryDto {
 # 서버 포트
 server.port=8080
 
-# 로깅 레벨
-logging.level.com.stock.predictor=INFO
+# CORS 설정
+cors.allowed-origins=http://localhost:3000
 
-# 캐시 설정 (CacheConfig에서 관리)
+# API 키 (필요시)
+yahoo.finance.api.key=your_api_key_here
+
+# 로깅
+logging.level.com.stock=DEBUG
 ```
 
-### CacheConfig (Spring Cache)
+### 환경별 설정
+- `application.properties` - 기본 설정
+- `application-dev.properties` - 개발 환경
+- `application-prod.properties` - 프로덕션 환경
+
+실행 시 프로파일 지정:
+```bash
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
+---
+
+## 🔧 CORS 설정
+
+`CorsConfig.java`:
 ```java
 @Configuration
-@EnableCaching
-public class CacheConfig {
-    
+public class CorsConfig {
     @Bean
-    public CacheManager cacheManager() {
-        SimpleCacheManager cacheManager = new SimpleCacheManager();
-        cacheManager.setCaches(Arrays.asList(
-            new ConcurrentMapCache("stockData"),     // 5분 TTL
-            new ConcurrentMapCache("stockHistory")   // 5분 TTL
-        ));
-        return cacheManager;
-    }
-}
-```
-
-### WebConfig (CORS)
-```java
-@Configuration
-public class WebConfig implements WebMvcConfigurer {
-    
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:3000")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("*");
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/api/**")
+                    .allowedOrigins("http://localhost:3000")
+                    .allowedMethods("GET", "POST", "PUT", "DELETE")
+                    .allowedHeaders("*");
+            }
+        };
     }
 }
 ```
 
 ---
 
-## 🔒 예외 처리
+## 📦 주요 의존성
 
-### GlobalExceptionHandler
-```java
-@RestControllerAdvice
-public class GlobalExceptionHandler {
+```xml
+<dependencies>
+    <!-- Spring Boot Starters -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
     
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(e.getMessage()));
-    }
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-webflux</artifactId>
+    </dependency>
     
-    @ExceptionHandler(IOException.class)
-    public ResponseEntity<ErrorResponse> handleIOException(IOException e) {
-        return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
-                .body(new ErrorResponse("Failed to fetch stock data"));
-    }
-}
+    <!-- Lombok -->
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <optional>true</optional>
+    </dependency>
+    
+    <!-- Test -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
 ```
 
 ---
 
-## 📊 캐싱 전략
+## 🔌 외부 API 통합
 
-### 캐시 적용
-- **stockData**: 현재 주가 (5분 TTL)
-- **stockHistory**: 과거 데이터 (5분 TTL)
-
-### 캐시 키
+### Yahoo Finance API
 ```java
-// 현재 주가: "AAPL"
-@Cacheable(value = "stockData", key = "#symbol")
-
-// 과거 데이터: "AAPL_30"
-@Cacheable(value = "stockHistory", key = "#symbol + '_' + #days")
+@Service
+public class StockService {
+    private final WebClient webClient;
+    
+    public StockData getStockData(String symbol) {
+        String url = String.format(
+            "https://query1.finance.yahoo.com/v8/finance/chart/%s",
+            symbol
+        );
+        
+        // WebClient로 API 호출
+        return webClient.get()
+            .uri(url)
+            .retrieve()
+            .bodyToMono(YahooFinanceResponse.class)
+            .map(this::convertToStockData)
+            .block();
+    }
+}
 ```
 
 ---
@@ -358,135 +296,189 @@ public class GlobalExceptionHandler {
 
 ### 단위 테스트
 ```bash
-./gradlew test
+./mvnw test
 ```
 
-### API 테스트 (curl)
+### 통합 테스트
 ```bash
-# 현재 주가
-curl http://localhost:8080/api/stocks/AAPL
+./mvnw verify
+```
 
-# 과거 데이터 (30일)
-curl "http://localhost:8080/api/stocks/AAPL/history?days=30"
-
-# 과거 데이터 (7일)
-curl "http://localhost:8080/api/stocks/AAPL/history?days=7"
-
-# Mock 데이터
-curl http://localhost:8080/api/stocks/TEST
-curl "http://localhost:8080/api/stocks/TEST/history?days=30"
+### 테스트 커버리지
+```bash
+./mvnw jacoco:report
 ```
 
 ---
 
-## 📈 데이터 흐름
+## 📊 모니터링
 
-```
-Frontend (React)
-    ↓ HTTP Request
-StockController
-    ↓ Service Call
-YahooFinanceService
-    ↓ Cache Check
-    ├─ Cache Hit → Return Cached Data
-    └─ Cache Miss → Yahoo Finance API
-                    ↓
-                 Cache Store
-                    ↓
-                 Return Data
+### Spring Boot Actuator (선택적)
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
 ```
 
----
-
-## 🐛 트러블슈팅
-
-### Yahoo Finance API 429 에러
-- **원인**: 너무 많은 요청
-- **해결**: Spring Cache 적용 (5분)
-
-### CORS 에러
-- **원인**: Frontend 도메인 허용 안 됨
-- **해결**: WebConfig에서 CORS 설정
-
-### 데이터 없음 (404)
-- **원인**: 잘못된 심볼 입력
-- **해결**: 유효한 심볼 확인 (예: AAPL, TSLA)
+엔드포인트:
+- `/actuator/health` - 헬스 체크
+- `/actuator/metrics` - 메트릭
+- `/actuator/info` - 애플리케이션 정보
 
 ---
 
-## 🔜 로드맵
+## 🐛 에러 처리
 
-- [ ] 데이터베이스 연동 (PostgreSQL)
-- [ ] Redis 캐싱
-- [ ] JWT 인증
-- [ ] Rate Limiting
-- [ ] Docker 컨테이너화
-- [ ] CI/CD 파이프라인
-
----
-
-## 📦 의존성
-
-```gradle
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-cache'
-    implementation 'com.yahoofinance-api:YahooFinanceAPI:3.17.0'
+### GlobalExceptionHandler
+```java
+@RestControllerAdvice
+public class GlobalExceptionHandler {
     
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    @ExceptionHandler(SymbolNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleSymbolNotFound(
+        SymbolNotFoundException ex
+    ) {
+        return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(new ErrorResponse(ex.getMessage()));
+    }
 }
+```
+
+---
+
+## 🔒 보안
+
+### API 키 관리
+```properties
+# application.properties에 직접 저장하지 말 것!
+# 환경 변수 사용 권장
+yahoo.finance.api.key=${YAHOO_API_KEY}
+```
+
+### HTTPS 설정 (프로덕션)
+```properties
+server.ssl.enabled=true
+server.ssl.key-store=classpath:keystore.p12
+server.ssl.key-store-password=changeit
+server.ssl.key-store-type=PKCS12
+```
+
+---
+
+## 📝 로깅
+
+### Logback 설정
+`src/main/resources/logback-spring.xml`:
+```xml
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+    
+    <logger name="com.stock" level="DEBUG" />
+</configuration>
 ```
 
 ---
 
 ## 🚀 배포
 
-### JAR 빌드
-```bash
-./gradlew bootJar
-```
-
-### Docker (예정)
+### Docker
 ```dockerfile
 FROM openjdk:17-jdk-slim
-COPY build/libs/*.jar app.jar
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+WORKDIR /app
+COPY target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+빌드 및 실행:
+```bash
+docker build -t stock-predictor-backend .
+docker run -p 8080:8080 stock-predictor-backend
+```
+
+### Heroku
+```bash
+heroku create stock-predictor-api
+git push heroku main
 ```
 
 ---
 
-## 📄 라이센스
+## 🔧 개발 가이드
 
-MIT License - 자세한 내용은 [LICENSE](../LICENSE) 파일 참조
+### 새 컨트롤러 추가
+```java
+@RestController
+@RequestMapping("/api/custom")
+public class CustomController {
+    
+    @GetMapping("/{param}")
+    public ResponseEntity<CustomData> getData(@PathVariable String param) {
+        // 로직 구현
+        return ResponseEntity.ok(data);
+    }
+}
+```
+
+### 새 서비스 추가
+```java
+@Service
+public class CustomService {
+    
+    private final WebClient webClient;
+    
+    public CustomService(WebClient.Builder webClientBuilder) {
+        this.webClient = webClientBuilder.build();
+    }
+    
+    public CustomData fetchData() {
+        // 비즈니스 로직
+    }
+}
+```
 
 ---
 
-## 👨‍💻 개발자
+## 📈 성능 최적화
 
-**Hwan Lee** ([@hwan0050](https://github.com/hwan0050))
-- Email: akma0050@naver.com
-- GitHub: https://github.com/hwan0050/stock-predictor
+### 캐싱 (선택적)
+```java
+@EnableCaching
+@Configuration
+public class CacheConfig {
+    
+    @Bean
+    public CacheManager cacheManager() {
+        return new ConcurrentMapCacheManager("stocks", "history");
+    }
+}
+
+@Service
+public class StockService {
+    
+    @Cacheable(value = "stocks", key = "#symbol")
+    public StockData getStockData(String symbol) {
+        // API 호출
+    }
+}
+```
 
 ---
 
-## 🙏 기여하기
+## 🤝 기여
 
-Pull Request를 환영합니다!
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+이슈나 PR은 언제든 환영합니다!
 
 ---
 
-**Made with ❤️ by hwan0050**
-
----
-
-**버전**: v0.9.2  
-**마지막 업데이트**: 2025-11-16
+**Made with ❤️ by Hwan**
