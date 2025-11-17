@@ -20,6 +20,7 @@ import WatchlistControl from './components/WatchlistControl';
 import TechnicalIndicators from './components/TechnicalIndicators';
 import IndicatorChart from './components/IndicatorChart';
 import Portfolio from './components/Portfolio';
+import NewsSection from './components/NewsSection'; // 🆕 뉴스 섹션 추가
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
@@ -361,6 +362,9 @@ function HomePage() {
                     )}
                   </>
                 )}
+
+                {/* 🆕 뉴스 섹션 */}
+                <NewsSection symbol={stockData.symbol} />
               </div>
             )}
 
