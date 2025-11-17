@@ -5,6 +5,7 @@
   --text-primary: #2c3e50;
   --text-secondary: #7f8c8d;
   --border-color: #e0e0e0;
+  --bg-secondary: #ecf0f1;
   --shadow: rgba(0, 0, 0, 0.1);
   --primary-color: #3498db;
   --success-color: #27ae60;
@@ -19,6 +20,7 @@ body.dark-mode {
   --text-primary: #eaeaea;
   --text-secondary: #a0a0a0;
   --border-color: #2a2a4e;
+  --bg-secondary: #0f3460;
   --shadow: rgba(0, 0, 0, 0.3);
   --primary-color: #5dade2;
   --success-color: #52c77c;
@@ -50,7 +52,7 @@ body {
 .App-header {
   background: linear-gradient(135deg, var(--primary-color) 0%, #2980b9 100%);
   color: white;
-  padding: 2rem 1rem;
+  padding: 2rem 1rem 1rem;
   text-align: center;
   box-shadow: 0 2px 10px var(--shadow);
 }
@@ -63,6 +65,42 @@ body {
 .App-header p {
   font-size: 1.1rem;
   opacity: 0.9;
+  margin-bottom: 1.5rem;
+}
+
+/* 🆕 탭 네비게이션 */
+.tab-navigation {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.tab-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.tab-button.active {
+  background: white;
+  color: var(--primary-color);
+  border-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Main Content */
@@ -166,6 +204,16 @@ body {
 
   .App-header p {
     font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .tab-navigation {
+    flex-direction: column;
+    max-width: 100%;
+  }
+
+  .tab-button {
+    padding: 14px 20px;
   }
 
   .App-main {
@@ -183,7 +231,7 @@ body {
   }
 
   .App-header {
-    padding: 1.5rem 1rem;
+    padding: 1.5rem 1rem 1rem;
   }
 
   .App-main {

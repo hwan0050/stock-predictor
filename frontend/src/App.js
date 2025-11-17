@@ -17,14 +17,16 @@ import CompareControl from './components/CompareControl';
 import ChartTypeControl from './components/ChartTypeControl';
 import ZoomControl from './components/ZoomControl';
 import WatchlistControl from './components/WatchlistControl';
-import TechnicalIndicators from './components/TechnicalIndicators'; // 🆕 기술적 지표 추가
-import IndicatorChart from './components/IndicatorChart'; // 🆕 지표 차트 추가
+import TechnicalIndicators from './components/TechnicalIndicators';
+import IndicatorChart from './components/IndicatorChart';
+import Portfolio from './components/Portfolio';
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 const API_BASE_PATH = process.env.REACT_APP_API_BASE_PATH || '/api';
 
 function HomePage() {
+  const [activeTab, setActiveTab] = useState('search');
   const [stockData, setStockData] = useState(null);
   const [historyData, setHistoryData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -44,14 +46,12 @@ function HomePage() {
 
   const [chartType, setChartType] = useState('line');
 
-  // 🆕 기술적 지표 state
   const [selectedIndicators, setSelectedIndicators] = useState({
     rsi: false,
     macd: false,
     bollingerBands: false
   });
 
-  // 차트 인스턴스 ref
   const chartInstanceRef = useRef(null);
 
   const handleSearch = async (symbol) => {
@@ -123,7 +123,6 @@ function HomePage() {
     handleSearch(symbol);
   };
 
-  // 관심 종목에서 빠른 검색
   const handleQuickSearch = (symbol) => {
     console.log('⭐ Quick search from watchlist:', symbol);
     handleSearch(symbol);
@@ -224,18 +223,15 @@ function HomePage() {
     }
   };
 
-  // 🆕 기술적 지표 변경 핸들러
   const handleIndicatorsChange = (newIndicators) => {
     console.log('📊 기술적 지표 변경:', newIndicators);
     setSelectedIndicators(newIndicators);
   };
 
-  // 차트 준비 완료 콜백
   const handleChartReady = (chartInstance) => {
     chartInstanceRef.current = chartInstance;
   };
 
-  // 줌 리셋 핸들러
   const handleZoomReset = () => {
     if (chartInstanceRef.current) {
       chartInstanceRef.current.resetZoom();
@@ -248,121 +244,138 @@ function HomePage() {
       <header className="App-header">
         <h1>📈 주가 예측</h1>
         <p>실시간 주식 정보 검색</p>
+
+        <div className="tab-navigation">
+          <button
+            className={`tab-button ${activeTab === 'search' ? 'active' : ''}`}
+            onClick={() => setActiveTab('search')}
+          >
+            🔍 주가 검색
+          </button>
+          <button
+            className={`tab-button ${activeTab === 'portfolio' ? 'active' : ''}`}
+            onClick={() => setActiveTab('portfolio')}
+          >
+            💼 포트폴리오
+          </button>
+        </div>
       </header>
 
       <main className="App-main">
-        <SearchBar onSearch={handleSearch} disabled={loading} />
-        <SearchHistory onClick={handleHistoryClick} />
-
-        {/* 관심 종목 컴포넌트 */}
-        <WatchlistControl
-          currentSymbol={stockData?.symbol}
-          onQuickSearch={handleQuickSearch}
-        />
-
-        {(stockData || loading) && (
+        {activeTab === 'search' ? (
           <>
-            <PeriodSelector
-              selectedPeriod={selectedPeriod}
-              onPeriodChange={handlePeriodChange}
-              disabled={loading}
+            <SearchBar onSearch={handleSearch} disabled={loading} />
+            <SearchHistory onClick={handleHistoryClick} />
+
+            <WatchlistControl
+              currentSymbol={stockData?.symbol}
+              onQuickSearch={handleQuickSearch}
             />
 
-            {!compareMode && (
-              <ChartTypeControl
-                chartType={chartType}
-                onChartTypeChange={handleChartTypeChange}
-              />
-            )}
-
-            {!compareMode && chartType === 'line' && (
-              <MovingAverageControl
-                selectedMA={selectedMA}
-                onMAChange={handleMAChange}
-                disabled={loading}
-              />
-            )}
-
-            <CompareControl
-              compareMode={compareMode}
-              onCompareModeChange={handleCompareModeChange}
-              compareSymbols={compareSymbols}
-              onAddSymbol={handleAddSymbol}
-              onRemoveSymbol={handleRemoveSymbol}
-              disabled={loading || chartType === 'candlestick'}
-            />
-
-            {/* 🆕 기술적 지표 컴포넌트 */}
-            {!compareMode && chartType === 'line' && (
-              <TechnicalIndicators
-                selectedIndicators={selectedIndicators}
-                onIndicatorsChange={handleIndicatorsChange}
-                disabled={loading}
-              />
-            )}
-
-            {/* 줌 컨트롤 */}
-            <ZoomControl
-              onReset={handleZoomReset}
-              disabled={loading}
-            />
-          </>
-        )}
-
-        {loading && !showSkeleton && (
-          <LoadingSpinner message="검색 중..." />
-        )}
-
-        {loading && showSkeleton && (
-          <div className="results-container">
-            <SkeletonCard />
-            <SkeletonChart />
-          </div>
-        )}
-
-        {error && (
-          <div className="error-message">
-            <p>⚠️ {error}</p>
-          </div>
-        )}
-
-        {!loading && stockData && (
-          <div className="results-container">
-            {!compareMode && <StockCard data={stockData} />}
-
-            {historyData && (
+            {(stockData || loading) && (
               <>
-                <StockChart
-                  data={historyData}
-                  symbol={stockData.symbol}
-                  selectedMA={selectedMA}
-                  compareMode={compareMode}
-                  compareData={compareData}
-                  chartType={chartType}
-                  onChartReady={handleChartReady}
+                <PeriodSelector
+                  selectedPeriod={selectedPeriod}
+                  onPeriodChange={handlePeriodChange}
+                  disabled={loading}
                 />
 
-                {/* 🆕 기술적 지표 차트 */}
-                {!compareMode && chartType === 'line' && (
-                  <IndicatorChart
-                    data={historyData}
-                    symbol={stockData.symbol}
-                    selectedIndicators={selectedIndicators}
+                {!compareMode && (
+                  <ChartTypeControl
+                    chartType={chartType}
+                    onChartTypeChange={handleChartTypeChange}
                   />
                 )}
+
+                {!compareMode && chartType === 'line' && (
+                  <MovingAverageControl
+                    selectedMA={selectedMA}
+                    onMAChange={handleMAChange}
+                    disabled={loading}
+                  />
+                )}
+
+                <CompareControl
+                  compareMode={compareMode}
+                  onCompareModeChange={handleCompareModeChange}
+                  compareSymbols={compareSymbols}
+                  onAddSymbol={handleAddSymbol}
+                  onRemoveSymbol={handleRemoveSymbol}
+                  disabled={loading || chartType === 'candlestick'}
+                />
+
+                {!compareMode && chartType === 'line' && (
+                  <TechnicalIndicators
+                    selectedIndicators={selectedIndicators}
+                    onIndicatorsChange={handleIndicatorsChange}
+                    disabled={loading}
+                  />
+                )}
+
+                <ZoomControl
+                  onReset={handleZoomReset}
+                  disabled={loading}
+                />
               </>
             )}
-          </div>
-        )}
 
-        {!loading && !error && !stockData && (
-          <>
-            <div className="welcome-message">
-              <p>🔍 주식 심볼을 검색해보세요!</p>
-              <p className="example">예시: AAPL, TSLA, GOOGL, TEST</p>
-            </div>
-            <PopularStocks onStockClick={handlePopularClick} disabled={loading} />
+            {loading && !showSkeleton && (
+              <LoadingSpinner message="검색 중..." />
+            )}
+
+            {loading && showSkeleton && (
+              <div className="results-container">
+                <SkeletonCard />
+                <SkeletonChart />
+              </div>
+            )}
+
+            {error && (
+              <div className="error-message">
+                <p>⚠️ {error}</p>
+              </div>
+            )}
+
+            {!loading && stockData && (
+              <div className="results-container">
+                {!compareMode && <StockCard data={stockData} />}
+
+                {historyData && (
+                  <>
+                    <StockChart
+                      data={historyData}
+                      symbol={stockData.symbol}
+                      selectedMA={selectedMA}
+                      compareMode={compareMode}
+                      compareData={compareData}
+                      chartType={chartType}
+                      onChartReady={handleChartReady}
+                    />
+
+                    {!compareMode && chartType === 'line' && (
+                      <IndicatorChart
+                        data={historyData}
+                        symbol={stockData.symbol}
+                        selectedIndicators={selectedIndicators}
+                      />
+                    )}
+                  </>
+                )}
+              </div>
+            )}
+
+            {!loading && !error && !stockData && (
+              <>
+                <div className="welcome-message">
+                  <p>🔍 주식 심볼을 검색해보세요!</p>
+                  <p className="example">예시: AAPL, TSLA, GOOGL, TEST</p>
+                </div>
+                <PopularStocks onStockClick={handlePopularClick} disabled={loading} />
+              </>
+            )}
           </>
+        ) : (
+          <Portfolio />
         )}
       </main>
 
