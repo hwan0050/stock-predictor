@@ -16,7 +16,9 @@ import MovingAverageControl from './components/MovingAverageControl';
 import CompareControl from './components/CompareControl';
 import ChartTypeControl from './components/ChartTypeControl';
 import ZoomControl from './components/ZoomControl';
-import WatchlistControl from './components/WatchlistControl'; // 🆕 관심 종목 추가
+import WatchlistControl from './components/WatchlistControl';
+import TechnicalIndicators from './components/TechnicalIndicators'; // 🆕 기술적 지표 추가
+import IndicatorChart from './components/IndicatorChart'; // 🆕 지표 차트 추가
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
@@ -41,6 +43,13 @@ function HomePage() {
   const [compareData, setCompareData] = useState([]);
 
   const [chartType, setChartType] = useState('line');
+
+  // 🆕 기술적 지표 state
+  const [selectedIndicators, setSelectedIndicators] = useState({
+    rsi: false,
+    macd: false,
+    bollingerBands: false
+  });
 
   // 차트 인스턴스 ref
   const chartInstanceRef = useRef(null);
@@ -114,7 +123,7 @@ function HomePage() {
     handleSearch(symbol);
   };
 
-  // 🆕 관심 종목에서 빠른 검색
+  // 관심 종목에서 빠른 검색
   const handleQuickSearch = (symbol) => {
     console.log('⭐ Quick search from watchlist:', symbol);
     handleSearch(symbol);
@@ -215,6 +224,12 @@ function HomePage() {
     }
   };
 
+  // 🆕 기술적 지표 변경 핸들러
+  const handleIndicatorsChange = (newIndicators) => {
+    console.log('📊 기술적 지표 변경:', newIndicators);
+    setSelectedIndicators(newIndicators);
+  };
+
   // 차트 준비 완료 콜백
   const handleChartReady = (chartInstance) => {
     chartInstanceRef.current = chartInstance;
@@ -239,7 +254,7 @@ function HomePage() {
         <SearchBar onSearch={handleSearch} disabled={loading} />
         <SearchHistory onClick={handleHistoryClick} />
 
-        {/* 🆕 관심 종목 컴포넌트 */}
+        {/* 관심 종목 컴포넌트 */}
         <WatchlistControl
           currentSymbol={stockData?.symbol}
           onQuickSearch={handleQuickSearch}
@@ -277,6 +292,15 @@ function HomePage() {
               disabled={loading || chartType === 'candlestick'}
             />
 
+            {/* 🆕 기술적 지표 컴포넌트 */}
+            {!compareMode && chartType === 'line' && (
+              <TechnicalIndicators
+                selectedIndicators={selectedIndicators}
+                onIndicatorsChange={handleIndicatorsChange}
+                disabled={loading}
+              />
+            )}
+
             {/* 줌 컨트롤 */}
             <ZoomControl
               onReset={handleZoomReset}
@@ -307,15 +331,26 @@ function HomePage() {
             {!compareMode && <StockCard data={stockData} />}
 
             {historyData && (
-              <StockChart
-                data={historyData}
-                symbol={stockData.symbol}
-                selectedMA={selectedMA}
-                compareMode={compareMode}
-                compareData={compareData}
-                chartType={chartType}
-                onChartReady={handleChartReady}
-              />
+              <>
+                <StockChart
+                  data={historyData}
+                  symbol={stockData.symbol}
+                  selectedMA={selectedMA}
+                  compareMode={compareMode}
+                  compareData={compareData}
+                  chartType={chartType}
+                  onChartReady={handleChartReady}
+                />
+
+                {/* 🆕 기술적 지표 차트 */}
+                {!compareMode && chartType === 'line' && (
+                  <IndicatorChart
+                    data={historyData}
+                    symbol={stockData.symbol}
+                    selectedIndicators={selectedIndicators}
+                  />
+                )}
+              </>
             )}
           </div>
         )}

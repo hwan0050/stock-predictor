@@ -1,0 +1,217 @@
+.technical-indicators {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.technical-indicators:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.technical-indicators h3 {
+  margin: 0 0 15px 0;
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 지표 그리드 */
+.indicators-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+}
+
+/* 개별 지표 아이템 */
+.indicator-item {
+  position: relative;
+}
+
+.indicator-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.indicator-label:hover:not(.disabled) {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+}
+
+.indicator-label.active {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  border-color: #2980b9;
+  color: white;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.indicator-label.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 체크박스 */
+.indicator-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.indicator-label.disabled input[type="checkbox"] {
+  cursor: not-allowed;
+}
+
+/* 아이콘 */
+.indicator-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+/* 지표 정보 */
+.indicator-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.indicator-name {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.indicator-label.active .indicator-name {
+  color: white;
+  font-weight: 600;
+}
+
+.indicator-params {
+  font-size: 12px;
+  opacity: 0.7;
+  font-weight: 400;
+}
+
+/* 정보 버튼 */
+.info-button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.info-button:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.indicator-label.active .info-button {
+  opacity: 0.8;
+}
+
+.indicator-label.active .info-button:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* 설명 박스 */
+.indicator-description {
+  margin-top: 8px;
+  padding: 10px 12px;
+  background: var(--bg-secondary);
+  border-left: 3px solid var(--primary-color);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 안내 메시지 */
+.indicators-notice {
+  margin-top: 15px;
+  padding: 10px;
+  background: rgba(52, 152, 219, 0.1);
+  border-left: 3px solid var(--primary-color);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* 다크모드 */
+@media (prefers-color-scheme: dark) {
+  .indicator-label:hover:not(.disabled) {
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+  }
+
+  .indicator-label.active {
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+  }
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .indicators-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .indicator-label {
+    padding: 14px;
+  }
+
+  .indicator-name {
+    font-size: 15px;
+  }
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.indicator-item {
+  animation: fadeIn 0.3s ease;
+}

@@ -1,0 +1,63 @@
+.indicator-charts {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.indicator-chart-container {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: 250px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.indicator-chart-container:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.indicator-chart-container canvas {
+  max-width: 100%;
+  height: 100% !important;
+}
+
+/* 애니메이션 */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.indicator-chart-container {
+  animation: slideUp 0.4s ease;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .indicator-chart-container {
+    height: 220px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .indicator-chart-container {
+    height: 200px;
+    padding: 10px;
+  }
+}
+
+/* 다크모드 */
+@media (prefers-color-scheme: dark) {
+  .indicator-chart-container:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+}
