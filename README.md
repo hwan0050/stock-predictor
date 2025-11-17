@@ -186,7 +186,7 @@ GET /api/news/{symbol}
     - 6-D: 포트폴리오 ✅
     - 6-E: 뉴스 피드 ✅
 
-자세한 체크리스트: [docs/CHECKLIST.md](docs/CHECKLIST.md)
+자세한 체크리스트: [CHECKLIST.md](CHECKLIST.md)
 
 ---
 
