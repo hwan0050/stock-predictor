@@ -2,16 +2,16 @@
 
 이 문서는 Stock Predictor 프로젝트를 배포하는 방법을 설명합니다.
 
-**마지막 업데이트:** 2024년 1월  
+**마지막 업데이트:** 2025년 11월  
 **배포 상태:** ✅ Vercel 배포 완료
 
 ---
 
 ## 🌐 Live Demo
 
-**배포 URL:** https://stock-predictor-xxx.vercel.app
+**배포 URL:** https://stock-predictor-89hovs9w2-hwan0050s-projects.vercel.app
 
-*(실제 URL로 교체하세요)*
+*(Backend 배포 후 완전 작동 예정)*
 
 ---
 
@@ -64,7 +64,7 @@ npm run build
    Name: REACT_APP_API_URL
    Value: http://localhost:8080
    
-   (또는 백엔드 배포 URL)
+   (Backend 배포 후 실제 Backend URL로 변경)
    ```
 
 5. **배포**
@@ -72,6 +72,8 @@ npm run build
    "Deploy" 버튼 클릭
    ⏳ 1-2분 대기...
    ✅ 배포 완료!
+   
+   배포 URL: https://stock-predictor-89hovs9w2-hwan0050s-projects.vercel.app
    ```
 
 #### CLI 배포
@@ -229,7 +231,7 @@ npm audit fix
 ### CORS 에러
 ```javascript
 // Backend CorsConfig.java 확인
-.allowedOrigins("https://your-domain.vercel.app")
+.allowedOrigins("https://stock-predictor-89hovs9w2-hwan0050s-projects.vercel.app")
 ```
 
 ### 환경 변수 미적용
@@ -271,13 +273,17 @@ Deployment 클릭
 
 ## 🔐 환경 변수 관리
 
-### 프로덕션
+### 프로덕션 (Vercel)
 ```env
-REACT_APP_API_URL=https://api.yourbackend.com
+REACT_APP_API_URL=https://your-backend-url.onrender.com
+REACT_APP_API_BASE_PATH=/api
+
+# 현재 (Backend 로컬):
+REACT_APP_API_URL=http://localhost:8080
 REACT_APP_API_BASE_PATH=/api
 ```
 
-### 개발
+### 개발 (로컬)
 ```env
 REACT_APP_API_URL=http://localhost:8080
 REACT_APP_API_BASE_PATH=/api
@@ -311,8 +317,10 @@ Vercel Dashboard
 - [x] GitHub 저장소 연결
 - [x] 환경 변수 설정
 - [x] 배포 완료
-- [x] 배포 URL 확인
-- [x] 기능 테스트
+- [x] 배포 URL 확인: https://stock-predictor-89hovs9w2-hwan0050s-projects.vercel.app
+- [x] 기능 테스트 (로컬)
+- [x] 스크린샷 캡처 완료
+- [ ] Backend 배포 (예정)
 - [ ] 커스텀 도메인 (선택)
 - [ ] Analytics 설정 (선택)
 
