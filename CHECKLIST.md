@@ -297,6 +297,9 @@
 - [x] Git 작업 정책 (GIT_WORKFLOW.md)
 - [x] 개발 체크리스트 (CHECKLIST.md)
 - [x] 인수인계 문서 (HANDOVER.md)
+- [x] 배포 링크 추가 ⭐
+- [x] 스크린샷 추가
+- [x] GitHub Repository 정리
 
 ### API 문서
 - [ ] Swagger/OpenAPI 설정
@@ -308,16 +311,18 @@
 ## 🚀 배포
 
 ### Frontend
-- [ ] 빌드 최적화
-- [ ] 환경 변수 설정 (프로덕션)
-- [ ] Vercel/Netlify 배포
-- [ ] 도메인 연결
+- [x] 빌드 최적화
+- [x] 환경 변수 설정 (프로덕션)
+- [x] Vercel 배포 ⭐
+- [x] 배포 URL: https://stock-predictor-89hovs9w2-hwan0050s-projects.vercel.app
+- [x] 스크린샷 추가 (4개)
+- [ ] 도메인 연결 (선택)
 
 ### Backend
 - [ ] JAR 파일 빌드
 - [ ] Docker 이미지 생성
-- [ ] Heroku/AWS 배포
-- [ ] 데이터베이스 연결 (필요시)
+- [ ] Render/Railway 배포 (예정)
+- [x] 현재: 로컬 실행 (스크린샷 캡처용)
 
 ---
 
@@ -387,5 +392,5 @@
 
 ---
 
-**마지막 업데이트:** 2024년 1월  
+**마지막 업데이트:** 2025년 11월  
 **작성자:** Hwan Lee (hwan0050)
