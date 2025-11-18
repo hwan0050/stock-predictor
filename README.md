@@ -256,19 +256,19 @@ chore: 빌드/설정 변경
 <div align="center">
 
 ### 메인 화면
-![메인 화면](docs/images/screenshots/main.png)
+![메인 화면](docs/screenshots/main.png)
 *실시간 주가 검색 및 차트 분석*
 
 ### 기술적 지표
-![기술적 지표](docs/images/screenshots/indicators.png)
+![기술적 지표](docs/screenshots/indicators.png)
 *RSI, MACD, 볼린저 밴드 분석*
 
 ### 포트폴리오 관리
-![포트폴리오](docs/images/screenshots/portfolio.png)
+![포트폴리오](docs/screenshots/portfolio.png)
 *보유 종목 관리 및 수익률 계산*
 
 ### 뉴스 피드
-![뉴스](docs/images/screenshots/news.png)
+![뉴스](docs/screenshots/news.png)
 *종목별 뉴스 및 감정 분석*
 
 </div>
