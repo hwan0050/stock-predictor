@@ -9,12 +9,17 @@
 
 ---
 
-## 🌐 Live Demo
+## 🚀 Live Demo
 
-**🚀 [Stock Predictor 실행하기](https://stock-predictor-89hovs9w2-hwan0050s-projects.vercel.app)**
+**🌐 Frontend:** https://stock-predictor-lrrj7q16f-hwan0050s-projects.vercel.app  
+**🔧 Backend API:** https://stock-predictor-zu6p.onrender.com
 
-> 실시간으로 주가를 검색하고 분석해보세요!  
-> *(현재 Backend 배포 준비 중 - 스크린샷으로 기능 확인 가능)*
+### 배포 상태
+- ✅ Frontend: Vercel에 배포 완료
+- ✅ Backend: Render에 배포 완료
+- ✅ CORS 설정 완료
+- ✅ 환경 변수 설정 완료
+- ✅ 완전 작동 확인됨
 
 ---
 
@@ -90,13 +95,15 @@ stock-predictor/
 │   │       ├── controller/  # REST API 컨트롤러
 │   │       ├── service/     # 비즈니스 로직
 │   │       ├── model/       # 데이터 모델
-│   │       └── repository/  # 데이터 접근
-│   └── pom.xml
+│   │       └── config/      # 설정
+│   ├── Dockerfile          # Docker 설정
+│   └── build.gradle
 │
 ├── docs/                    # 문서
-│   ├── API.md              # API 문서
 │   ├── CHECKLIST.md        # 개발 체크리스트
-│   └── GIT_WORKFLOW.md     # Git 작업 정책
+│   ├── GIT_WORKFLOW.md     # Git 작업 정책
+│   ├── HANDOVER.md         # 인수인계 문서
+│   └── DEPLOYMENT.md       # 배포 가이드
 │
 └── README.md               # 프로젝트 README
 ```
@@ -108,7 +115,7 @@ stock-predictor/
 ### 📋 사전 요구사항
 
 - **Node.js** 18.x 이상
-- **Java** 11 이상
+- **Java** 17 이상
 - **Git**
 - **npm** 또는 **yarn**
 
@@ -123,8 +130,8 @@ cd stock-predictor
 #### 2️⃣ 백엔드 실행
 ```bash
 cd backend
-./mvnw clean install
-./mvnw spring-boot:run
+./gradlew clean build
+./gradlew bootRun
 ```
 서버: http://localhost:8080
 
@@ -135,6 +142,37 @@ npm install
 npm start
 ```
 앱: http://localhost:3000
+
+---
+
+## 🌐 배포
+
+### Frontend (Vercel)
+프론트엔드는 Vercel에 배포되어 있습니다:
+- **URL:** https://stock-predictor-lrrj7q16f-hwan0050s-projects.vercel.app
+- **플랫폼:** Vercel
+- **자동 배포:** main 브랜치에 push 시 자동 배포
+
+### Backend (Render)
+백엔드는 Render에 배포되어 있습니다:
+- **URL:** https://stock-predictor-zu6p.onrender.com
+- **플랫폼:** Render (Docker)
+- **Java 버전:** 17
+- **자동 배포:** main 브랜치에 push 시 자동 배포
+
+### 환경 변수
+**Frontend (.env)**
+```env
+REACT_APP_API_URL=https://stock-predictor-zu6p.onrender.com
+REACT_APP_API_BASE_PATH=/api
+```
+
+**Backend (Render)**
+```env
+CORS_ALLOWED_ORIGINS=https://stock-predictor-*.vercel.app,https://stock-predictor-lrrj7q16f-hwan0050s-projects.vercel.app
+```
+
+자세한 배포 가이드: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
 
 ---
 
@@ -152,15 +190,17 @@ npm start
 - **Spring Boot** 3.x - 백엔드 프레임워크
 - **Spring Web** - REST API
 - **Lombok** - 보일러플레이트 감소
-- **Maven** - 빌드 도구
+- **Gradle** - 빌드 도구
+- **Docker** - 컨테이너화
 
 ### API 통합
 - **Yahoo Finance API** - 실시간 주가 데이터
 - REST API 아키텍처
 
-### Deployment
+### 배포
 - **Vercel** - Frontend 배포
-- **GitHub Actions** - CI/CD (선택적)
+- **Render** - Backend 배포
+- **Docker** - Backend 컨테이너화
 
 ---
 
@@ -178,7 +218,9 @@ GET /api/stocks/popular
 GET /api/news/{symbol}
 ```
 
-자세한 API 문서: [docs/API.md](docs/API.md)
+### API 기본 URL
+- **Production:** https://stock-predictor-zu6p.onrender.com
+- **Local:** http://localhost:8080
 
 ---
 
@@ -198,6 +240,11 @@ GET /api/news/{symbol}
     - 6-C: 기술적 지표 ✅
     - 6-D: 포트폴리오 ✅
     - 6-E: 뉴스 피드 ✅
+- **Phase 7**: 배포 ✅
+    - Frontend Vercel 배포 ✅
+    - Backend Render 배포 ✅
+    - CORS 설정 ✅
+    - 환경 변수 설정 ✅
 
 자세한 체크리스트: [docs/CHECKLIST.md](docs/CHECKLIST.md)
 
@@ -222,6 +269,7 @@ style: 코드 포맷팅
 refactor: 리팩토링
 test: 테스트 추가
 chore: 빌드/설정 변경
+deploy: 배포 관련 변경
 ```
 
 자세한 작업 정책: [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md)
@@ -248,30 +296,27 @@ chore: 빌드/설정 변경
 - [Chart.js](https://www.chartjs.org) - 차트 라이브러리
 - [Spring Boot](https://spring.io/projects/spring-boot) - 백엔드 프레임워크
 - [React](https://react.dev) - 프론트엔드 프레임워크
+- [Vercel](https://vercel.com) - Frontend 호스팅
+- [Render](https://render.com) - Backend 호스팅
 
 ---
 
 ## 📸 스크린샷
 
-<div align="center">
-
 ### 메인 화면
-![메인 화면](docs/screenshots/main.png)
-*실시간 주가 검색 및 차트 분석*
+- 주가 검색 및 차트
+- 기술적 지표
+- 관심 종목
 
-### 기술적 지표
-![기술적 지표](docs/screenshots/indicators.png)
-*RSI, MACD, 볼린저 밴드 분석*
-
-### 포트폴리오 관리
-![포트폴리오](docs/screenshots/portfolio.png)
-*보유 종목 관리 및 수익률 계산*
+### 포트폴리오
+- 보유 종목 관리
+- 자산 분포 차트
+- 수익률 현황
 
 ### 뉴스 피드
-![뉴스](docs/screenshots/news.png)
-*종목별 뉴스 및 감정 분석*
-
-</div>
+- 종목별 뉴스
+- 감정 분석
+- 날짜 필터
 
 ---
 
@@ -282,6 +327,48 @@ chore: 빌드/설정 변경
 - [ ] 모바일 앱 개발
 - [ ] 소셜 기능 (의견 공유)
 - [ ] 다국어 지원
+- [ ] 사용자 인증 시스템
+- [ ] 데이터베이스 연동
+
+---
+
+## ⚠️ 알려진 제한사항
+
+1. **뉴스 API**: 현재 Mock 데이터 사용
+2. **실시간 업데이트**: 수동 새로고침 필요
+3. **데이터 저장**: LocalStorage만 사용 (서버 DB 없음)
+4. **인증**: 사용자 로그인 기능 없음
+5. **Backend Cold Start**: Render 무료 플랜 사용 시 첫 요청 지연 가능
+
+---
+
+## 🔧 개발 팁
+
+### 로컬 개발
+```bash
+# Frontend
+cd frontend
+npm install
+npm start
+
+# Backend
+cd backend
+./gradlew bootRun
+```
+
+### 환경 변수 설정
+```bash
+# Frontend (.env)
+REACT_APP_API_URL=http://localhost:8080
+REACT_APP_API_BASE_PATH=/api
+```
+
+### Docker 빌드 (Backend)
+```bash
+cd backend
+docker build -t stock-predictor-backend .
+docker run -p 8080:8080 stock-predictor-backend
+```
 
 ---
 

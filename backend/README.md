@@ -2,6 +2,8 @@
 
 Spring Boot 기반의 주가 데이터 REST API 서버입니다.
 
+**배포 URL:** https://stock-predictor-zu6p.onrender.com
+
 ---
 
 ## 🛠️ 기술 스택
@@ -11,7 +13,9 @@ Spring Boot 기반의 주가 데이터 REST API 서버입니다.
 - **Spring Web Client** - HTTP 클라이언트
 - **Lombok** - 보일러플레이트 감소
 - **Jackson** - JSON 처리
-- **Maven** - 빌드 도구
+- **Gradle** - 빌드 도구
+- **Java** 17
+- **Docker** - 컨테이너화
 
 ---
 
@@ -39,7 +43,8 @@ backend/
 ├── src/test/java/
 │   └── com/stock/
 │       └── StockPredictorApplicationTests.java
-├── pom.xml                             # Maven 설정
+├── Dockerfile                          # Docker 설정
+├── build.gradle                        # Gradle 설정
 └── README.md
 ```
 
@@ -48,27 +53,27 @@ backend/
 ## 🚀 시작하기
 
 ### 사전 요구사항
-- Java 11 이상
-- Maven 3.6 이상
+- Java 17 이상
+- Gradle 7.x 이상
 
 ### 빌드 및 실행
 
-#### Maven Wrapper 사용 (권장)
+#### Gradle Wrapper 사용 (권장)
 ```bash
 # 빌드
-./mvnw clean install
+./gradlew clean build
 
 # 실행
-./mvnw spring-boot:run
+./gradlew bootRun
 ```
 
-#### Maven 직접 사용
+#### Gradle 직접 사용
 ```bash
 # 빌드
-mvn clean install
+gradle clean build
 
 # 실행
-mvn spring-boot:run
+gradle bootRun
 ```
 
 서버는 http://localhost:8080 에서 실행됩니다.
@@ -76,10 +81,39 @@ mvn spring-boot:run
 ### JAR 파일로 실행
 ```bash
 # 빌드
-./mvnw clean package
+./gradlew clean build
 
 # 실행
-java -jar target/stock-predictor-0.0.1-SNAPSHOT.jar
+java -jar build/libs/stock-predictor-0.0.1-SNAPSHOT.jar
+```
+
+---
+
+## 🐳 Docker
+
+### Docker 이미지 빌드
+```bash
+docker build -t stock-predictor-backend .
+```
+
+### Docker 컨테이너 실행
+```bash
+docker run -p 8080:8080 stock-predictor-backend
+```
+
+### Dockerfile
+```dockerfile
+FROM gradle:8.5-jdk17 AS build
+WORKDIR /app
+COPY build.gradle settings.gradle ./
+COPY src ./src
+RUN gradle clean build -x test
+
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY --from=build /app/build/libs/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
 ```
 
 ---
@@ -154,30 +188,6 @@ GET /api/stocks/popular
 ]
 ```
 
-### 4. 뉴스 조회 (선택적)
-```
-GET /api/news/{symbol}
-```
-
-**파라미터:**
-- `symbol` (path) - 주식 심볼
-
-**응답:**
-```json
-[
-  {
-    "id": 1,
-    "title": "Apple announces new product",
-    "description": "...",
-    "source": "Reuters",
-    "publishedAt": "2024-01-15T10:30:00Z",
-    "url": "https://...",
-    "sentiment": "positive"
-  },
-  ...
-]
-```
-
 ---
 
 ## ⚙️ 설정
@@ -188,10 +198,7 @@ GET /api/news/{symbol}
 server.port=8080
 
 # CORS 설정
-cors.allowed-origins=http://localhost:3000
-
-# API 키 (필요시)
-yahoo.finance.api.key=your_api_key_here
+cors.allowed-origins=https://stock-predictor-*.vercel.app,https://stock-predictor-lrrj7q16f-hwan0050s-projects.vercel.app
 
 # 로깅
 logging.level.com.stock=DEBUG
@@ -204,7 +211,7 @@ logging.level.com.stock=DEBUG
 
 실행 시 프로파일 지정:
 ```bash
-./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+./gradlew bootRun --args='--spring.profiles.active=dev'
 ```
 
 ---
@@ -215,15 +222,20 @@ logging.level.com.stock=DEBUG
 ```java
 @Configuration
 public class CorsConfig {
+    
+    @Value("${cors.allowed-origins:https://stock-predictor-*.vercel.app}")
+    private String allowedOrigins;
+    
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                    .allowedOrigins("http://localhost:3000")
-                    .allowedMethods("GET", "POST", "PUT", "DELETE")
-                    .allowedHeaders("*");
+                    .allowedOriginPatterns(allowedOrigins.split(","))
+                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                    .allowedHeaders("*")
+                    .allowCredentials(true);
             }
         };
     }
@@ -232,252 +244,32 @@ public class CorsConfig {
 
 ---
 
-## 📦 주요 의존성
-
-```xml
-<dependencies>
-    <!-- Spring Boot Starters -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-webflux</artifactId>
-    </dependency>
-    
-    <!-- Lombok -->
-    <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <optional>true</optional>
-    </dependency>
-    
-    <!-- Test -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-test</artifactId>
-        <scope>test</scope>
-    </dependency>
-</dependencies>
-```
-
----
-
-## 🔌 외부 API 통합
-
-### Yahoo Finance API
-```java
-@Service
-public class StockService {
-    private final WebClient webClient;
-    
-    public StockData getStockData(String symbol) {
-        String url = String.format(
-            "https://query1.finance.yahoo.com/v8/finance/chart/%s",
-            symbol
-        );
-        
-        // WebClient로 API 호출
-        return webClient.get()
-            .uri(url)
-            .retrieve()
-            .bodyToMono(YahooFinanceResponse.class)
-            .map(this::convertToStockData)
-            .block();
-    }
-}
-```
-
----
-
-## 🧪 테스트
-
-### 단위 테스트
-```bash
-./mvnw test
-```
-
-### 통합 테스트
-```bash
-./mvnw verify
-```
-
-### 테스트 커버리지
-```bash
-./mvnw jacoco:report
-```
-
----
-
-## 📊 모니터링
-
-### Spring Boot Actuator (선택적)
-```xml
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-actuator</artifactId>
-</dependency>
-```
-
-엔드포인트:
-- `/actuator/health` - 헬스 체크
-- `/actuator/metrics` - 메트릭
-- `/actuator/info` - 애플리케이션 정보
-
----
-
-## 🐛 에러 처리
-
-### GlobalExceptionHandler
-```java
-@RestControllerAdvice
-public class GlobalExceptionHandler {
-    
-    @ExceptionHandler(SymbolNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleSymbolNotFound(
-        SymbolNotFoundException ex
-    ) {
-        return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .body(new ErrorResponse(ex.getMessage()));
-    }
-}
-```
-
----
-
-## 🔒 보안
-
-### API 키 관리
-```properties
-# application.properties에 직접 저장하지 말 것!
-# 환경 변수 사용 권장
-yahoo.finance.api.key=${YAHOO_API_KEY}
-```
-
-### HTTPS 설정 (프로덕션)
-```properties
-server.ssl.enabled=true
-server.ssl.key-store=classpath:keystore.p12
-server.ssl.key-store-password=changeit
-server.ssl.key-store-type=PKCS12
-```
-
----
-
-## 📝 로깅
-
-### Logback 설정
-`src/main/resources/logback-spring.xml`:
-```xml
-<configuration>
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
-    
-    <root level="INFO">
-        <appender-ref ref="CONSOLE" />
-    </root>
-    
-    <logger name="com.stock" level="DEBUG" />
-</configuration>
-```
-
----
-
 ## 🚀 배포
 
-### Docker
-```dockerfile
-FROM openjdk:17-jdk-slim
-WORKDIR /app
-COPY target/*.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+### Render 배포 (현재 사용 중) ⭐
+
+#### 환경 변수 설정
+```
+CORS_ALLOWED_ORIGINS=https://stock-predictor-*.vercel.app,https://stock-predictor-lrrj7q16f-hwan0050s-projects.vercel.app
+PORT=8080
 ```
 
-빌드 및 실행:
+#### Health Check
 ```bash
-docker build -t stock-predictor-backend .
-docker run -p 8080:8080 stock-predictor-backend
-```
-
-### Heroku
-```bash
-heroku create stock-predictor-api
-git push heroku main
+curl https://stock-predictor-zu6p.onrender.com/actuator/health
 ```
 
 ---
 
-## 🔧 개발 가이드
+## 🌐 배포 URL
 
-### 새 컨트롤러 추가
-```java
-@RestController
-@RequestMapping("/api/custom")
-public class CustomController {
-    
-    @GetMapping("/{param}")
-    public ResponseEntity<CustomData> getData(@PathVariable String param) {
-        // 로직 구현
-        return ResponseEntity.ok(data);
-    }
-}
-```
+### Production
+- **API Base:** https://stock-predictor-zu6p.onrender.com
+- **Frontend:** https://stock-predictor-lrrj7q16f-hwan0050s-projects.vercel.app
 
-### 새 서비스 추가
-```java
-@Service
-public class CustomService {
-    
-    private final WebClient webClient;
-    
-    public CustomService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.build();
-    }
-    
-    public CustomData fetchData() {
-        // 비즈니스 로직
-    }
-}
-```
-
----
-
-## 📈 성능 최적화
-
-### 캐싱 (선택적)
-```java
-@EnableCaching
-@Configuration
-public class CacheConfig {
-    
-    @Bean
-    public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("stocks", "history");
-    }
-}
-
-@Service
-public class StockService {
-    
-    @Cacheable(value = "stocks", key = "#symbol")
-    public StockData getStockData(String symbol) {
-        // API 호출
-    }
-}
-```
-
----
-
-## 🤝 기여
-
-이슈나 PR은 언제든 환영합니다!
+### Local Development
+- **API Base:** http://localhost:8080
+- **Frontend:** http://localhost:3000
 
 ---
 

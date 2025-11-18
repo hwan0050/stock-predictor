@@ -2,6 +2,8 @@
 
 React 기반의 주가 예측 웹 애플리케이션 프론트엔드입니다.
 
+**배포 URL:** https://stock-predictor-lrrj7q16f-hwan0050s-projects.vercel.app
+
 ---
 
 ## 🛠️ 기술 스택
@@ -56,6 +58,7 @@ frontend/
 │   ├── App.css             # 전역 스타일
 │   └── index.js            # 엔트리 포인트
 ├── package.json
+├── .env                     # 환경 변수 (로컬)
 └── README.md
 ```
 
@@ -161,11 +164,19 @@ body.dark-mode {
 
 ## 🔧 환경 변수
 
-`.env` 파일 생성:
+### 로컬 개발 (.env)
 ```env
 REACT_APP_API_URL=http://localhost:8080
 REACT_APP_API_BASE_PATH=/api
 ```
+
+### 프로덕션 (Vercel)
+```env
+REACT_APP_API_URL=https://stock-predictor-zu6p.onrender.com
+REACT_APP_API_BASE_PATH=/api
+```
+
+**중요:** `.env` 파일은 `.gitignore`에 포함되어 Git에 추적되지 않습니다!
 
 ---
 
@@ -251,13 +262,54 @@ REACT_APP_API_BASE_PATH=/api
 
 ## 🚀 배포
 
-### Vercel / Netlify
+### Vercel 배포 (현재 사용 중) ⭐
+
+#### 1. Vercel CLI 설치 (선택)
 ```bash
-npm run build
-# build/ 폴더 배포
+npm install -g vercel
 ```
 
-### Docker
+#### 2. Vercel에 로그인
+```bash
+vercel login
+```
+
+#### 3. 프로젝트 배포
+```bash
+cd frontend
+vercel
+```
+
+#### 4. 환경 변수 설정
+Vercel Dashboard → Settings → Environment Variables:
+```
+REACT_APP_API_URL=https://stock-predictor-zu6p.onrender.com
+REACT_APP_API_BASE_PATH=/api
+```
+
+#### 5. 자동 배포 설정
+- GitHub 저장소 연결
+- main 브랜치에 push하면 자동 배포
+- Preview deployments for all branches
+
+#### 6. 빌드 설정
+Vercel Dashboard → Settings → Build & Development Settings:
+- **Framework Preset:** Create React App
+- **Build Command:** `npm run build`
+- **Output Directory:** `build`
+- **Install Command:** `npm install`
+
+#### 7. 배포 확인
+- **Production URL:** https://stock-predictor-lrrj7q16f-hwan0050s-projects.vercel.app
+- **Preview URLs:** https://stock-predictor-[hash].vercel.app
+
+### Netlify 배포 (대안)
+```bash
+npm run build
+# build/ 폴더 드래그 앤 드롭
+```
+
+### Docker (로컬 테스트)
 ```dockerfile
 FROM node:18-alpine
 WORKDIR /app
@@ -269,11 +321,17 @@ EXPOSE 3000
 CMD ["npx", "serve", "-s", "build"]
 ```
 
+빌드 및 실행:
+```bash
+docker build -t stock-predictor-frontend .
+docker run -p 3000:3000 stock-predictor-frontend
+```
+
 ---
 
 ## 🐛 알려진 이슈
 
-현재 알려진 이슈는 없습니다.
+현재 알려진 이슈는 없습니다. ✅
 
 ---
 
@@ -324,9 +382,113 @@ const data = JSON.parse(localStorage.getItem('key') || '[]');
 
 ---
 
+## 🔍 디버깅
+
+### 개발자 도구
+```javascript
+// API 응답 확인
+console.log('✅ Data:', response.data);
+
+// 상태 확인
+console.log('🔍 State:', state);
+
+// 에러 확인
+console.error('❌ Error:', error);
+```
+
+### 네트워크 확인
+- Chrome DevTools → Network 탭
+- API 요청/응답 확인
+- CORS 에러 확인
+
+### 프로덕션 빌드 테스트
+```bash
+npm run build
+npx serve -s build
+```
+
+---
+
+## 📊 성능 최적화
+
+### Code Splitting
+```javascript
+import React, { lazy, Suspense } from 'react';
+
+const Portfolio = lazy(() => import('./components/Portfolio'));
+
+function App() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <Portfolio />
+    </Suspense>
+  );
+}
+```
+
+### Memoization
+```javascript
+import React, { memo } from 'react';
+
+const StockCard = memo(({ data }) => {
+  // 컴포넌트 로직
+});
+```
+
+### Image Optimization
+```javascript
+// WebP 사용
+<img src="image.webp" alt="..." />
+
+// Lazy Loading
+<img loading="lazy" src="..." alt="..." />
+```
+
+---
+
+## 🌐 배포 URL
+
+### Production
+- **Frontend:** https://stock-predictor-lrrj7q16f-hwan0050s-projects.vercel.app
+- **Backend API:** https://stock-predictor-zu6p.onrender.com
+
+### Local Development
+- **Frontend:** http://localhost:3000
+- **Backend API:** http://localhost:8080
+
+---
+
+## 🔗 유용한 링크
+
+### 프로젝트
+- GitHub: https://github.com/hwan0050/stock-predictor
+- Vercel Dashboard: https://vercel.com/dashboard
+
+### 문서
+- [React 공식 문서](https://react.dev)
+- [Chart.js 공식 문서](https://www.chartjs.org)
+- [Vercel 문서](https://vercel.com/docs)
+- [Axios 문서](https://axios-http.com/docs/intro)
+
+---
+
 ## 🤝 기여
 
 이슈나 PR은 언제든 환영합니다!
+
+### 기여 방법
+1. Fork 저장소
+2. Feature 브랜치 생성
+3. 변경사항 커밋
+4. Pull Request 생성
+
+---
+
+## 📞 연락처
+
+**개발자:** Hwan Lee (hwan0050)  
+**GitHub:** [@hwan0050](https://github.com/hwan0050)  
+**Email:** akma0050@naver.com
 
 ---
 

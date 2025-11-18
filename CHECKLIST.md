@@ -2,7 +2,7 @@
 
 프로젝트 전체 개발 진행 상황을 추적하는 문서입니다.
 
-**마지막 업데이트:** 2024년 1월 (Phase 6 완료)  
+**마지막 업데이트:** 2025년 11월 (Phase 7 완료)  
 **전체 진행률:** 100% 🎉
 
 ---
@@ -17,6 +17,7 @@
 | Phase 4 | 차트 통합 | 100% | ✅ 완료 |
 | Phase 5 | 고급 차트 기능 | 100% | ✅ 완료 |
 | Phase 6 | 추가 기능 | 100% | ✅ 완료 |
+| Phase 7 | 배포 | 100% | ✅ 완료 |
 
 ---
 
@@ -231,6 +232,59 @@
 
 ---
 
+## Phase 7: 배포 ✅
+
+### 7-A: Frontend 배포 (Vercel) ✅
+- [x] Vercel 프로젝트 생성
+- [x] GitHub 저장소 연결
+- [x] 환경 변수 설정
+    - [x] REACT_APP_API_URL
+    - [x] REACT_APP_API_BASE_PATH
+- [x] 빌드 설정 확인
+- [x] 자동 배포 설정 (main 브랜치)
+- [x] 배포 완료 및 테스트
+- [x] **배포 URL:** https://stock-predictor-lrrj7q16f-hwan0050s-projects.vercel.app
+
+### 7-B: Backend 배포 (Render) ✅
+- [x] Render 프로젝트 생성
+- [x] Docker 설정
+    - [x] Dockerfile 작성
+    - [x] Java 17 설정
+    - [x] Gradle 빌드
+- [x] 환경 변수 설정
+    - [x] CORS_ALLOWED_ORIGINS
+    - [x] PORT
+- [x] CORS 패턴 설정 (Vercel preview URLs)
+- [x] 자동 배포 설정 (main 브랜치)
+- [x] 배포 완료 및 테스트
+- [x] **배포 URL:** https://stock-predictor-zu6p.onrender.com
+
+### 7-C: 통합 테스트 ✅
+- [x] Frontend - Backend 연결 테스트
+- [x] CORS 설정 확인
+- [x] API 엔드포인트 테스트
+    - [x] GET /api/stocks/{symbol}
+    - [x] GET /api/stocks/{symbol}/history
+    - [x] GET /api/stocks/popular
+- [x] 모든 기능 작동 확인
+    - [x] 주가 검색
+    - [x] 차트 표시
+    - [x] 기술적 지표
+    - [x] 포트폴리오
+    - [x] 뉴스 피드
+    - [x] 다크모드
+    - [x] 반응형 디자인
+
+### 7-D: 문서 업데이트 ✅
+- [x] README.md 배포 정보 추가
+- [x] CHECKLIST.md Phase 7 완료 체크
+- [x] HANDOVER.md 배포 섹션 추가
+- [x] backend-README.md Render 배포 가이드
+- [x] frontend-README.md Vercel 배포 가이드
+- [x] DEPLOYMENT.md 새 파일 작성
+
+---
+
 ## 📦 패키지 및 의존성
 
 ### Frontend
@@ -248,6 +302,7 @@
 - [x] Spring WebFlux (WebClient)
 - [x] Lombok
 - [x] Jackson
+- [x] Java 17 (Dockerfile)
 
 ---
 
@@ -297,9 +352,7 @@
 - [x] Git 작업 정책 (GIT_WORKFLOW.md)
 - [x] 개발 체크리스트 (CHECKLIST.md)
 - [x] 인수인계 문서 (HANDOVER.md)
-- [x] 배포 링크 추가 ⭐
-- [x] 스크린샷 추가
-- [x] GitHub Repository 정리
+- [x] 배포 가이드 (DEPLOYMENT.md)
 
 ### API 문서
 - [ ] Swagger/OpenAPI 설정
@@ -310,41 +363,39 @@
 
 ## 🚀 배포
 
-### Frontend
+### Frontend (Vercel)
 - [x] 빌드 최적화
 - [x] 환경 변수 설정 (프로덕션)
-- [x] Vercel 배포 ⭐
-- [x] 배포 URL: https://stock-predictor-89hovs9w2-hwan0050s-projects.vercel.app
-- [x] 스크린샷 추가 (4개)
-- [ ] 도메인 연결 (선택)
+- [x] Vercel 배포 완료 ✅
+- [x] 도메인: https://stock-predictor-lrrj7q16f-hwan0050s-projects.vercel.app
 
-### Backend
-- [ ] JAR 파일 빌드
-- [ ] Docker 이미지 생성
-- [ ] Render/Railway 배포 (예정)
-- [x] 현재: 로컬 실행 (스크린샷 캡처용)
+### Backend (Render)
+- [x] JAR 파일 빌드
+- [x] Docker 이미지 생성
+- [x] Render 배포 완료 ✅
+- [x] 도메인: https://stock-predictor-zu6p.onrender.com
 
 ---
 
 ## 🔮 향후 계획
 
-### Phase 7: AI 예측 모델 (예정)
+### Phase 8: AI 예측 모델 (예정)
 - [ ] Python ML 모델 개발
 - [ ] 모델 학습 파이프라인
 - [ ] 예측 API 구현
 - [ ] 프론트엔드 통합
 
-### Phase 8: 실시간 기능 (예정)
+### Phase 9: 실시간 기능 (예정)
 - [ ] WebSocket 연동
 - [ ] 실시간 가격 업데이트
 - [ ] 실시간 알림
 
-### Phase 9: 소셜 기능 (예정)
+### Phase 10: 소셜 기능 (예정)
 - [ ] 사용자 인증 (JWT)
 - [ ] 댓글/의견 공유
 - [ ] 포트폴리오 공유
 
-### Phase 10: 모바일 앱 (예정)
+### Phase 11: 모바일 앱 (예정)
 - [ ] React Native 앱
 - [ ] iOS/Android 배포
 - [ ] 푸시 알림
@@ -357,13 +408,23 @@
 
 ---
 
+## ⚠️ 제한사항
+
+1. **뉴스 API**: 현재 Mock 데이터 사용
+2. **실시간 업데이트**: 수동 새로고침 필요
+3. **데이터베이스**: LocalStorage만 사용 (서버 DB 없음)
+4. **인증**: 사용자 로그인 기능 없음
+5. **Backend Cold Start**: Render 무료 플랜 사용 시 첫 요청 약간 지연 가능
+
+---
+
 ## 📊 통계
 
-- **총 커밋 수:** 50+
+- **총 커밋 수:** 60+
 - **총 컴포넌트 수:** 25+
-- **총 코드 라인 수:** 5000+
-- **개발 기간:** 2주
-- **완성도:** 100% 🎉
+- **총 코드 라인 수:** 6000+
+- **개발 기간:** 3주
+- **완성도:** 100% (배포 완료) 🎉
 
 ---
 
@@ -378,17 +439,25 @@
 - [x] Git 커밋 정리
 - [x] README 업데이트
 - [x] 인수인계 문서 작성
+- [x] **Frontend 배포 완료** ✅
+- [x] **Backend 배포 완료** ✅
+- [x] **통합 테스트 완료** ✅
 
 ---
 
 ## 🎉 프로젝트 완료!
 
-**축하합니다!** 모든 기능이 구현되었습니다! 🎊
+**축하합니다!** 모든 기능이 구현되고 배포까지 완료되었습니다! 🎊
 
-다음 단계:
+### 배포 URL
+- **Frontend:** https://stock-predictor-lrrj7q16f-hwan0050s-projects.vercel.app
+- **Backend:** https://stock-predictor-zu6p.onrender.com
+
+### 다음 단계
 1. 테스트 추가
-2. 배포 준비
-3. Phase 7 계획
+2. 성능 최적화
+3. Phase 8 계획 (AI 예측 모델)
+4. 사용자 피드백 수집
 
 ---
 
