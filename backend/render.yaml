@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: stock-predictor-api
+    runtime: java
+    buildCommand: ./gradlew clean build -x test
+    startCommand: java -jar build/libs/stock-predictor-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: CORS_ALLOWED_ORIGINS
+        value: http://localhost:3000,https://stock-predictor-89hovs9w2-hwan0050s-projects.vercel.app
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
