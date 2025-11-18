@@ -14,7 +14,11 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOrigins(allowedOrigins.split(","))  // 환경 변수에서 읽기
+                .allowedOriginPatterns(
+                        "http://localhost:*",
+                        "https://*.vercel.app",
+                        "https://*-hwan0050s-projects.vercel.app"
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(false);
