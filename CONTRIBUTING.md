@@ -477,7 +477,7 @@ test('renders stock card with data', () => {
 
 ### 문서
 - [README.md](README.md) - 프로젝트 개요
-- [CHECKLIST.md](CHECKLIST.md) - 개발 진행 상황
+- [CHECKLIST.md](docs/CHECKLIST.md) - 개발 진행 상황
 - [Backend README](backend/README.md) - Backend 문서
 - [Frontend README](frontend/README.md) - Frontend 문서
 
